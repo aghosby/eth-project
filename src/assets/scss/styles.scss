@@ -85,6 +85,13 @@
 html, body { }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.toast-top-right {
+  top: 12px;         // distance from top
+  right: 12px;       // distance from right
+  position: fixed;   // make it fixed in the viewport
+  z-index: 99999;    // ensure it's on top of everything
+}
+
 @include mat.form-field-density(-1);
 
 // /* Input text size */

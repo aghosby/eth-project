@@ -34,6 +34,7 @@ export class PersonalInfoComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
+      this.grpInfoForm.markAllAsTouched();
       if (stepName === 'Personal Details' || stepName === 'Group Lead Details') {
         this.utilityService.updateStep('personalInfo', {
           valid: this.grpInfoForm.valid,

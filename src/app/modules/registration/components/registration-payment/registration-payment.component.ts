@@ -23,8 +23,8 @@ export class RegistrationPaymentComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
-      if (stepName === 'Terms & Signatures') {
-        this.utilityService.updateStep('termsConditions', {
+      if (stepName === 'Payment') {
+        this.utilityService.updateStep('payment', {
           valid: true,
           value: {paymentSuccessful: true},
         });

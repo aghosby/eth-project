@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificationService } from '@shared/services/notification.service';
 import { UtilityService } from '@shared/services/utility.service';
 import { BehaviorSubject } from 'rxjs';
 
@@ -167,7 +168,10 @@ export class RegisterComponent implements OnInit {
     return this._formProgress;
   }
 
-  constructor(private utilityService: UtilityService) {}
+  constructor(
+    private utilityService: UtilityService,
+    private notifyService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.updateFormSteps();
@@ -219,6 +223,7 @@ export class RegisterComponent implements OnInit {
       //console.log(step)
 
       if (!step || !step.valid) {
+        this.notifyService.showError('Please check that you have filled in all required fields')
         console.warn(`❌ Step "${currentStepName}" is invalid`, step?.value);
         return;
       }
@@ -247,13 +252,12 @@ export class RegisterComponent implements OnInit {
     return map[stepName] || stepName;
   }
 
-
-
   private updateProgress(): void {
     this._formProgress = Math.ceil(
       (100 * (this.currentStep - 1)) / (this.formSteps.length - 1)
     );
   }
+
   setRegType(type:number) {
     this.regType = type;
     this.updateFormSteps();

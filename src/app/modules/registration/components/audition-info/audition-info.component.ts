@@ -46,7 +46,10 @@ export class AuditionInfoComponent implements OnInit {
         controlLabel: 'Audition Location',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {},
+        selectOptions: {
+          Lagos: 'Lagos',
+          Benin: 'Benin'
+        },
         validators: [Validators.required],
         visible: true,
         order: 1

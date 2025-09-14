@@ -184,6 +184,11 @@ export class RegisterComponent implements OnInit {
     const nextStep = this.currentStep + next;
     const currentStepName = this.stepInView?.stepName;
 
+    if(next < 0) {
+      this.viewStep(nextStep);
+      return;
+    }
+
     if (this.currentStep === 0) {
       // 🔥 Step 0 is in parent → push regType directly
       this.utilityService.updateStep('registrationType', {

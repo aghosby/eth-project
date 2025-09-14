@@ -30,6 +30,7 @@ export class TalentInfoComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
+      this.grpInfoForm.markAllAsTouched();
       if (stepName === 'Talent Details') {
         this.utilityService.updateStep('talentInfo', {
           valid: this.grpInfoForm.valid,

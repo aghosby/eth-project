@@ -30,6 +30,7 @@ export class TermsConditionsComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
+      this.grpInfoForm.markAllAsTouched();
       if (stepName === 'Terms & Signatures') {
         this.utilityService.updateStep('termsConditions', {
           valid: this.grpInfoForm.valid,

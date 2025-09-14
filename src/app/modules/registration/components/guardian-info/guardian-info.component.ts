@@ -30,6 +30,7 @@ export class GuardianInfoComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
+      this.grpInfoForm.markAllAsTouched();
       if (stepName === 'Guardian Details') {
         this.utilityService.updateStep('guardianInfo', {
           valid: this.grpInfoForm.valid,

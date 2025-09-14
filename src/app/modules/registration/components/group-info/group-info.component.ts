@@ -55,6 +55,7 @@ export class GroupInfoComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
+      this.grpInfoForm.markAllAsTouched();
       if (stepName === 'Group Details') {
         this.utilityService.updateStep('groupInfo', {
           valid: this.grpInfoForm.valid,

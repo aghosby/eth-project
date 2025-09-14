@@ -30,6 +30,7 @@ export class MediaInfoComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
+      this.grpInfoForm.markAllAsTouched();
       if (stepName === 'Media Upload') {
         this.utilityService.updateStep('mediaInfo', {
           valid: this.grpInfoForm.valid,

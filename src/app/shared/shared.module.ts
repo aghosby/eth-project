@@ -16,7 +16,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { SignaturePadModule } from 'angular2-signaturepad';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // Components
@@ -66,7 +65,6 @@ const SHARED_COMP = [
     CommonModule,
     RouterModule,
     FormsModule,
-    SignaturePadModule,
     ReactiveFormsModule,
 
     // External modules
@@ -130,6 +128,7 @@ const SHARED_COMP = [
 
     // Layouts
     LayoutHeaderComponent,
+    LayoutFooterComponent,
     PageLayoutComponent,
     HeaderComponent,
     FooterComponent,

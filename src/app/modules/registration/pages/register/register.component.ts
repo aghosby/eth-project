@@ -172,7 +172,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateFormSteps();
-    this.viewStep(3);
+    this.viewStep(0);
   }
 
   viewStep(stepNo:number) {

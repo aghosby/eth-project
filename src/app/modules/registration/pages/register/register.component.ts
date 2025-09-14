@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,8 @@ export class RegisterComponent implements OnInit {
   stepInView:any;
   regType:number = 1;
   apiLoading:boolean = false;
-  applicantAge: number = 15;
+  applicantAge: number = 18;
+  applicantAge$ = new BehaviorSubject<number | null>(null);
 
   formSteps:any[] = [];
   
@@ -170,7 +172,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateFormSteps();
-    this.viewStep(0);
+    this.viewStep(3);
   }
 
   viewStep(stepNo:number) {
@@ -218,6 +220,7 @@ export class RegisterComponent implements OnInit {
 
   onAgeChange(age: number) {
     this.applicantAge = age;
+    this.applicantAge$.next(age);
     this.updateFormSteps();
   }
 

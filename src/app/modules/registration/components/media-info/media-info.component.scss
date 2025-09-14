@@ -1,0 +1,10 @@
+@import '../../../../../assets/scss/mixins.scss';
+
+.form-container {
+    width: 100%;
+    margin: 0 auto;
+
+    @include screen-media-min(md) {
+        width: 70%;
+    }
+}

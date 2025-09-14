@@ -39,7 +39,7 @@
             <app-media-info *ngIf="stepInView?.stepName == 'Media Upload'"></app-media-info>
             <app-guardian-info *ngIf="stepInView?.stepName == 'Guardian Details'"></app-guardian-info>
             <app-audition-info *ngIf="stepInView?.stepName == 'Audition Details'"></app-audition-info>
-            <app-terms-conditions *ngIf="stepInView?.stepName == 'Terms & Signatures'"></app-terms-conditions>
+            <app-terms-conditions *ngIf="stepInView?.stepName == 'Terms & Signatures'" [applicantAge]="applicantAge$ | async"></app-terms-conditions>
             <app-registration-payment *ngIf="stepInView?.stepName == 'Payment'"></app-registration-payment>
 
             <div *ngIf="stepInView?.stepName == 'Success'" class="successful-registration"></div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormFields } from '@shared/models/form-fields';
 import { UtilityService } from '@shared/services/utility.service';
@@ -14,6 +14,7 @@ export class TermsConditionsComponent implements OnInit {
   formInfoFields!: FormFields[];
   screenSize!:number;
   useFormWidth:boolean = true;
+  @Input() applicantAge: number | null = null;
   keepOrder = () => 0;
 
   constructor(private utilityService: UtilityService) {}
@@ -22,6 +23,10 @@ export class TermsConditionsComponent implements OnInit {
     this.screenSize = this.utilityService.getScreenWidth();
     this.useFormWidth = this.screenSize > 768;
     this.setUpForm();
+  }
+
+  get showGuardianSignature(): boolean {
+    return this.applicantAge !== null && this.applicantAge < 16;
   }
 
   setUpForm = async () => {
@@ -55,8 +60,11 @@ export class TermsConditionsComponent implements OnInit {
         validators: [],
         visible: true,
         order: 3
-      },
-      {
+      }
+    ]
+
+    if(this.showGuardianSignature) {
+      this.formInfoFields.push({
         controlName: 'guardianSignature',
         controlType: 'signature',
         controlLabel: 'Guardian Signature',
@@ -65,8 +73,8 @@ export class TermsConditionsComponent implements OnInit {
         validators: [],
         visible: true,
         order: 4
-      }
-    ]
+      })
+    }
 
     this.formInfoFields.sort((a,b) => (a.order - b.order));
 

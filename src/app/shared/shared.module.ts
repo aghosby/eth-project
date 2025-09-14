@@ -43,6 +43,8 @@ import { FooterComponent } from './components/layouts/footer/footer.component';
 import { DonutProgressComponent } from './components/blocks/donut-progress/donut-progress.component';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { SignaturePadComponent } from './components/blocks/signature-pad/signature-pad.component';
+import { ProfilePhotoComponent } from './components/blocks/profile-photo/profile-photo.component';
+import { VideoPreviewComponent } from './components/blocks/video-preview/video-preview.component';
 
 const SHARED_COMP = [
   MatFormFieldModule,
@@ -53,7 +55,7 @@ const SHARED_COMP = [
   MatButtonModule,
   MatDialogModule,
   MatCheckboxModule,
-  NgxMatTimepickerModule
+  NgxMatTimepickerModule,
 ];
 
 
@@ -95,7 +97,9 @@ const SHARED_COMP = [
     HeaderComponent,
     FooterComponent,
     DonutProgressComponent,
-    SignaturePadComponent
+    SignaturePadComponent,
+    ProfilePhotoComponent,
+    VideoPreviewComponent
   ],
   exports:[
     // Angular modules
@@ -104,6 +108,8 @@ const SHARED_COMP = [
     RouterModule,
     FormsModule,
     SignaturePadComponent,
+    ProfilePhotoComponent,
+    VideoPreviewComponent,
     ReactiveFormsModule,
 
     // External modules

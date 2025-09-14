@@ -1,0 +1,39 @@
+<div class="upload-container mt-4">
+    <h3 class="req">{{ label }}</h3>
+    <div class="preamble">{{ preamble }}</div>
+
+    <div (click)="fileInput.click()" class="upload-wrap mt-lg-2 mt-2" [class.disabled]="disabled">
+        <input 
+            type="file" 
+            class="file-upload"
+            accept="video/*"
+            (change)="onFileSelected($event)" 
+            #fileInput
+            [disabled]="disabled"
+        />
+        <div class="icon"><i class="bi bi-camera-video-fill"></i></div>
+        <div class="info text-center">
+            Click to upload a video, <span>Maximum Size 10MB</span> <br>
+            <span>Recommended aspect ratio: 16:9</span>
+        </div>
+
+        <!-- Video Preview -->
+        <video 
+            class="preview" 
+            *ngIf="videoUrl && !error" 
+            [src]="videoUrl" 
+            controls 
+            width="fit-content"
+            height="auto"
+        >
+        </video>
+
+        <span class="file-name" [style.color]="'#2C90FF'">
+            {{ fileName || (videoUrl ? 'Change video' : 'No video uploaded') }}
+        </span>
+    </div>
+
+    <div *ngIf="error" class="errors">
+        <div class="text-danger">{{ error }}</div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="profile-wrap">
+    <div class="profile">
+        <div (click)="fileUpload.click()" class="image bkg-standard" role="button">
+            <img *ngIf="profilePic || initialUrl" [src]="profilePic || initialUrl" alt=""/>
+            <div *ngIf="!(profilePic || initialUrl)" class="img-wrap"></div>
+        </div>
+        <span [class.center]="!(profilePic || initialUrl)" (click)="fileUpload.click()" *ngIf="!disabled" role="button">
+            <i *ngIf="!(profilePic || initialUrl)" class="bi bi-camera-fill"></i>
+            <i *ngIf="profilePic || initialUrl" class="bi bi-arrow-repeat"></i>
+        </span>
+        <input 
+            type="file" 
+            class="file-upload"
+            accept="image/*"
+            (change)="profilePicUpload($event)" 
+            #fileUpload
+            [disabled]="disabled"
+        />
+    </div>
+
+    <div class="info">
+        <h3>Profile Photo</h3>
+        <div class="text">
+            Click the circle to upload a profile photo, <br> <span>Maximum Size 2MB</span> <br>
+            <span>Recommended aspect ratio: 1:1</span>
+        </div>
+    </div>
+</div>
+

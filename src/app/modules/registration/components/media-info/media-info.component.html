@@ -1,1 +1,23 @@
-<p>media-info works!</p>
+<div class="form-wrap">
+    <div class="form-hld">
+
+        <form [formGroup]="grpInfoForm" class="form-container" style="font-size: 0.8rem;">
+
+            <ng-container class="d-flex">
+                <ng-container>
+
+                    <div class="profile-photo w-100">
+                        <app-profile-photo formControlName="profilePhoto" [initialUrl]="profilePic"></app-profile-photo>
+                    </div>
+
+                    <div class="video-upoad w-100">
+                        <app-video-preview formControlName="videoUpload" [initialUrl]="videoUrl"></app-video-preview>
+                    </div>
+                    
+
+                </ng-container>
+            </ng-container>
+
+        </form>
+    </div>
+</div>

@@ -1,7 +1,18 @@
+@import '../../../../../assets/scss/mixins.scss';
+
 .profile-wrap {
     display: flex;
+    text-align: center;
+    flex-direction: column-reverse;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
+
+    @include screen-media-min(md) {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 2rem;
+    }
 
     .info {
         h3 {

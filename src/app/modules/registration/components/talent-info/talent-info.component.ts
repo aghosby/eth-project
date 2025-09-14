@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormFields } from '@shared/models/form-fields';
 import { UtilityService } from '@shared/services/utility.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-talent-info',
@@ -10,6 +11,8 @@ import { UtilityService } from '@shared/services/utility.service';
 })
 export class TalentInfoComponent implements OnInit {
 
+  @Input() stepName!: string;
+  private stepTrigger!: Subscription;
   grpInfoForm:FormGroup = new FormGroup({});
   formInfoFields!: FormFields[];
   screenSize!:number;
@@ -23,6 +26,17 @@ export class TalentInfoComponent implements OnInit {
     this.useFormWidth = this.screenSize > 768;
     this.setUpForm();
     this.setupConditionalLogic();
+
+    // 🔥 listen for trigger from parent
+    this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
+      //console.log('Step', stepName)
+      if (stepName === 'Talent Details') {
+        this.utilityService.updateStep('talentInfo', {
+          valid: this.grpInfoForm.valid,
+          value: this.grpInfoForm.value,
+        });
+      }
+    });
   }
 
   setUpForm = async () => {

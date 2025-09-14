@@ -1,4 +1,12 @@
+@import '../../../../../assets/scss/mixins.scss';
+
 .upload-container {
+    text-align: center;
+
+    @include screen-media-min(md) {
+        text-align: left;
+    }
+
     h3 {
         display: inline-block;
         font-size: 1rem;
@@ -7,6 +15,8 @@
         margin-bottom: 0.4rem;
         margin: 0;
         position: relative;
+        text-align: center;
+
         &.req::before {
             content: '*';
             font-size: 1.2rem;
@@ -15,6 +25,8 @@
             right: -0.8rem;
             top: -0.1rem;
         }
+
+        
     }
 
     .preamble {

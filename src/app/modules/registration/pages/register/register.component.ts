@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilityService } from '@shared/services/utility.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -143,7 +144,7 @@ export class RegisterComponent implements OnInit {
           action: -1
         },
         {
-          text: 'Next',
+          text: 'Make Payment',
           action: +1
         }
       ]
@@ -166,13 +167,11 @@ export class RegisterComponent implements OnInit {
     return this._formProgress;
   }
 
-  constructor() {
-
-  }
+  constructor(private utilityService: UtilityService) {}
 
   ngOnInit(): void {
     this.updateFormSteps();
-    this.viewStep(3);
+    this.viewStep(0);
   }
 
   viewStep(stepNo:number) {
@@ -181,10 +180,69 @@ export class RegisterComponent implements OnInit {
     this.updateProgress();
   }
 
-  goToStep(next:number) {
+  goToStep(next: number) {
     const nextStep = this.currentStep + next;
-    this.viewStep(nextStep);
+    const currentStepName = this.stepInView?.stepName;
+
+    if (this.currentStep === 0) {
+      // 🔥 Step 0 is in parent → push regType directly
+      this.utilityService.updateStep('registrationType', {
+        valid: true, // or add more validation if needed
+        value: { regType: this.regType },
+      });
+
+      //console.log('✅ Step "registrationType" saved:', { regType: this.regType });
+
+      // proceed to next step
+      this.viewStep(nextStep);
+      return;
+    }
+
+    if (!currentStepName) {
+      return;
+    }
+
+    // map display step name → storage key
+    const stepKey = this.mapStepName(currentStepName);
+
+    // 🔥 Ask the current child to report its form state
+    this.utilityService.requestFormReport(currentStepName);
+
+    // Wait for the child to respond before deciding
+    setTimeout(() => {
+      const step = this.utilityService.getStep(stepKey);
+      //console.log(step)
+
+      if (!step || !step.valid) {
+        console.warn(`❌ Step "${currentStepName}" is invalid`, step?.value);
+        return;
+      }
+
+      //console.log(`✅ Step "${currentStepName}" valid, moving to next step...`);
+      //console.log('Form Value:', step.value);
+
+      // Move to next step
+      this.viewStep(nextStep);
+    }, 0);
   }
+
+  private mapStepName(stepName: string): string {
+    const map: { [key: string]: string } = {
+      'Personal Details': 'personalInfo',
+      'Group Lead Details': 'personalInfo', // for group registration
+      'Talent Details': 'talentInfo',
+      'Group Details': 'groupInfo',
+      'Media Upload': 'mediaInfo',
+      'Guardian Details': 'guardianInfo',
+      'Audition Details': 'auditionInfo',
+      'Terms & Signatures': 'termsConditions',
+      'Payment': 'payment',
+      'Success': 'success',
+    };
+    return map[stepName] || stepName;
+  }
+
+
 
   private updateProgress(): void {
     this._formProgress = Math.ceil(
@@ -215,7 +273,7 @@ export class RegisterComponent implements OnInit {
 
     // reindex sequentially
     this.formSteps = steps.map((s, i) => ({ ...s, id: i }));
-    console.log('Form Steps', this.formSteps)
+    //console.log('Form Steps', this.formSteps)
   }
 
   onAgeChange(age: number) {

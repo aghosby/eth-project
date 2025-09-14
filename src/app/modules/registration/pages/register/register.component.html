@@ -33,14 +33,14 @@
                 
             </div>
 
-            <app-personal-info *ngIf="currentStep == 1" (ageChange)="onAgeChange($event)"></app-personal-info>
-            <app-talent-info *ngIf="stepInView?.stepName == 'Talent Details'"></app-talent-info>
-            <app-group-info *ngIf="stepInView?.stepName == 'Group Details'"></app-group-info>
-            <app-media-info *ngIf="stepInView?.stepName == 'Media Upload'"></app-media-info>
-            <app-guardian-info *ngIf="stepInView?.stepName == 'Guardian Details'"></app-guardian-info>
-            <app-audition-info *ngIf="stepInView?.stepName == 'Audition Details'"></app-audition-info>
-            <app-terms-conditions *ngIf="stepInView?.stepName == 'Terms & Signatures'" [applicantAge]="applicantAge$ | async"></app-terms-conditions>
-            <app-registration-payment *ngIf="stepInView?.stepName == 'Payment'"></app-registration-payment>
+            <app-personal-info *ngIf="currentStep == 1" (ageChange)="onAgeChange($event)" [stepName]="stepInView?.stepName"></app-personal-info>
+            <app-talent-info *ngIf="stepInView?.stepName == 'Talent Details'" [stepName]="stepInView?.stepName"></app-talent-info>
+            <app-group-info *ngIf="stepInView?.stepName == 'Group Details'" [stepName]="stepInView?.stepName"></app-group-info>
+            <app-media-info *ngIf="stepInView?.stepName == 'Media Upload'" [stepName]="stepInView?.stepName"></app-media-info>
+            <app-guardian-info *ngIf="stepInView?.stepName == 'Guardian Details'" [stepName]="stepInView?.stepName"></app-guardian-info>
+            <app-audition-info *ngIf="stepInView?.stepName == 'Audition Details'" [stepName]="stepInView?.stepName"></app-audition-info>
+            <app-terms-conditions *ngIf="stepInView?.stepName == 'Terms & Signatures'" [applicantAge]="applicantAge$ | async" [stepName]="stepInView?.stepName"></app-terms-conditions>
+            <app-registration-payment *ngIf="stepInView?.stepName == 'Payment'" [stepName]="stepInView?.stepName"></app-registration-payment>
 
             <div *ngIf="stepInView?.stepName == 'Success'" class="successful-registration"></div>
         </div>

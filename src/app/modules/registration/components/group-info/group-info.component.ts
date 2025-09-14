@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Countries } from '@shared/constants/countries';
 import { FormFields } from '@shared/models/form-fields';
 import { UtilityService } from '@shared/services/utility.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-group-info',
@@ -10,6 +11,8 @@ import { UtilityService } from '@shared/services/utility.service';
   styleUrls: ['./group-info.component.scss']
 })
 export class GroupInfoComponent implements OnInit {
+  @Input() stepName!: string;
+  private stepTrigger!: Subscription;
   maxDate!: Date;
   keepOrder = () => 0;
 
@@ -48,6 +51,17 @@ export class GroupInfoComponent implements OnInit {
     this.screenSize = this.utilityService.getScreenWidth();
     this.useFormWidth = this.screenSize > 768;
     this.setUpForm();
+
+    // 🔥 listen for trigger from parent
+    this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
+      //console.log('Step', stepName)
+      if (stepName === 'Group Details') {
+        this.utilityService.updateStep('groupInfo', {
+          valid: this.grpInfoForm.valid,
+          value: this.grpInfoForm.value,
+        });
+      }
+    });
   }
 
   get members(): FormArray {

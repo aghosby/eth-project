@@ -1,6 +1,6 @@
-import { Component, forwardRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, forwardRef, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { SignaturePad } from 'angular2-signaturepad';
+import SignaturePad from 'signature_pad';
 
 @Component({
   selector: 'app-signature-pad',
@@ -15,22 +15,36 @@ import { SignaturePad } from 'angular2-signaturepad';
   ]
 })
 export class SignaturePadComponent implements ControlValueAccessor, AfterViewInit {
-  @ViewChild(SignaturePad) signaturePad!: SignaturePad;
+  @ViewChild('signatureCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  private signaturePad!: SignaturePad;
 
   private onChange: (value: string | null) => void = () => {};
   private onTouched: () => void = () => {};
 
   value: string | null = null;
 
-  signaturePadOptions: Object = {
+  signaturePadOptions = {
     minWidth: 2,
+    maxWidth: 4,
+    backgroundColor: 'rgb(246, 246, 246)',
+    penColor: 'black',
     canvasWidth: 300,
-    canvasHeight: 150,
-    backgroundColor: '#f6f6f6',
-    penColor: 'black'
+    canvasHeight: 150
   };
 
   ngAfterViewInit() {
+    const canvas = this.canvasRef.nativeElement;
+    canvas.width = this.signaturePadOptions.canvasWidth;
+    canvas.height = this.signaturePadOptions.canvasHeight;
+    
+    this.signaturePad = new SignaturePad(canvas, {
+      minWidth: this.signaturePadOptions.minWidth,
+      maxWidth: this.signaturePadOptions.maxWidth,
+      backgroundColor: this.signaturePadOptions.backgroundColor,
+      penColor: this.signaturePadOptions.penColor
+    });
+    
+    this.signaturePad.addEventListener('endStroke', () => this.drawComplete());
     this.signaturePad.clear();
   }
 
@@ -49,16 +63,12 @@ export class SignaturePadComponent implements ControlValueAccessor, AfterViewIni
   // ControlValueAccessor methods
   writeValue(value: string | null): void {
     this.value = value;
-    if (value) {
-      const canvas = this.signaturePad.fromDataURL(value);
-      // const ctx = canvas.getContext('2d');
-      // if (ctx) {
-      //   const img = new Image();
-      //   img.src = value;
-      //   img.onload = () => ctx.drawImage(img, 0, 0);
-      // }
-    } else if (this.signaturePad) {
-      this.signaturePad.clear();
+    if (this.signaturePad) {
+      if (value) {
+        this.signaturePad.fromDataURL(value);
+      } else {
+        this.signaturePad.clear();
+      }
     }
   }
 

@@ -1,12 +1,8 @@
 <div class="signature-container">
-    <signature-pad
-        [options]="signaturePadOptions"
-        (onEndEvent)="drawComplete()"
-        #signaturePad>
-    </signature-pad>
+    <canvas #signatureCanvas class="signature-canvas"></canvas>
 
     <div class="btn-row">
-        <mat-label>Write your signature</mat-label>
+        <label>Write your signature</label>
         <button mat-raised-button color="warn" type="button" (click)="clearSignature()">Clear</button>
     </div>
 </div>

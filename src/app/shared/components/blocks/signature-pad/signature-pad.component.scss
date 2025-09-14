@@ -5,13 +5,14 @@
     width: fit-content;
 }
 
-signature-pad {
+.signature-canvas {
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: var(--radius-md);
     overflow: hidden;
     box-shadow: 0 16px 43px rgba(0,0,0,.06);
     display: block;
     margin-bottom: 1rem;
+    background-color: rgb(246, 246, 246);
 }
 
 .btn-row {

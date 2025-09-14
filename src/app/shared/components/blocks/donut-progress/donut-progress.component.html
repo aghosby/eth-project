@@ -1,0 +1,13 @@
+<div
+  class="donut"
+  [style.--value]="displayedValue"
+  [style.--size]="size"
+  [style.--thickness]="thickness"
+  [style.--color]="color"
+  [style.--bg]="bg"
+  role="img"
+  [attr.aria-label]="'Progress: ' + displayedValue + '%'"
+>
+    <span class="donut__label"></span>
+    <span class="donut__value">{{ displayedValue }}%</span>
+</div>

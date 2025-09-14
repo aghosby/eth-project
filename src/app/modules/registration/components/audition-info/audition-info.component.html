@@ -1,0 +1,51 @@
+<div class="form-wrap">
+    <div class="form-hld">
+
+        <form [formGroup]="grpInfoForm" class="form-container" style="font-size: 0.8rem;">
+
+            <ng-container class="d-flex" *ngFor="let field of formInfoFields">
+                <ng-container *ngIf="field.visible" [ngSwitch]="field.controlType">
+
+                    <mat-form-field *ngSwitchCase="'text'" class="mb-lg-2" [style.width]="useFormWidth ? field.controlWidth : '100%'" appearance="outline">
+                        <mat-label>{{field.controlLabel}}</mat-label>
+                        <input matInput [formControlName]="field.controlName">
+                        <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('email')">Please enter a valid email address</mat-error>
+                        <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field *ngSwitchCase="'select'" class="mb-lg-2" [style.width]="useFormWidth ? field.controlWidth : '100%'" appearance="outline">
+                        <mat-label>{{field.controlLabel}}</mat-label>
+                        <mat-select
+                            class="selectField"
+                            disableOptionCentering
+                            panelClass="matDropdown"
+                            [formControlName]="field.controlName"
+                        >
+                            <mat-option *ngFor="let option of field.selectOptions | keyvalue: keepOrder" [value]="option.key">{{option.value}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field *ngSwitchCase="'date'" class="mb-lg-2" [style.width]="useFormWidth ? field.controlWidth : '100%'" appearance="outline">
+                        <mat-label>{{field.controlLabel}}</mat-label>
+                        <input matInput [matDatepicker]="picker" readonly [formControlName]="field.controlName">
+                        <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
+                        <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                        <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('date')">{{field.controlLabel}} is invalid</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field *ngSwitchCase="'time'" [style.width]="useFormWidth ? field.controlWidth : '100%'" appearance="outline">
+                        <mat-label>{{field.controlLabel}}</mat-label>
+                        <input matInput [ngxMatTimepicker]="picker" readonly [formControlName]="field.controlName">
+                        <ngx-mat-timepicker #picker></ngx-mat-timepicker>
+                        <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                    </mat-form-field>
+
+                </ng-container>
+            </ng-container>
+
+        </form>
+    </div>
+</div>

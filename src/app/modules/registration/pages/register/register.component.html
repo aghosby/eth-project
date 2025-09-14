@@ -1,0 +1,74 @@
+<!-- <app-donut-progress [value]="65"></app-donut-progress>
+<app-donut-progress [value]="25" size="50px" thickness="8px" color="#F39C12"></app-donut-progress>
+<app-donut-progress [value]="85" size="150px" thickness="20px" color="#27AE60"></app-donut-progress> -->
+
+<div class="page-wrap">
+    <div class="page-hdr">
+        <div class="title">
+            <h5 *ngIf="currentStep > 0">Step {{currentStep}} of {{formSteps.length - 2}}</h5>
+            <h2>{{stepInView?.stepName}}</h2>
+            <p *ngIf="stepInView?.description">{{stepInView?.description}}</p>
+        </div>
+        <div *ngIf="currentStep > 0" class="progress-wrap">
+            <app-donut-progress [value]="formProgess" size="60px" thickness="8px" color="#27AE60"></app-donut-progress>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="form-steps">
+
+            <div *ngIf="currentStep == 0" class="reg-type">
+                <div class="type">
+                    <button (click)="setRegType(1)" [class.active]="regType == 1">
+                        <i class="bi bi-person-fill"></i> 
+                        <span>Individual</span>
+                    </button>
+                </div>
+
+                <div class="type">
+                    <button (click)="setRegType(2)" [class.active]="regType == 2">
+                        <i class="bi bi-people-fill"></i> 
+                        <span>Group</span>
+                    </button>
+                </div>
+                
+            </div>
+
+            <app-personal-info *ngIf="currentStep == 1" (ageChange)="onAgeChange($event)"></app-personal-info>
+            <app-talent-info *ngIf="stepInView?.stepName == 'Talent Details'"></app-talent-info>
+            <app-group-info *ngIf="stepInView?.stepName == 'Group Details'"></app-group-info>
+            <app-media-info *ngIf="stepInView?.stepName == 'Media Upload'"></app-media-info>
+            <app-guardian-info *ngIf="stepInView?.stepName == 'Guardian Details'"></app-guardian-info>
+            <app-audition-info *ngIf="stepInView?.stepName == 'Audition Details'"></app-audition-info>
+            <app-terms-conditions *ngIf="stepInView?.stepName == 'Terms & Signatures'"></app-terms-conditions>
+            <app-registration-payment *ngIf="stepInView?.stepName == 'Payment'"></app-registration-payment>
+
+            <div *ngIf="stepInView?.stepName == 'Success'" class="successful-registration"></div>
+        </div>
+
+        <div 
+            class="btn-hld d-flex text-center"
+            [ngClass]="{
+                'justify-content-center': stepInView?.buttons.length == 1,
+                'justify-content-between': stepInView?.buttons.length == 2,
+            }"
+        >
+            <button 
+                *ngFor="let button of stepInView?.buttons; let i = index" 
+                (click)="goToStep(button.action)" 
+                type="submit" 
+                class="cta my-3 px-5"
+                [ngClass]="{
+                    'w-100': stepInView?.buttons.length == 1,
+                    'w-48': stepInView?.buttons.length == 2,
+                    'cta-primary': button.action == 1,
+                    'cta-wht': button.action == -1
+                }"
+                role="button"
+            >
+                <span *ngIf="apiLoading" class="loader spinner-border text-white"></span> {{button.text}}
+            </button>
+        </div>
+    </div>
+
+    
+</div>

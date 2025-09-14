@@ -1,0 +1,84 @@
+<div class="form-wrap">
+    <div class="form-hld">
+        <form [formGroup]="grpInfoForm" class="form-container" style="font-size: 0.8rem;">
+
+            <!-- Group Name -->
+            <mat-form-field appearance="outline" class="mb-lg-2" [style.width]="useFormWidth ? '48%' : '100%'">
+                <mat-label>Group Name</mat-label>
+                <input matInput formControlName="groupName">
+                <mat-error *ngIf="grpInfoForm.get('groupName')?.hasError('required')">Group Name is required</mat-error>
+            </mat-form-field>
+
+            <!-- Number of Members -->
+            <mat-form-field class="mb-lg-2" [style.width]="useFormWidth ? '48%' : '100%'" appearance="outline">
+                <mat-label>Number of group members</mat-label>
+                <mat-select
+                    class="selectField"
+                    disableOptionCentering
+                    panelClass="matDropdown"
+                    formControlName="noOfGroupMembers"
+                >
+                    <mat-option *ngFor="let option of grpCountSelectOptions | keyvalue: keepOrder" [value]="option.key">{{option.value}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="grpInfoForm.get('noOfGroupMembers')?.touched && grpInfoForm.get('noOfGroupMembers')?.hasError('required')">Number of group members is required</mat-error>
+            </mat-form-field>
+
+            <!-- Members -->
+            <div class="member-wrap" formArrayName="members">
+                <div *ngFor="let member of members.controls; let i = index" [formGroupName]="i" class="member-hld d-flex flex-wrap justify-content-between">
+                    <h4 class="w-100">Group Member {{ i + 1 }}</h4>
+
+                    <mat-form-field appearance="outline" [style.width]="useFormWidth ? '48%' : '100%'" >
+                        <mat-label>First Name</mat-label>
+                        <input matInput formControlName="firstName">
+                        <mat-error *ngIf="member.get('firstName')?.touched && member.get('firstName')?.hasError('required')">First name is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" [style.width]="useFormWidth ? '48%' : '100%'" >
+                        <mat-label>Last Name</mat-label>
+                        <input matInput formControlName="lastName">
+                        <mat-error *ngIf="member.get('lastName')?.touched && member.get('lastName')?.hasError('required')">Last name is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="mb-lg-2" [style.width]="useFormWidth ? '48%' : '100%'" appearance="outline">
+                        <mat-label>Date of birth</mat-label>
+                        <input matInput [matDatepicker]="picker" [max]="maxDate" readonly formControlName="dateOfBirth">
+                        <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
+                        <mat-error *ngIf="member.get('dateOfBirth')?.touched && member.get('dateOfBirth')?.hasError('required')">Date of birth is required</mat-error>
+                        <mat-error *ngIf="member.get('dateOfBirth')?.touched && member.get('dateOfBirth')?.hasError('date')">Date of birth is invalid</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="mb-lg-2" [style.width]="useFormWidth ? '48%' : '100%'" appearance="outline">
+                        <mat-label>Gender</mat-label>
+                        <mat-select
+                            class="selectField"
+                            disableOptionCentering
+                            panelClass="matDropdown"
+                            formControlName="gender"
+                        >
+                            <mat-option *ngFor="let option of genderSelectOptions | keyvalue: keepOrder" [value]="option.key">{{option.value}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="member.get('gender')?.touched && member.get('gender')?.hasError('required')">Gender is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="mb-lg-2" [style.width]="useFormWidth ? '48%' : '100%'" appearance="outline">
+                        <mat-label>T-Shirt Size</mat-label>
+                        <mat-select
+                            class="selectField"
+                            disableOptionCentering
+                            panelClass="matDropdown"
+                            formControlName="tshirtSize"
+                        >
+                            <mat-option *ngFor="let option of tshirtSelectOptions | keyvalue: keepOrder" [value]="option.key">{{option.value}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="member.get('tshirtSize')?.touched && member.get('tshirtSize')?.hasError('required')">T-Shirt size is required</mat-error>
+                    </mat-form-field>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

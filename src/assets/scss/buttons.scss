@@ -1,0 +1,62 @@
+@import './mixins.scss';
+
+.cta {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.04rem;
+    border-radius: 0.3rem;
+    background: rgba(#d09823, 1);
+    transition: all 0.4s ease;
+    padding: 0.6rem;
+    color: white;
+    outline: none;
+    border: none;
+
+    @include screen-media-min(md) {
+      font-size: 1.2rem;
+      padding: 1rem;
+    }
+
+    &:hover {
+        background: rgba(#d09823, 0.8);
+    }
+
+    &-trans {
+        background: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+
+        &:hover {
+            background: transparent;
+        }
+    }
+
+    &-wht {
+        background: white;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+
+        &:hover {
+            background: white;
+        }
+    }
+
+    &.sm {
+        font-size: 0.785rem;
+        font-weight: 500;
+        border: none;
+        letter-spacing: 0.05rem;
+        background: transparent;
+        color: var(--primary);
+        text-decoration: none;
+
+        @include screen-media-min(md) {
+            font-size: 0.9rem;
+            padding: 1rem;
+        }
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+}

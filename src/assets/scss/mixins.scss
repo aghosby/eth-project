@@ -1,0 +1,108 @@
+@import 'variables.scss';
+
+
+/**
+ *
+ * Defines breakpoints for media queries below.
+ * Uses default breakpoints set in variables.scss
+ *
+*/
+$media-types: (
+	xs: $xs,
+	sm: $sm,
+	md: $md,
+	lg: $lg,
+	xl: $xl,
+	xxl: $xxl,
+	xxxl: $xxxl,
+);
+
+/**
+ *
+ * Defines breakpoints for high pixel density devices (>2x)
+ *
+*/
+$media-types-retina: (
+	non-retina: "screen and (-webkit-max-device-pixel-ratio: 1)",
+	retina: "screen and (-webkit-min-device-pixel-ratio: 2)",
+);
+
+/**
+ *
+ * Media queries using desktop-first approach (max)
+ *
+*/
+@mixin screen-media-max($size) {
+	@if map-has-key($media-types, $size) {
+		@media only screen and (max-width: #{map-get($media-types, $size)}) {
+			@content;
+		}
+	}
+
+	@else {
+		@media only screen and (max-width: #{$size}) {
+			@content;
+		}
+	}
+}
+
+
+/**
+ *
+ * Media queries using desktop-first approach range (min - max)
+ *
+*/
+@mixin screen-media-min-max($min, $max) {
+	@if map-has-key($media-types, $min) and map-has-key($media-types, $max) {
+		@media only screen and (min-width: #{map-get($media-types, $min)}) and (max-width: #{map-get($media-types, $max)}) {
+			@content;
+		}
+	}
+
+	@else {
+		@media only screen and (min-width: #{$min}) and (max-width: #{$max}) {
+			@content;
+		}
+	}
+}
+
+/**
+ *
+ * Media queries using mobile-first approach
+ *
+*/
+@mixin screen-media-min($size) {
+	@if map-has-key($media-types, $size) {
+		@media only screen and (min-width: #{map-get($media-types, $size)}) {
+			@content;
+		}
+	}
+
+	@else {
+		@media only screen and (min-width: #{$size}) {
+			@content;
+		}
+	}
+}
+
+/**
+ *
+ * Media queries targeting high pixel density devices (>2x)
+ *
+*/
+@mixin screen-media-retina($size) {
+	@if not map-has-key($media-types-retina, $size) {
+		@warn "#{$size} is not a known media type. Using retina instead.";
+		$size: retina;
+	}
+
+	@media only #{map-get($media-types-retina, $size)} {
+		@content;
+	}
+}
+
+/*=====  End of Media queries  ======*/
+
+/*=============================================
+=            Components           =
+=============================================*/

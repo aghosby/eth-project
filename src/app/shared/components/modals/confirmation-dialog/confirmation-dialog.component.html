@@ -1,0 +1,22 @@
+<div class="remove-card">
+    <div *ngIf="data.role != 'status'" class="inner-wrap">
+        <div class="card-title">{{data.title}}</div>
+        <div [innerHTML]="data.message" class="card-details"></div>
+        <div class="btn-actions">
+            <button (click)="closeDialog()" class="cta sm trans-bkg">{{data.cancelText}}</button>
+            <button (click)="closeDialog()" class="cta sm primary-bkg">{{data.confirmText}}</button>
+        </div>
+    </div>
+
+    <div *ngIf="data.role == 'status'" class="info-card">
+        <div class="inner-wrap">
+            <div *ngIf="data.status == 'positive'" class="bkg" style="background-image: url('assets/images/illustrations/success-img.png');"></div>
+            <img *ngIf="data.status == 'positive'" src="assets/images/illustrations/success.svg" alt="">
+            <img class="rd" *ngIf="data.status == 'negative'" src="assets/images/illustrations/failure.svg" alt="">
+            <div [innerHTML]="data.message" class="card-details text-center"></div>
+            <div class="btn-actions">
+                <div (click)="closeDialog()" style="min-width: 8rem;" class="cta sm primary-bkg">{{data.cancelText}}</div>
+            </div>
+        </div>
+    </div>
+</div>

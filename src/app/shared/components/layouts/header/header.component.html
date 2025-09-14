@@ -1,0 +1,33 @@
+<header>
+    <div class="logo">
+        <img [routerLink]="'/app'" class="logo" src="assets/img/project/eth-logo-wht.png" alt="">
+    </div>
+
+    <!-- <nav>
+        <ul>
+            <li>
+            </li>
+            <li>
+                <a [routerLink]="['events']" [routerLinkActive]="'active'">All Events</a>
+            </li>
+            <li>
+            </li>
+        </ul>
+    </nav> -->
+
+    <div class="info">
+        <div (click)="logOutConfirm = !logOutConfirm" [class.active]="userInitials" class="det user">
+            <span class="text-uppercase">{{userInitials ? userInitials : ''}}</span>
+
+            <div *ngIf="logOutConfirm" class="mini-menu">
+                <div class="item">
+                    <a [routerLink]="['profile']" [routerLinkActive]="'active'">Go to Profile</a>
+                </div>
+                <div class="item">
+                    <div [class.warn]="userInitials" (click)="logOut()" class="text">{{userInitials ? 'Logout' : 'Login'}}</div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</header>

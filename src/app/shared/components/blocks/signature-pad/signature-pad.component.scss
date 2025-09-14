@@ -1,0 +1,23 @@
+.signature-container {
+    border: 1px solid #ccc;
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    width: fit-content;
+}
+
+signature-pad {
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 16px 43px rgba(0,0,0,.06);
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.btn-row {
+    font-size: 0.85rem;
+    letter-spacing: 0.04rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

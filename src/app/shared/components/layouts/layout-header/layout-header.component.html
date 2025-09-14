@@ -1,0 +1,48 @@
+<!-- NOTE Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <div class="g-padx w-100 d-flex justify-content-between">
+    <a class="navbar-brand" [routerLink]="['/dashboard']">
+      <img src="./assets/img/project/logo.svg" [alt]="appName + ' Logo'" class="me-2"/>
+    </a>
+    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" [ngbCollapse]="isMenuCollapsed" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-2 mb-lg-0 w-100 justify-content-end">
+
+        <li class="nav-item d-flex align-items-center">
+          <img src="./assets/img/project/icons/world.svg" alt="translation" class=""/>
+          <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['active']">{{ 'English' | translate }}</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['active']">{{ 'List your property' | translate }}</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['active']">{{ 'Support' | translate }}</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['active']">{{ 'Trips' | translate }}</a>
+        </li>
+
+        <li class="nav-item dropdown" ngbDropdown>
+          <a class="nav-link dropdown-toggle d-flex align-items-center" ngbDropdownToggle id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>{{ 'Sign in' | translate }}</span>
+            <span><img src="./assets/img/project/icons/profile.svg" alt="signin" class=""/></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="navbarDropdown">
+            <!-- <li><a class="dropdown-item" [routerLink]="['/user']" [routerLinkActive]="['active']">{{ 'MY_ACCOUNT' | translate }}</a></li> -->
+            <li><a class="dropdown-item cursor-pointer" (click)="onClickLogout()">{{ 'LOGOUT' | translate }}</a></li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- NOTE Content -->
+<ng-content></ng-content>

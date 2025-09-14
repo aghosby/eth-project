@@ -1,0 +1,227 @@
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormFields } from '@shared/models/form-fields';
+import { UtilityService } from '@shared/services/utility.service';
+
+@Component({
+  selector: 'app-talent-info',
+  templateUrl: './talent-info.component.html',
+  styleUrls: ['./talent-info.component.scss']
+})
+export class TalentInfoComponent implements OnInit {
+
+  grpInfoForm:FormGroup = new FormGroup({});
+  formInfoFields!: FormFields[];
+  screenSize!:number;
+  useFormWidth:boolean = true;
+  keepOrder = () => 0;
+
+  constructor(private utilityService: UtilityService) {}
+  
+  ngOnInit(): void {
+    this.screenSize = this.utilityService.getScreenWidth();
+    this.useFormWidth = this.screenSize > 768;
+    this.setUpForm();
+    this.setupConditionalLogic();
+  }
+
+  setUpForm = async () => {
+    this.formInfoFields = [
+      {
+        controlName: 'talentCategory',
+        controlType: 'select',
+        controlLabel: 'Talent Category',
+        controlWidth: '48%',
+        initialValue: '',
+        selectOptions: {
+          Singing: 'Singing',
+          Dancing: 'Dancing',
+          Acting: 'Acting',
+          Comedy: 'Comedy',
+          Drama: 'Drama',
+          Instrumental: 'Instrumental',
+          Other: 'Other'
+        },
+        validators: [Validators.required],
+        visible: true,
+        order: 1
+      },
+      {
+        controlName: 'otherTalentCategory',
+        controlType: 'text',
+        controlLabel: 'Other Talent',
+        controlWidth: '48%',
+        initialValue: null,
+        validators: [],
+        visible: false,
+        order: 1
+      },
+      {
+        controlName: 'skillLevel',
+        controlType: 'select',
+        controlLabel: 'Skill Level',
+        controlWidth: '48%',
+        initialValue: '',
+        selectOptions: {
+          Beginner: 'Beginner',
+          Intermediate: 'Intermediate',
+          Advanced: 'Advanced'
+        },
+        validators: [Validators.required],
+        visible: true,
+        order: 2
+      },
+      {
+        controlName: 'stageName',
+        controlType: 'text',
+        controlLabel: 'Stage Name',
+        controlWidth: '48%',
+        initialValue: null,
+        validators: [],
+        visible: true,
+        order: 3
+      },
+      {
+        controlName: 'previouslyParticipated',
+        controlType: 'select',
+        controlLabel: 'Previously participated in a talent hunt ?',
+        controlWidth: '48%',
+        initialValue: '',
+        selectOptions: {
+          Yes: 'Yes',
+          No: 'No',
+        },
+        validators: [],
+        visible: true,
+        order: 4
+      },
+      {
+        controlName: 'previousParticipationCategory',
+        controlType: 'select',
+        controlLabel: 'Participation Category',
+        controlWidth: '48%',
+        initialValue: '',
+        selectOptions: {
+          Singing: 'Singing',
+          Dancing: 'Dancing',
+          Acting: 'Acting',
+          Comedy: 'Comedy',
+          Drama: 'Drama',
+          Instrumental: 'Instrumental',
+          Other: 'Other'
+        },
+        validators: [Validators.required],
+        visible: false,
+        order: 5
+      },
+      {
+        controlName: 'previousParticipationOtherCategory',
+        controlType: 'text',
+        controlLabel: 'Other Talent',
+        controlWidth: '48%',
+        initialValue: null,
+        validators: [],
+        visible: false,
+        order: 5
+      },
+      {
+        controlName: 'competitionName',
+        controlType: 'text',
+        controlLabel: 'Competition Name',
+        controlWidth: '48%',
+        initialValue: null,
+        validators: [Validators.required],
+        visible: false,
+        order: 6
+      },
+      {
+        controlName: 'participationPosition',
+        controlType: 'text',
+        controlLabel: 'Participation Position',
+        controlWidth: '48%',
+        initialValue: null,
+        validators: [],
+        visible: false,
+        order: 7
+      }
+    ]
+
+    this.formInfoFields.sort((a,b) => (a.order - b.order));
+
+    this.formInfoFields.forEach(field => {
+      const formControl = new FormControl(field.initialValue, field.validators)
+      this.grpInfoForm.addControl(field.controlName, formControl)
+    });
+  }
+
+  //Converts an array to an Object of key value pairs
+  arrayToObject(arrayVar:any, key:string) {
+    let reqObj = {}
+    reqObj = arrayVar.reduce((agg:any, item:any, index:any) => {
+      agg[item['_id']] = item[key];
+      return agg;
+    }, {})
+    console.log(reqObj);
+    return reqObj;
+  }
+
+  private setupConditionalLogic() {
+    // TalentCategory → show/hide OtherTalentCategory
+    this.grpInfoForm.get('talentCategory')?.valueChanges.subscribe(value => {
+      const otherField = this.formInfoFields.find(f => f.controlName === 'otherTalentCategory');
+      const control = this.grpInfoForm.get('otherTalentCategory');
+
+      if (value === 'Other') {
+        otherField!.visible = true;
+        control?.setValidators([Validators.required]);
+      } 
+      else {
+        otherField!.visible = false;
+        control?.clearValidators();
+        control?.setValue('');
+      }
+      control?.updateValueAndValidity();
+    });
+
+    // PreviouslyParticipated → show/hide related fields
+    this.grpInfoForm.get('previouslyParticipated')?.valueChanges.subscribe(value => {
+      const participationFields = ['previousParticipationCategory', 'competitionName', 'participationPosition', 'previousParticipationOtherCategory'];
+
+      participationFields.forEach(name => {
+        const field = this.formInfoFields.find(f => f.controlName === name);
+        const control = this.grpInfoForm.get(name);
+
+        if (value === 'Yes') {
+          field!.visible = true;
+          if (name === 'previousParticipationCategory' || name === 'competitionName') {
+            control?.setValidators([Validators.required]);
+          }
+        } 
+        else {
+          field!.visible = false;
+          control?.clearValidators();
+          control?.setValue('');
+        }
+        control?.updateValueAndValidity();
+      });
+    });
+
+    // PreviousParticipationCategory → show/hide Other
+    this.grpInfoForm.get('previousParticipationCategory')?.valueChanges.subscribe(value => {
+      const otherField = this.formInfoFields.find(f => f.controlName === 'previousParticipationOtherCategory');
+      const control = this.grpInfoForm.get('previousParticipationOtherCategory');
+
+      if (value === 'Other') {
+        otherField!.visible = true;
+        control?.setValidators([Validators.required]);
+      } 
+      else {
+        otherField!.visible = false;
+        control?.clearValidators();
+        control?.setValue('');
+      }
+      control?.updateValueAndValidity();
+    });
+  }
+
+}

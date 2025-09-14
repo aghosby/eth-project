@@ -1,0 +1,42 @@
+@import '../../../../../assets/scss/mixins.scss';
+
+.page-wrap {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 6rem;
+    // grid-template-rows: 6rem calc(100% - 13rem) 5.5rem;
+
+    @include screen-media-min(md) {
+        margin-top: 7.5rem;
+        //grid-template-rows: 9rem calc(100% - 18rem) 8rem;
+    }
+
+    @include screen-media-min(xxxl) {
+        margin-top: 9rem;
+        //grid-template-rows: 9rem calc(100% - 18rem) 8rem;
+    }
+
+    .page-body {
+        position: relative;
+    }
+
+    .page-bkg {
+        width: 100%;
+        height: 66vh;
+        filter: grayscale(100%);
+        transform: translate(-50%, -50%);
+        opacity: 0.07;
+        position: fixed;
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
+        left: 50%;
+        top: 60%;
+
+        @include screen-media-min(md) {
+            width: 50%;
+            background-size: contain;
+        }
+    }
+}

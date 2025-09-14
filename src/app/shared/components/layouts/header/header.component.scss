@@ -1,0 +1,180 @@
+@import '../../../../../assets/scss/mixins.scss';
+
+header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: var(--bkg-1);
+    z-index: 1000;
+    left: 0;
+    top: 0;
+
+    @include screen-media-min(xxxl) {
+        padding: 1.5rem 10%;
+    }
+
+    .logo {
+
+        img {
+            width: auto;
+            height: 3.5rem;
+
+            @include screen-media-min(md) {
+                height: 5rem;
+            }
+
+            @include screen-media-min(xxl) {
+                height: 5rem;
+            }
+        }
+    }
+
+    nav {
+        margin-left: 1rem;
+
+        @include screen-media-min(md) {
+            margin-left: 7rem;
+        }
+
+        ul {
+            display: flex;
+            margin: 0;
+            gap: 1.7rem;
+
+            li {
+                list-style: none;
+
+                a {
+                    font-size: 0.85rem;
+                    font-weight: 400;
+                    letter-spacing: 0.06rem;
+                    font-family: 'Gilroy-medium';
+                    padding: 0.6rem 1rem;
+                    border-radius: 0.3rem;
+                    transition: all 0.4s ease;
+                    color: black;
+                    text-decoration: none;
+
+                    &.active {
+                        background: var(--primary);
+                        color: white;
+                    }                    
+                }
+            }
+        }
+    }
+
+    .info {
+        display: flex;
+        margin-left: auto;
+        align-items: center;
+        gap: 2rem;
+
+        .det {
+
+            &:first-child, &:nth-child(2) {
+                display: block;
+
+                @include screen-media-min(md) {
+                    display: block;
+                }
+            }
+
+            &.user {
+                width: 2.3rem;
+                height: 2.3rem;
+                font-size: 0.9rem;
+                font-weight: 500;
+                letter-spacing: 0.05rem;
+                border-radius: 50%;
+                display: inline-flex;
+                cursor: pointer;
+                justify-content: center;
+                border: 1px solid rgba($color: #000000, $alpha: 0.1);
+                align-items: center;
+                background: var(--bkg-2);
+                position: relative;
+
+                @include screen-media-min(md) {
+                    width: 2.5rem;
+                    height: 2.5rem;
+                }
+
+                &.active {
+
+                    &:after {
+                        background: var(--approved);
+                    }
+                }
+
+                &:after {
+                    content: '';
+                    width: 0.6rem;
+                    height: 0.6rem;
+                    border-radius: 50%;
+                    background: var(--warning);
+                    position: absolute;
+                    bottom: 0rem;
+                    right: 0rem;
+                }
+
+                .mini-menu {
+                    width: fit-content;
+                    position: absolute;
+                    bottom: -5.7rem;
+                    right: -1rem;
+                    padding: 0.6rem 1rem;
+                    cursor: pointer;
+                    border-radius: 0.3rem;
+                    background-color: white;
+                    border: 1px solid rgba(0,0,0,.05);
+                    box-shadow: 0 16px 43px rgba(0,0,0,.06);
+                    z-index: 4;
+
+                    .item {
+
+                        a {
+                            font-size: 0.85rem;
+                            display: inline-flex;
+                            white-space: nowrap;
+                            color: rgba(#000, 0.7);
+                            padding-bottom: 0.3rem;
+                            text-decoration: none;
+                        }
+
+                        &:nth-child(n+2) {
+                            border-top: 1px solid rgba(#000, 0.1);
+                        }
+                    }
+
+                    .text {
+                        text-align: center;
+                        white-space: nowrap;
+
+                        &:first-child {
+                            font-size: 0.75rem;
+                            color: rgba(#000, 0.3);
+                            padding-bottom: 0.5rem;
+                            //border-bottom: 1px solid rgba(#000, 0.1);
+                        }
+
+                        &:last-child {
+                            font-size: 0.8rem;
+                            letter-spacing: 0.03rem;
+                            padding-top: 0.5rem;
+                            cursor: pointer;
+                            color: var(--primary);
+                        }
+
+                        &.warn {
+                            color: var(--warning);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

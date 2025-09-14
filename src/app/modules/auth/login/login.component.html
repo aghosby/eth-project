@@ -1,0 +1,92 @@
+<div class="page-wrap">
+  <button class="back-btn"><i class="bi bi-arrow-left"></i> <span>Home</span></button>
+  <div class="pg-hdr text-center text-primary mb-4">
+    <img class="logo" src="assets/img/project/eth-logo-wht.png" alt="edo-talent-hunt">
+    <!-- <h1>Sign In</h1>
+    <p>Welcome back, enter your details to login</p> -->
+  </div>
+
+  <div class="pg-body px-lg-0 px-4">
+    <!-- NOTE Login form -->
+    <form class="form-group mx-auto" [formGroup]="authForm">
+
+      <!-- NOTE Email -->
+      <div class="field-group">
+        <mat-form-field *ngIf="userAction == 'create'" class="field w-48" appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" id="firstName" name="firstName" placeholder="Enter your first name">
+          <mat-error *ngIf="formCtrls['firstName'].touched && formCtrls['firstName'].hasError('required')">First name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="userAction == 'create'" class="field w-48" appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" id="lastName" name="lastName" placeholder="Enter your last name">
+          <mat-error *ngIf="formCtrls['lastName'].touched && formCtrls['lastName'].hasError('required')">Last name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="userAction != 'verify'" class="field" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" id="email" name="email" type="email" [readonly]="userAction == 'change'" placeholder="Enter your email">
+          <mat-error *ngIf="formCtrls['email'].touched && formCtrls['email'].hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="formCtrls['email'].touched && formCtrls['email'].hasError('email')">Please enter a valid email </mat-error>
+        </mat-form-field>
+
+        <div *ngIf="userAction == 'verify'" class="field d-flex justify-content-center">
+          <ng-otp-input formControlName="otp" [config]="{ length: 4 }"></ng-otp-input>
+        </div>
+
+        <mat-form-field *ngIf="userAction != 'reset' && userAction != 'create' && userAction != 'verify'" class="field" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'" id="password" name="password" placeholder="Enter your password">
+          <span class="eyePass">
+            <i alt="show" class="bi bi-eye-fill" (click)="showPassword = !showPassword" *ngIf="showPassword"></i>
+            <i alt="hide" class="bi bi-eye-slash-fill" (click)="showPassword = !showPassword" *ngIf="!showPassword"></i>
+          </span>
+          <mat-error *ngIf="formCtrls['password'].touched && formCtrls['password'].hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="formCtrls['password'].touched && formCtrls['password'].hasError('minlength')">Password must have at least 8 characters</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="userAction == 'change'" class="field" appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput formControlName="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword" placeholder="Enter password">
+          <span class="eyePass">
+            <i alt="show" class="bi bi-eye-fill" (click)="showConfirmPassword = !showConfirmPassword" *ngIf="showConfirmPassword"></i>
+            <i alt="hide" class="bi bi-eye-slash-fill" (click)="showConfirmPassword = !showConfirmPassword" *ngIf="!showConfirmPassword"></i>
+          </span>
+          <mat-error *ngIf="formCtrls['password'].touched && formCtrls['password'].hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="formCtrls['password'].touched && formCtrls['password'].hasError('minlength')">Password must have at least 8 characters</mat-error>
+          <mat-error *ngIf="formCtrls['password'].touched && !matchValid">Password does not match</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="userAction == 'login'" class="text-end mb-3">
+        <button role="button" (click)="changeState('reset')" class="cta sm">Forgot Password?</button>
+      </div>
+
+      <div class="text-center">
+        <button *ngIf="userAction == 'create'" (click)="verifyEmail()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
+          <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Create Account
+        </button>
+        <button *ngIf="userAction == 'verify'" (click)="verifyOtp()" type="submit" class="w-100 cta cta-primary my-4 px-5" role="button">Submit OTP</button>
+        <button [disabled]="timeLeft != 30" (click)="resendOtp()" *ngIf="userAction == 'verify'" class="w-100 cta cta-trans mb-4">
+          <span *ngIf="resendingOtp" class="loader spinner-border text-primary"></span> 
+          <span *ngIf="timeLeft != 30">Resend in {{timeLeft}}s</span>
+          <span *ngIf="timeLeft == 30">Resend OTP Code</span>
+        </button>
+        <button *ngIf="userAction == 'login'" (click)="login()" type="submit" class="w-100 cta cta-primary mb-3 px-5" role="button">Login</button>
+        <button *ngIf="userAction == 'reset'" (click)="resetPassword()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">Reset Password</button>
+        <button *ngIf="userAction == 'change'" (click)="login()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
+          <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Set Password
+        </button>
+      </div>
+
+      <div class="auth-actions text-center">
+        <div *ngIf="userAction != 'login'" class="info">Already have an account ? <button class="cta sm" (click)="this.changeState('login')">Log In</button></div>
+        <div *ngIf="userAction == 'login'" class="info">Don't have an account ? <button class="cta sm" (click)="changeState('create')">Create Account</button></div>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="pg-footer" style="background-image: url(assets/img/project/talent1.png);"></div>
+</div>

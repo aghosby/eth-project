@@ -136,7 +136,7 @@ export class PersonalInfoComponent implements OnInit {
         controlName: 'address',
         controlType: 'text',
         controlLabel: 'Address',
-        controlWidth: '48%',
+        controlWidth: '100%',
         initialValue: null,
         validators: [],
         order: 9
@@ -170,6 +170,23 @@ export class PersonalInfoComponent implements OnInit {
         validators: [],
         order: 12
       },
+      {
+        controlName: 'tshirtSize',
+        controlType: 'select',
+        controlLabel: 'Nationality',
+        controlWidth: '48%',
+        initialValue: null,
+        selectOptions: {
+          xs: 'XS',
+          s: 'S',
+          m: 'M',
+          l: 'L',
+          xl: 'XL',
+          xxl: 'XXL'
+        },
+        validators: [Validators.required],
+        order: 13
+      }
     ]
 
     this.formInfoFields.sort((a,b) => (a.order - b.order));

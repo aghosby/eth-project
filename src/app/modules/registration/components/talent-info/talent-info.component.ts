@@ -125,7 +125,7 @@ export class TalentInfoComponent implements OnInit {
           Instrumental: 'Instrumental',
           Other: 'Other'
         },
-        validators: [Validators.required],
+        validators: [],
         visible: false,
         order: 5
       },
@@ -145,7 +145,7 @@ export class TalentInfoComponent implements OnInit {
         controlLabel: 'Competition Name',
         controlWidth: '48%',
         initialValue: null,
-        validators: [Validators.required],
+        validators: [],
         visible: false,
         order: 6
       },
@@ -167,6 +167,15 @@ export class TalentInfoComponent implements OnInit {
       const formControl = new FormControl(field.initialValue, field.validators)
       this.grpInfoForm.addControl(field.controlName, formControl)
     });
+
+    // 🔥 Use the same map logic as parent
+    const stepKey = this.utilityService.mapStepName(this.stepName);
+    const saved = this.utilityService.getStep(stepKey);
+    console.log('Restoring form for', stepKey, saved);
+
+    if (saved?.value) {
+      this.grpInfoForm.patchValue(saved.value);
+    }
   }
 
   //Converts an array to an Object of key value pairs

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '@shared/services/notification.service';
+import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,6 +10,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  userId!: string;
   currentStep:number = 0;
   stepInView:any;
   regType:number = 1;
@@ -169,18 +171,23 @@ export class RegisterComponent implements OnInit {
   }
 
   constructor(
+    private sharedService: SharedService,
     private utilityService: UtilityService,
     private notifyService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.updateFormSteps();
-    this.viewStep(0);
+    // this.updateFormSteps();
+    // this.viewStep(0);
+    this.getCurrentStep()
+    // this.getProfileDetails()
   }
 
   viewStep(stepNo:number) {
     this.stepInView = this.formSteps.find(step => step.id === stepNo);
     this.currentStep = stepNo;
+    // save current step in session storage
+    sessionStorage.setItem('currentStep', String(stepNo));
     this.updateProgress();
   }
 
@@ -212,7 +219,7 @@ export class RegisterComponent implements OnInit {
     }
 
     // map display step name → storage key
-    const stepKey = this.mapStepName(currentStepName);
+    const stepKey = this.utilityService.mapStepName(currentStepName);
 
     // 🔥 Ask the current child to report its form state
     this.utilityService.requestFormReport(currentStepName);
@@ -236,21 +243,21 @@ export class RegisterComponent implements OnInit {
     }, 0);
   }
 
-  private mapStepName(stepName: string): string {
-    const map: { [key: string]: string } = {
-      'Personal Details': 'personalInfo',
-      'Group Lead Details': 'personalInfo', // for group registration
-      'Talent Details': 'talentInfo',
-      'Group Details': 'groupInfo',
-      'Media Upload': 'mediaInfo',
-      'Guardian Details': 'guardianInfo',
-      'Audition Details': 'auditionInfo',
-      'Terms & Signatures': 'termsConditions',
-      'Payment': 'payment',
-      'Success': 'success',
-    };
-    return map[stepName] || stepName;
-  }
+  // private mapStepName(stepName: string): string {
+  //   const map: { [key: string]: string } = {
+  //     'Personal Details': 'personalInfo',
+  //     'Group Lead Details': 'personalInfo', // for group registration
+  //     'Talent Details': 'talentInfo',
+  //     'Group Details': 'groupInfo',
+  //     'Media Upload': 'mediaInfo',
+  //     'Guardian Details': 'guardianInfo',
+  //     'Audition Details': 'auditionInfo',
+  //     'Terms & Signatures': 'termsConditions',
+  //     'Payment': 'payment',
+  //     'Success': 'success',
+  //   };
+  //   return map[stepName] || stepName;
+  // }
 
   private updateProgress(): void {
     this._formProgress = Math.ceil(
@@ -289,6 +296,50 @@ export class RegisterComponent implements OnInit {
     this.applicantAge = age;
     this.applicantAge$.next(age);
     this.updateFormSteps();
+  }
+
+  private getProfileDetails(): void {
+    this.apiLoading = true;
+
+    this.sharedService.getProfileDetails(this.userId).subscribe({
+      next: (profile) => {
+        this.apiLoading = false;
+
+        // 🔥 Merge profile + session data
+        const sessionData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+        const mergedData = { ...profile, ...sessionData };
+
+        // Save merged into service
+        Object.keys(mergedData).forEach((key) => {
+          this.utilityService.updateStep(key, {
+            valid: true, // assume profile data is valid
+            value: mergedData[key],
+          });
+        });
+
+        // Restore step
+        const savedStep = Number(sessionStorage.getItem('currentStep')) || 0;
+        this.updateFormSteps();
+        this.viewStep(savedStep);
+      },
+      error: (err) => {
+        this.apiLoading = false;
+        console.error('Failed to fetch profile details', err);
+
+        // fallback to session storage only
+        const savedStep = Number(sessionStorage.getItem('currentStep')) || 0;
+        this.updateFormSteps();
+        this.viewStep(savedStep);
+      }
+    });
+  }
+
+  getCurrentStep() {
+    this.apiLoading = false;
+    // fallback to session storage only
+    const savedStep = Number(sessionStorage.getItem('currentStep')) || 0;
+    this.updateFormSteps();
+    this.viewStep(savedStep);
   }
 
 }

@@ -76,11 +76,20 @@ export class GroupInfoComponent implements OnInit {
       members: new FormArray([], Validators.required)
     });
 
+    // 🔥 Use the same map logic as parent
+    const stepKey = this.utilityService.mapStepName(this.stepName);
+    const saved = this.utilityService.getStep(stepKey);
+    console.log('Restoring form for', stepKey, saved);
+
+    if (saved?.value) {
+      this.grpInfoForm.patchValue(saved.value);
+    }
+
     this.grpInfoForm.get('noOfGroupMembers')?.valueChanges.subscribe((count: number) => {
       this.setMembers(count);
     });
 
-    // initialize with default 1
+    // initialize with default 2
     this.setMembers(2);
   }
 

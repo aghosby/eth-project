@@ -17,7 +17,8 @@ import SignaturePad from 'signature_pad';
 export class SignaturePadComponent implements ControlValueAccessor, AfterViewInit {
   @ViewChild('signatureCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   private signaturePad!: SignaturePad;
-
+  private pendingValue: string | null = null;
+  
   private onChange: (value: string | null) => void = () => {};
   private onTouched: () => void = () => {};
 
@@ -46,6 +47,17 @@ export class SignaturePadComponent implements ControlValueAccessor, AfterViewIni
     
     this.signaturePad.addEventListener('endStroke', () => this.drawComplete());
     this.signaturePad.clear();
+
+    if (this.pendingValue) {
+      //this.signaturePad.fromDataURL(this.pendingValue);
+      this.signaturePad.fromDataURL(this.pendingValue!, {
+        width: 200,
+        height: 100,
+        xOffset: 40,
+        yOffset: 15
+      });
+      this.pendingValue = null;
+    }
   }
 
   drawComplete() {
@@ -62,13 +74,19 @@ export class SignaturePadComponent implements ControlValueAccessor, AfterViewIni
 
   // ControlValueAccessor methods
   writeValue(value: string | null): void {
+    console.log('Val', value);
     this.value = value;
     if (this.signaturePad) {
       if (value) {
         this.signaturePad.fromDataURL(value);
-      } else {
+      } 
+      else {
         this.signaturePad.clear();
       }
+    } 
+    else {
+      // Pad not ready yet → save for later
+      this.pendingValue = value;
     }
   }
 

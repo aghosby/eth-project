@@ -72,7 +72,37 @@ export class UtilityService {
   }
 
   getStep(stepName: string): StepForm | undefined {
-    console.log(stepName)
-    return this.forms[stepName];
+    // check in-memory first
+    if (this.forms[stepName]) {
+      return this.forms[stepName];
+    }
+
+    // fallback: check sessionStorage
+    const savedData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+
+    if (savedData[stepName]) {
+      return {
+        valid: true, // assume valid if it came from API/session
+        value: savedData[stepName],
+      };
+    }
+
+    return undefined;
+  }
+
+  mapStepName(stepName: string): string {
+    const map: { [key: string]: string } = {
+      'Personal Details': 'personalInfo',
+      'Group Lead Details': 'personalInfo',
+      'Talent Details': 'talentInfo',
+      'Group Details': 'groupInfo',
+      'Media Upload': 'mediaInfo',
+      'Guardian Details': 'guardianInfo',
+      'Audition Details': 'auditionInfo',
+      'Terms & Signatures': 'termsConditions',
+      'Payment': 'payment',
+      'Success': 'success',
+    };
+    return map[stepName] || stepName;
   }
 }

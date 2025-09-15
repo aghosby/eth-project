@@ -13,8 +13,7 @@
         />
         <div class="icon"><i class="bi bi-camera-video-fill"></i></div>
         <div class="info text-center">
-            Click to upload a video, <span>Maximum Size 10MB</span> <br>
-            <span>Recommended aspect ratio: 16:9</span>
+            Click to upload a video, <span>Maximum Size 10MB</span>
         </div>
 
         <!-- Video Preview -->
@@ -28,9 +27,9 @@
         >
         </video>
 
-        <span class="file-name" [style.color]="'#2C90FF'">
+        <!-- <span class="file-name" [style.color]="'#2C90FF'">
             {{ fileName || (videoUrl ? 'Change video' : 'No video uploaded') }}
-        </span>
+        </span> -->
     </div>
 
     <div *ngIf="error" class="errors">

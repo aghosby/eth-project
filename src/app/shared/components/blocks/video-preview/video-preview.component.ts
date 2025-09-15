@@ -14,7 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class VideoPreviewComponent implements ControlValueAccessor {
-  @Input() initialUrl: string | null = null; // Existing video (from server, e.g. S3 link)
+  @Input() initialUrl: string | null = null; // Existing video (from server)
   @Input() label = 'Upload Video';
   @Input() preamble = 'Attach your performance video';
 
@@ -27,14 +27,22 @@ export class VideoPreviewComponent implements ControlValueAccessor {
   private onTouched: any = () => {};
   disabled = false;
 
-  // Max size = 10MB
-  readonly MAX_SIZE = 10 * 1024 * 1024;
+  readonly MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
-  writeValue(value: any): void {
-    if (typeof value === 'string') {
+  // Handle value from parent form control or initialUrl
+  writeValue(value: string | File | null): void {
+    if (value instanceof File) {
+      this.file = value;
+      this.fileName = value.name;
+      this.videoUrl = URL.createObjectURL(value);
+    } else if (typeof value === 'string') {
       this.videoUrl = value;
+      this.file = null;
+      this.fileName = value.split('/').pop() || null;
     } else {
       this.videoUrl = this.initialUrl || null;
+      this.file = null;
+      this.fileName = null;
     }
   }
 
@@ -56,9 +64,9 @@ export class VideoPreviewComponent implements ControlValueAccessor {
       const file = input.files[0];
 
       if (file.size > this.MAX_SIZE) {
-        this.error = 'File is too large. Maximum size is 3MB.';
+        this.error = `File is too large. Maximum size is ${this.MAX_SIZE / (1024 * 1024)}MB.`;
         this.file = null;
-        this.videoUrl = null;
+        this.videoUrl = this.initialUrl || null;
         this.fileName = null;
         this.onChange(null);
         return;

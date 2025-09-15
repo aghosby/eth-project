@@ -18,14 +18,26 @@ export class ProfilePhotoComponent implements ControlValueAccessor {
 
   profilePic: string | null = null; // preview
   file: File | null = null;
+  errorMessage: string | null = null; // for validation feedback
 
   private onChange: any = () => {};
   private onTouched: any = () => {};
   disabled = false;
 
   // Handle input from parent (formControl value or initialUrl)
-  writeValue(value: string | null): void {
-    this.profilePic = value || this.initialUrl || null;
+  writeValue(value: string | File | null): void {
+    if (value instanceof File) {
+      this.file = value;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.profilePic = reader.result as string;
+      };
+      reader.readAsDataURL(value);
+    } else if (typeof value === 'string') {
+      this.profilePic = value || this.initialUrl || null;
+    } else {
+      this.profilePic = this.initialUrl || null;
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -43,7 +55,19 @@ export class ProfilePhotoComponent implements ControlValueAccessor {
   profilePicUpload(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.file = input.files[0];
+      const file = input.files[0];
+
+      // Validate size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        this.errorMessage = 'File size must be less than 2MB';
+        this.file = null;
+        this.profilePic = this.initialUrl || null;
+        this.onChange(null);
+        return;
+      }
+
+      this.errorMessage = null;
+      this.file = file;
 
       // Preview
       const reader = new FileReader();

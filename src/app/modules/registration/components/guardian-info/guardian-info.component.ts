@@ -144,6 +144,15 @@ export class GuardianInfoComponent implements OnInit {
       const formControl = new FormControl(field.initialValue, field.validators)
       this.grpInfoForm.addControl(field.controlName, formControl)
     });
+
+    // 🔥 Use the same map logic as parent
+    const stepKey = this.utilityService.mapStepName(this.stepName);
+    const saved = this.utilityService.getStep(stepKey);
+    console.log('Restoring form for', stepKey, saved);
+
+    if (saved?.value) {
+      this.grpInfoForm.patchValue(saved.value);
+    }
   }
 
   private setupConditionalLogic() {

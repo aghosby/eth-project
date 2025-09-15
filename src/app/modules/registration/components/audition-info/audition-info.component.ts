@@ -91,7 +91,7 @@ export class AuditionInfoComponent implements OnInit {
           Projector: 'Projector',
           Other: 'Other'
         },
-        validators: [Validators.required],
+        validators: [],
         visible: true,
         order: 4
       },
@@ -101,7 +101,7 @@ export class AuditionInfoComponent implements OnInit {
         controlLabel: 'Other Requirement',
         controlWidth: '48%',
         initialValue: null,
-        validators: [Validators.required],
+        validators: [],
         visible: false,
         order: 4
       },
@@ -115,7 +115,7 @@ export class AuditionInfoComponent implements OnInit {
           Yes: 'Yes',
           No: 'No'
         },
-        validators: [Validators.required],
+        validators: [],
         visible: true,
         order: 5
       }
@@ -127,6 +127,15 @@ export class AuditionInfoComponent implements OnInit {
       const formControl = new FormControl(field.initialValue, field.validators)
       this.grpInfoForm.addControl(field.controlName, formControl)
     });
+
+    // 🔥 Use the same map logic as parent
+    const stepKey = this.utilityService.mapStepName(this.stepName);
+    const saved = this.utilityService.getStep(stepKey);
+    console.log('Restoring form for', stepKey, saved);
+
+    if (saved?.value) {
+      this.grpInfoForm.patchValue(saved.value);
+    }
   }
 
   private setupConditionalLogic() {

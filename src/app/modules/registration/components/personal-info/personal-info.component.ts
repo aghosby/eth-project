@@ -174,6 +174,15 @@ export class PersonalInfoComponent implements OnInit {
       this.grpInfoForm.addControl(field.controlName, formControl)
     });
 
+    // 🔥 Use the same map logic as parent
+    const stepKey = this.utilityService.mapStepName(this.stepName);
+    const saved = this.utilityService.getStep(stepKey);
+    console.log('Restoring form for', stepKey, saved);
+
+    if (saved?.value) {
+      this.grpInfoForm.patchValue(saved.value);
+    }
+
     this.grpInfoForm.get('dateOfBirth')?.valueChanges.subscribe((dob: Date) => {
       if (dob) {
         const today = new Date();

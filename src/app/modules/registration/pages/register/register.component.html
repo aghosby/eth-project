@@ -5,12 +5,12 @@
 <div class="page-wrap">
     <div class="page-hdr">
         <div class="title">
-            <h5 *ngIf="currentStep > 0">Step {{currentStep}} of {{formSteps.length - 2}}</h5>
+            <h5 *ngIf="currentStep > 0 && this.stepInView?.stepName !== 'Success'">Step {{currentStep}} of {{formSteps.length - 2}}</h5>
             <h2>{{stepInView?.stepName}}</h2>
             <p *ngIf="stepInView?.description">{{stepInView?.description}}</p>
         </div>
         <div *ngIf="currentStep > 0" class="progress-wrap">
-            <app-donut-progress [value]="formProgess" size="60px" thickness="8px" color="#27AE60"></app-donut-progress>
+            <app-donut-progress [value]="this.stepInView?.stepName === 'Success' ? 100 : formProgess" size="60px" thickness="8px" color="#27AE60"></app-donut-progress>
         </div>
     </div>
     <div class="page-body">
@@ -40,9 +40,11 @@
             <app-guardian-info *ngIf="stepInView?.stepName == 'Guardian Details'" [stepName]="stepInView?.stepName"></app-guardian-info>
             <app-audition-info *ngIf="stepInView?.stepName == 'Audition Details'" [stepName]="stepInView?.stepName"></app-audition-info>
             <app-terms-conditions *ngIf="stepInView?.stepName == 'Terms & Signatures'" [applicantAge]="applicantAge$ | async" [stepName]="stepInView?.stepName"></app-terms-conditions>
-            <app-registration-payment *ngIf="stepInView?.stepName == 'Payment'" [stepName]="stepInView?.stepName"></app-registration-payment>
+            <app-registration-payment *ngIf="stepInView?.stepName == 'Review & Payment'" [stepName]="stepInView?.stepName" [formSteps]="formSteps"></app-registration-payment>
 
-            <div *ngIf="stepInView?.stepName == 'Success'" class="successful-registration"></div>
+            <div *ngIf="stepInView?.stepName == 'Success'" class="success mt-3">
+                <img src="assets/img/project/success.gif" alt="edo-talent-hunt">
+            </div>
         </div>
 
         <div 

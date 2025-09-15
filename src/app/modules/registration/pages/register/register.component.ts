@@ -20,150 +20,7 @@ export class RegisterComponent implements OnInit {
 
   formSteps:any[] = [];
   
-  allFormSteps:any[] = [
-    {
-      id: 0,
-      stepName: 'Registration Type',
-      description: 'Are you registering as an individual or a group ?',
-      buttons: [
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 1,
-      stepName: 'Personal Details',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 2,
-      stepName: 'Talent Details',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 3,
-      stepName: 'Group Details',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 4,
-      stepName: 'Media Upload',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 5,
-      stepName: 'Guardian Details',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 6,
-      stepName: 'Audition Details',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 7,
-      stepName: 'Terms & Signatures',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Next',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 8,
-      stepName: 'Payment',
-      description: '',
-      buttons: [
-        {
-          text: 'Back',
-          action: -1
-        },
-        {
-          text: 'Make Payment',
-          action: +1
-        }
-      ]
-    },
-    {
-      id: 9,
-      stepName: 'Success',
-      description: '',
-      buttons: [
-        {
-          text: 'View Profile',
-          action: +1
-        }
-      ]
-    }
-  ]
+  allFormSteps:any[] = [];
 
   _formProgress:number = 0;
   get formProgess() {
@@ -177,10 +34,11 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.allFormSteps = this.utilityService.formSteps
     // this.updateFormSteps();
     // this.viewStep(0);
     this.getCurrentStep()
-    // this.getProfileDetails()
+    //this.getProfileDetails()
   }
 
   viewStep(stepNo:number) {
@@ -227,7 +85,12 @@ export class RegisterComponent implements OnInit {
     // Wait for the child to respond before deciding
     setTimeout(() => {
       const step = this.utilityService.getStep(stepKey);
-      //console.log(step)
+      console.log(step)
+
+      if(currentStepName == 'Review & Payment') {
+        this.viewStep(nextStep);
+        return;
+      }
 
       if (!step || !step.valid) {
         this.notifyService.showError('Please check that you have filled in all required fields')
@@ -338,6 +201,9 @@ export class RegisterComponent implements OnInit {
     this.apiLoading = false;
     // fallback to session storage only
     const savedStep = Number(sessionStorage.getItem('currentStep')) || 0;
+    const regData = sessionStorage.getItem('registrationData') || ''
+    this.regType = regData ? JSON.parse(regData).registrationType.regType : 1;
+    console.log(this.regType)
     this.updateFormSteps();
     this.viewStep(savedStep);
   }

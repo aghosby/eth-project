@@ -1,5 +1,134 @@
+@import '../../../../../assets/scss/mixins.scss';
+
 .payment-container {
     display: flex;
     justify-content: center;
     margin-top: 2rem;
+}
+
+.page-wrap {
+
+    .page-hdr {
+        max-width: 40rem;
+        margin: 1.5rem 0;
+
+        h4 {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            letter-spacing: 0.04rem;
+            color: rgba(0, 0, 0, 0.7);
+
+            span {
+                color: var(--primary);
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+
+.accordion {
+
+    .accordion-item {
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: var(--radius-md);
+
+        &:nth-child(n+2) {
+            margin-top: 1rem;
+        }
+
+        .accordion-header {
+            border: none;
+            
+            .accordion-button {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 0.85rem;
+                letter-spacing: 0.02rem;
+                background-color: transparent;
+                padding: 1rem 3%;
+
+                @include screen-media-min(md) {
+                    padding: 1.5rem 3%;
+                }
+
+                &::after {
+                    display: none;
+                    background-size: 70%;
+                }
+
+                &:focus {
+                    outline: none;
+                    box-shadow: none;
+                }
+
+                .name {
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    letter-spacing: 0.05rem;
+                    color: var(--black);
+
+                    @include screen-media-min(md) {
+                        font-size: 0.9rem;
+                    }
+                }
+
+                .accordion-arrow {
+                    transition: transform 0.4s ease;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .accordion-arrow.active {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+
+        .accordion-body {
+            padding: 0 3% 1rem;
+
+            .field-group {
+                h4 {
+                    font-size: 0.75rem;
+                    letter-spacing: 0.04rem;
+                    color: var(--primary);
+                    margin-top: 1rem;
+                    margin-bottom: 0.7rem;
+                }
+            }
+            
+            .field-row {
+                width: 100%;
+                padding: 0 0.5rem;
+                display: inline-flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 2.5rem;
+
+                &:nth-child(n+2) {
+                    border-top: 1px solid rgba(0, 0, 0, 0.1);
+                }
+
+                .row-wrap {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .label, .value {
+                        font-size: 0.75rem;
+                        font-weight: 400;
+                        letter-spacing: 0.05rem;
+                    }
+
+                    .label {
+                        color: rgba(0, 0, 0, 0.6);
+                    }
+                }
+            }
+        }
+    }
 }

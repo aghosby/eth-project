@@ -26,6 +26,7 @@ export class GroupInfoComponent implements OnInit {
 
   grpInfoForm:FormGroup = new FormGroup({});
   formInfoFields!: FormFields[];
+  formStepLabels:any;
   screenSize!:number;
   useFormWidth:boolean = true;
   grpCountSelectOptions:any = {
@@ -56,11 +57,14 @@ export class GroupInfoComponent implements OnInit {
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
       this.grpInfoForm.markAllAsTouched();
+      const stepKey = this.utilityService.mapStepName(this.stepName);
       if (stepName === 'Group Details') {
-        this.utilityService.updateStep('groupInfo', {
+        this.utilityService.updateStep(stepKey, {
           valid: this.grpInfoForm.valid,
           value: this.grpInfoForm.value,
         });
+
+        this.utilityService.saveStepLabelsToSession(stepKey, this.formStepLabels);
       }
     });
   }
@@ -82,8 +86,24 @@ export class GroupInfoComponent implements OnInit {
     console.log('Restoring form for', stepKey, saved);
 
     if (saved?.value) {
-      this.grpInfoForm.patchValue(saved.value);
+      this.grpInfoForm.patchValue({
+        ...saved.value,
+        members: []
+      });
+
+      if (saved.value.members && Array.isArray(saved.value.members)) {
+        const membersArray = this.grpInfoForm.get('members') as FormArray;
+        membersArray.clear();
+
+        saved.value.members.forEach((member: any) => {
+          const memberGroup = this.createMember(); // create empty group
+          memberGroup.patchValue(member); // patch member values into it
+          membersArray.push(memberGroup); // add to array
+        });
+      }
     }
+
+    // this.formStepLabels = this.utilityService.generateFieldMapping(this.formInfoFields);
 
     this.grpInfoForm.get('noOfGroupMembers')?.valueChanges.subscribe((count: number) => {
       this.setMembers(count);

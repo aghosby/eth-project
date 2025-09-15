@@ -16,6 +16,7 @@ export class PersonalInfoComponent implements OnInit {
   private stepTrigger!: Subscription;
   grpInfoForm:FormGroup = new FormGroup({});
   formInfoFields!: FormFields[];
+  formStepLabels:any;
   screenSize!:number;
   useFormWidth:boolean = true;
   maxDate!: Date;
@@ -35,11 +36,14 @@ export class PersonalInfoComponent implements OnInit {
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
       this.grpInfoForm.markAllAsTouched();
+      const stepKey = this.stepName == 'Group Lead Details' ? this.utilityService.mapStepName('Personal Details') : this.utilityService.mapStepName(this.stepName);
       if (stepName === 'Personal Details' || stepName === 'Group Lead Details') {
-        this.utilityService.updateStep('personalInfo', {
+        this.utilityService.updateStep(stepKey, {
           valid: this.grpInfoForm.valid,
           value: this.grpInfoForm.value,
         });
+
+        this.utilityService.saveStepLabelsToSession(stepKey, this.formStepLabels);
       }
     });
   }
@@ -175,13 +179,15 @@ export class PersonalInfoComponent implements OnInit {
     });
 
     // 🔥 Use the same map logic as parent
-    const stepKey = this.utilityService.mapStepName(this.stepName);
+    const stepKey = this.stepName == 'Group Lead Details' ? this.utilityService.mapStepName('Personal Details') : this.utilityService.mapStepName(this.stepName);
     const saved = this.utilityService.getStep(stepKey);
     console.log('Restoring form for', stepKey, saved);
 
     if (saved?.value) {
       this.grpInfoForm.patchValue(saved.value);
     }
+
+    this.formStepLabels = this.utilityService.generateFieldMapping(this.formInfoFields);
 
     this.grpInfoForm.get('dateOfBirth')?.valueChanges.subscribe((dob: Date) => {
       if (dob) {

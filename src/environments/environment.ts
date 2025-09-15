@@ -22,6 +22,7 @@ export const environment = {
   envName         : EnvName.LOCAL,
   defaultLanguage : 'en',
   apiBaseUrl      : baseUrl,
+  credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH'
 };
 
 /*

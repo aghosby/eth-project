@@ -14,6 +14,7 @@ export class AuditionInfoComponent implements OnInit {
   private stepTrigger!: Subscription;
   grpInfoForm:FormGroup = new FormGroup({});
   formInfoFields!: FormFields[];
+  formStepLabels:any;
   screenSize!:number;
   useFormWidth:boolean = true;
   keepOrder = () => 0;
@@ -30,11 +31,14 @@ export class AuditionInfoComponent implements OnInit {
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
       this.grpInfoForm.markAllAsTouched();
+      const stepKey = this.utilityService.mapStepName(this.stepName);
       if (stepName === 'Audition Details') {
-        this.utilityService.updateStep('auditionInfo', {
+        this.utilityService.updateStep(stepKey, {
           valid: this.grpInfoForm.valid,
           value: this.grpInfoForm.value,
         });
+
+        this.utilityService.saveStepLabelsToSession(stepKey, this.formStepLabels);
       }
     });
   }
@@ -136,6 +140,8 @@ export class AuditionInfoComponent implements OnInit {
     if (saved?.value) {
       this.grpInfoForm.patchValue(saved.value);
     }
+
+    this.formStepLabels = this.utilityService.generateFieldMapping(this.formInfoFields);
   }
 
   private setupConditionalLogic() {

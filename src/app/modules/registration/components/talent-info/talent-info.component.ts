@@ -15,6 +15,7 @@ export class TalentInfoComponent implements OnInit {
   private stepTrigger!: Subscription;
   grpInfoForm:FormGroup = new FormGroup({});
   formInfoFields!: FormFields[];
+  formStepLabels:any;
   screenSize!:number;
   useFormWidth:boolean = true;
   keepOrder = () => 0;
@@ -31,11 +32,14 @@ export class TalentInfoComponent implements OnInit {
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       //console.log('Step', stepName)
       this.grpInfoForm.markAllAsTouched();
+      const stepKey = this.utilityService.mapStepName(this.stepName);
       if (stepName === 'Talent Details') {
-        this.utilityService.updateStep('talentInfo', {
+        this.utilityService.updateStep(stepKey, {
           valid: this.grpInfoForm.valid,
           value: this.grpInfoForm.value,
         });
+
+        this.utilityService.saveStepLabelsToSession(stepKey, this.formStepLabels);
       }
     });
   }
@@ -176,6 +180,8 @@ export class TalentInfoComponent implements OnInit {
     if (saved?.value) {
       this.grpInfoForm.patchValue(saved.value);
     }
+
+    this.formStepLabels = this.utilityService.generateFieldMapping(this.formInfoFields);
   }
 
   //Converts an array to an Object of key value pairs

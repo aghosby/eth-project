@@ -21,6 +21,7 @@ export class PersonalInfoComponent implements OnInit {
   useFormWidth:boolean = true;
   maxDate!: Date;
   @Output() ageChange = new EventEmitter<number>();
+  keepOrder = () => 0;
   
   constructor(private utilityService: UtilityService) {
     const today = new Date();

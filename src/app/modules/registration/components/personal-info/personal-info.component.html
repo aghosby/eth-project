@@ -21,7 +21,7 @@
                             panelClass="matDropdown"
                             [formControlName]="field.controlName"
                         >
-                            <mat-option *ngFor="let option of field.selectOptions | keyvalue" [value]="option.key">{{option.value}}</mat-option>
+                            <mat-option *ngFor="let option of field.selectOptions | keyvalue: keepOrder" [value]="option.key">{{option.value}}</mat-option>
                         </mat-select>
                         <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
                     </mat-form-field>

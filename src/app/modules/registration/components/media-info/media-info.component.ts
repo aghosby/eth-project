@@ -42,8 +42,8 @@ export class MediaInfoComponent implements OnInit, OnDestroy {
 
   private setUpForm(): void {
     this.grpInfoForm = new FormGroup({
-      profilePhoto: new FormControl('', Validators.required),
-      videoUpload: new FormControl('', Validators.required),
+      profilePhoto: new FormControl(''),
+      videoUpload: new FormControl(''),
     });
 
     this.restoreFromSession();

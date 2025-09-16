@@ -64,7 +64,7 @@
       </div>
 
       <div class="text-center">
-        <button *ngIf="userAction == 'create'" (click)="verifyEmail()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
+        <button *ngIf="userAction == 'create'" (click)="createAccount()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
           <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Create Account
         </button>
         <button *ngIf="userAction == 'verify'" (click)="verifyOtp()" type="submit" class="w-100 cta cta-primary my-4 px-5" role="button">Submit OTP</button>
@@ -73,9 +73,13 @@
           <span *ngIf="timeLeft != 30">Resend in {{timeLeft}}s</span>
           <span *ngIf="timeLeft == 30">Resend OTP Code</span>
         </button>
-        <button *ngIf="userAction == 'login'" (click)="login()" type="submit" class="w-100 cta cta-primary mb-3 px-5" role="button">Login</button>
-        <button *ngIf="userAction == 'reset'" (click)="resetPassword()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">Reset Password</button>
-        <button *ngIf="userAction == 'change'" (click)="login()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
+        <button *ngIf="userAction == 'login'" (click)="login()" type="submit" class="w-100 cta cta-primary mb-3 px-5" role="button">
+          <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Login
+        </button>
+        <button *ngIf="userAction == 'reset'" (click)="resendOtp()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
+          <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Reset Password
+        </button>
+        <button *ngIf="userAction == 'change'" (click)="setPassword()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
           <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Set Password
         </button>
       </div>

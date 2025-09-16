@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
   interval:any
 
   public authForm !: FormGroup<any>;
+  loggedInUser:any;
 
   constructor(
     private router: Router,
@@ -175,69 +176,75 @@ export class LoginComponent implements OnInit {
 
   verifyOtp() {
     this.changeState('change');
-    // if(this.authForm.controls['otp'].valid) {
-    //   this.isLoading = true;
-    //   let payload = {
-    //     email: this.authForm.value.email,
-    //     otp: Number(this.authForm.value.otp)
-    //   }
-    //   this.authService.verifyOtp(payload).subscribe({
-    //     next: res => {
-    //       //console.log(res);
-    //       if (res.status_code == 200) {
-    //         this.changeState('create')
-    //         this.isLoading = false; 
-    //         this.notifyService.showSuccess(res.message)
-    //       }
-    //     },
-    //     error: err => {
-    //       this.isLoading = false;  
-    //     }
-    //   })
-    // }
-    // else {
-    //   this.notifyService.showError('Please check that the you have filled in your email address')
-    // }
+    if(this.authForm.controls['otp'].valid) {
+      this.isLoading = true;
+      let payload = {
+        email: this.authForm.value.email,
+        otp: Number(this.authForm.value.otp)
+      }
+      this.authService.verifyOtp(payload).subscribe({
+        next: res => {
+          //console.log(res);
+          if (res.success) {
+            this.changeState('create')
+            this.isLoading = false; 
+            this.notifyService.showSuccess(res.message)
+          }
+        },
+        error: err => {
+          this.notifyService.showSuccess(err.message)
+          this.isLoading = false;  
+        }
+      })
+    }
+    else {
+      this.notifyService.showError('Please check that the you have filled in your email address')
+    }
   }
 
   createAccount() {
-    this.changeState('verify');
-    // if(this.formCtrls['firstName'].valid && this.formCtrls['lastName'].valid && this.formCtrls['email'].valid) {
-    //   this.isLoading = true;
-    //   let payload = {
-    //     firstName: this.authForm.value.firstName,
-    //     lastName: this.authForm.value.lastName,
-    //     email: this.authForm.value.email,
-    //   }
-
-    //   this.authService.createAccount(payload).subscribe({
-    //     next: res => {
-    //       this.changeState('verify');
-    //       //this.notifyService.showSuccess('Your account has been created successfully');
-    //     },
-    //     error: err => {
-    //       //console.log(err);
-    //       this.notifyService.showError(err.error);
-    //       this.isLoading = false;  
-    //     }
-    //   })
-    // }
-    // else {
-    //   this.notifyService.showError('Please check that the you have filled in all required fields')
-    // }    
+    //this.changeState('verify');
+    if(this.formCtrls['firstName'].valid && this.formCtrls['lastName'].valid && this.formCtrls['email'].valid) {
+      this.isLoading = true;
+      let payload = {
+        firstName: this.authForm.value.firstName,
+        lastName: this.authForm.value.lastName,
+        email: this.authForm.value.email,
+      }
+      sessionStorage.setItem('userRegDetails', JSON.stringify(payload));
+      this.authService.createAccount(payload).subscribe({
+        next: res => {
+          if (res.success) {
+            this.changeState('verify');
+            this.notifyService.showSuccess(res.message);
+          }
+        },
+        error: err => {
+          this.notifyService.showError(err.message);
+          this.isLoading = false;  
+        }
+      })
+    }
+    else {
+      this.authForm.markAllAsTouched();
+      this.notifyService.showError('Please check that the you have filled in all required fields')
+    }    
   }
 
   resendOtp() {
     this.startTimer();
     this.resendingOtp = true;
+    const userRegDetails = JSON.parse(sessionStorage.getItem('userRegDetails')!)
+    if(userRegDetails) this.authForm.controls['email'].setValue(userRegDetails.email)
     let payload = {
       email: this.authForm.value.email,
     }
     this.authService.verifyEmail(payload).subscribe({
       next: (res:any) => {
         //console.log(res);
-        if (res.status_code == 200) {
+        if (res.success) {
           this.changeState('verify')
+          this.notifyService.showSuccess(res.message);
           this.resendingOtp = false; 
         }
       },
@@ -272,72 +279,69 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.router.navigate(['/register']);
-    // console.log(this.authForm.value)
-    // if((this.authForm.controls['email'].valid) && this.authForm.controls['password'].valid) {
-    //   this.isLoading = true;
-    //   let payload = {
-    //     username: this.authForm.value.email,
-    //     password: this.authForm.value.password
-    //   }
-    //   this.authService.login(payload).subscribe({
-    //     next: res => {
-    //       console.log(res);
-    //       if (res.status_code == 200) {
-    //         if(res.data.changeDefaultPassword) {
-    //           this.userAction = 'change';
-    //           this.resetToken = res.data.token.access_token;
-    //           this.isLoading = false;
-    //           this.authForm.controls['oldPassword'].setValue(this.authForm.value.password);
-    //           this.authForm.controls['password'].setValue('');
-    //         }
-    //         else {
-    //           // sessionStorage.setItem("loggedInEventOrganizer", JSON.stringify(res.data))
-    //           // this.notifyService.showSuccess('You logged in successfully');
-    //           // this.loggedInUser = this.eventsService.loggedInUser;
-    //           // this.getProfileInfo();
-    //           // this.isLoading = false;  
-    //         } 
-    //       }
-    //     },
-    //     error: err => {
-    //       //this.notifyService.showError(err.error);
-    //       this.isLoading = false;  
-    //     }
-    //   })
-    // }
-    // else {
-    //   this.notifyService.showError('Please check that the you have filled in all required fields')
-    // }
+    //this.router.navigate(['/register']);
+    console.log(this.authForm.value)
+    if((this.authForm.controls['email'].valid) && this.authForm.controls['password'].valid) {
+      this.isLoading = true;
+      let payload = {
+        email: this.authForm.value.email,
+        password: this.authForm.value.password
+      }
+      this.authService.login(payload).subscribe({
+        next: res => {
+          console.log(res);
+          if (res.success) {
+            sessionStorage.setItem("loggedInUser", JSON.stringify(res.data))
+            this.notifyService.showSuccess('You logged in successfully');
+            this.loggedInUser = this.authService.loggedInUser;
+            // this.getProfileInfo();
+            this.router.navigate(['/register']);
+            this.isLoading = false; 
+          }
+        },
+        error: err => {
+          this.notifyService.showError(err.message);
+          this.isLoading = false;  
+        }
+      })
+    }
+    else {
+      this.authForm.markAllAsTouched();
+      this.notifyService.showError('Please check that the you have filled in all required fields')
+    }
    
   }
 
-  resetPassword() {
-    this.changeState('verify');
-    // if(this.authForm.controls['email'].valid) {
-    //   this.isLoading = true;
-    //   let payload = {
-    //     email: this.authForm.value.email,
-    //   }
-
-    //   this.authService.resetPassword(payload).subscribe({
-    //     next: res => {
-    //       console.log('Reset', res);
-    //       if (res.status_code == 200) {
-    //         this.notifyService.showSuccess('You password reset was successful. Check your email for your new password');
-    //         this.userAction = 'login';
-    //         this.isLoading = false;   
-    //       }
-    //     },
-    //     error: err => {
-    //       //this.notifyService.showError(err.error);
-    //       this.isLoading = false;  
-    //     }
-    //   })
-    // }
-    // else {
-    //   this.notifyService.showError('Please check that the you have filled in your email address')
-    // }
+  setPassword() {
+    //this.changeState('verify');
+    const userRegDetails = JSON.parse(sessionStorage.getItem('userRegDetails')!)
+    if(userRegDetails) this.authForm.controls['email'].setValue(userRegDetails.email)
+    if(this.authForm.controls['email'].valid) {
+      this.isLoading = true;
+      let payload = {
+        email: this.authForm.value.email,
+        password: this.authForm.value.password,
+        confirmPassword: this.authForm.value.confirmPassword
+      }
+      this.authService.setPassword(payload).subscribe({
+        next: res => {
+          console.log('Reset', res);
+          if (res.success) {
+            this.notifyService.showSuccess(res.message);
+            this.userAction = 'login';
+            this.isLoading = false;   
+          }
+        },
+        error: err => {
+          this.notifyService.showError(err.message);
+          this.isLoading = false;  
+        }
+      })
+    }
+    else {
+      this.authForm.markAllAsTouched();
+      this.notifyService.showError('Please check that the you have filled in your email address')
+    }
   }
 
 

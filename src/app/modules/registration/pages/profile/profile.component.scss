@@ -112,10 +112,11 @@
             .accordion-button {
                 display: flex;
                 align-items: center;
+                border-radius: var(--radius-md);
                 justify-content: space-between;
                 font-size: 0.85rem;
                 letter-spacing: 0.02rem;
-                background-color: transparent;
+                background-color: white;
                 padding: 1rem 3%;
 
                 @include screen-media-min(md) {
@@ -157,6 +158,7 @@
 
         .accordion-body {
             padding: 0 3% 1rem;
+            background: white;
 
             .field-group {
                 h4 {

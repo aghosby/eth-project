@@ -42,9 +42,12 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUser = this.authService.loggedInUser;
-    this.allFormSteps = this.utilityService.formSteps
-    this.getRegistrationData();
-    //this.getCurrentStep()
+    this.allFormSteps = this.utilityService.formSteps;
+    if(this.loggedInUser.registrationInfo.currentStep == 0) {
+      this.savedRegData = {};
+      this.getCurrentStep()
+    }
+    else this.getRegistrationData();
   }
 
   viewStep(stepNo:number) {
@@ -213,15 +216,19 @@ export class RegisterComponent implements OnInit {
     this.apiLoading = false;
     const regData = sessionStorage.getItem('registrationData') || ''
     if(this.loggedInUser.registrationInfo) {
-      this.regType = this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
+      const loggedInUserReg = this.loggedInUser.registrationInfo.registrationType
+      this.regType = loggedInUserReg ? loggedInUserReg === 'individual' ? 1 : 2 : 1
     }
     else {
       this.regType = regData ? JSON.parse(regData).registrationType?.regType : 1
+      console.log('else')
     }    
     // fallback to session storage only
     const savedStep = this.loggedInUser.currentStep ? this.loggedInUser.currentStep : Number(sessionStorage.getItem('currentStep')) || 0;
-    const savedAge = this.savedRegData.personalInfo.dateOfBirth
-    this.getUserAge(new Date(savedAge))
+    if(this.savedRegData && this.savedRegData.personalInfo) {
+      const savedAge = this.savedRegData.personalInfo.dateOfBirth
+      this.getUserAge(new Date(savedAge))
+    }
     this.updateFormSteps();
     this.viewStep(savedStep);
   }

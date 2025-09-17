@@ -234,6 +234,7 @@ export class LoginComponent implements OnInit {
   }
 
   resendOtp() {
+    this.isLoading = true
     this.startTimer();
     this.resendingOtp = true;
     const userRegDetails = JSON.parse(sessionStorage.getItem('userRegDetails')!)
@@ -246,12 +247,14 @@ export class LoginComponent implements OnInit {
       next: (res:any) => {
         //console.log(res);
         if (res.success) {
+          this.isLoading = false;
           this.changeState('verify')
           this.notifyService.showSuccess(res.message);
           this.resendingOtp = false; 
         }
       },
       error: (err: any) => {
+        this.isLoading = false;
         this.resendingOtp = false;  
       }
     })

@@ -50,7 +50,9 @@ export class MediaInfoComponent implements OnInit, OnDestroy {
   }
 
   private restoreFromSession(): void {
-    const saved = JSON.parse(sessionStorage.getItem('mediaUpload') || '{}');
+    const savedRegData = this.utilityService.registrationData.mediaInfo;
+    // const patch = savedRegData ? { ...initial, ...savedRegData } : {...initial};
+    const saved = savedRegData ? savedRegData : JSON.parse(sessionStorage.getItem('mediaUpload') || '{}');
 
     if (saved.profilePhoto || saved.videoUpload) {
       this.profilePic = saved.profilePhoto || '';

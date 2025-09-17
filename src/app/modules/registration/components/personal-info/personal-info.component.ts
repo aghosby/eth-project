@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Countries } from '@shared/constants/countries';
 import { FormFields } from '@shared/models/form-fields';
+import { AuthService } from '@shared/services/auth.service';
+import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
 import { Subscription } from 'rxjs';
 
@@ -13,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class PersonalInfoComponent implements OnInit {
 
   @Input() stepName!: string;
+  @Input() formInitialValue!: any;
   private stepTrigger!: Subscription;
   grpInfoForm:FormGroup = new FormGroup({});
   formInfoFields!: FormFields[];
@@ -23,7 +26,11 @@ export class PersonalInfoComponent implements OnInit {
   @Output() ageChange = new EventEmitter<number>();
   keepOrder = () => 0;
   
-  constructor(private utilityService: UtilityService) {
+  constructor(
+    private utilityService: UtilityService,
+    private authService: AuthService,
+    private sharedService: SharedService
+  ) {
     const today = new Date();
     this.maxDate = new Date(today.getFullYear() - 3, today.getMonth(), today.getDate());
   }
@@ -50,6 +57,7 @@ export class PersonalInfoComponent implements OnInit {
   }
 
   setUpForm = async () => {
+    console.log(this.formInitialValue);
     this.formInfoFields = [
       {
         controlName: 'firstName',
@@ -74,7 +82,7 @@ export class PersonalInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Email Address',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.authService.loggedInUser.email ?? null,
         validators: [Validators.required, Validators.email],
         order: 3
       },
@@ -143,10 +151,11 @@ export class PersonalInfoComponent implements OnInit {
       },
       {
         controlName: 'state',
-        controlType: 'text',
+        controlType: 'select',
         controlLabel: 'State of Origin',
         controlWidth: '48%',
         initialValue: null,
+        selectOptions: {},
         validators: [],
         order: 10
       },
@@ -173,7 +182,7 @@ export class PersonalInfoComponent implements OnInit {
       {
         controlName: 'tshirtSize',
         controlType: 'select',
-        controlLabel: 'Nationality',
+        controlLabel: 'T-Shirt Size',
         controlWidth: '48%',
         initialValue: null,
         selectOptions: {
@@ -188,6 +197,8 @@ export class PersonalInfoComponent implements OnInit {
         order: 13
       }
     ]
+
+    this.getStates();
 
     this.formInfoFields.sort((a,b) => (a.order - b.order));
 
@@ -218,17 +229,20 @@ export class PersonalInfoComponent implements OnInit {
         this.ageChange.emit(age);
       }
     });
+
+    this.grpInfoForm.get('state')?.valueChanges.subscribe(stateName => {
+      if (stateName) {
+        this.getLgas(stateName);
+      }
+    });
   }
 
   //Converts an array to an Object of key value pairs
-  arrayToObject(arrayVar:any, key:string) {
-    let reqObj = {}
-    reqObj = arrayVar.reduce((agg:any, item:any, index:any) => {
-      agg[item['_id']] = item[key];
+  arrayToObject(arrayVar: any[], key: string) {
+    return arrayVar.reduce((agg: any, item: any) => {
+      agg[item.name] = item[key]; // ✅ use name instead of _id
       return agg;
-    }, {})
-    console.log(reqObj);
-    return reqObj;
+    }, {});
   }
 
   createCountryOptions() {
@@ -239,6 +253,28 @@ export class PersonalInfoComponent implements OnInit {
     }, {})
     //console.log(reqObj);
     return reqObj;
+  }
+
+  getStates() {
+    this.sharedService.getStates().subscribe((res: any) => {
+      const stateOptions = this.arrayToObject(res.data.states, 'name');
+      const stateField = this.formInfoFields.find(f => f.controlName === 'state');
+      const placeOfBirthField = this.formInfoFields.find(f => f.controlName === 'placeOfBirth');
+      if (stateField && placeOfBirthField) {
+        stateField.selectOptions = stateOptions;
+        placeOfBirthField.selectOptions = stateOptions;
+      }
+    });
+  }
+
+  getLgas(stateName: string) {
+    this.sharedService.getLgas(stateName).subscribe((res: any) => {
+      const lgaOptions = this.arrayToObject(res.data.lgas, 'name');
+      const lgaField = this.formInfoFields.find(f => f.controlName === 'lga');
+      if (lgaField) {
+        lgaField.selectOptions = lgaOptions;
+      }
+    });
   }
 
   

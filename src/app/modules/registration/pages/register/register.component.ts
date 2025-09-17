@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@shared/services/auth.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
@@ -17,10 +18,12 @@ export class RegisterComponent implements OnInit {
   apiLoading:boolean = false;
   applicantAge: number = 18;
   applicantAge$ = new BehaviorSubject<number | null>(null);
+  loggedInUser:any;
 
   formSteps:any[] = [];
   
   allFormSteps:any[] = [];
+  savedRegData:any;
 
   _formProgress:number = 0;
   get formProgess() {
@@ -28,15 +31,18 @@ export class RegisterComponent implements OnInit {
   }
 
   constructor(
+    private authService: AuthService,
     private sharedService: SharedService,
     private utilityService: UtilityService,
     private notifyService: NotificationService
   ) {}
 
   ngOnInit(): void {
+    this.loggedInUser = this.authService.loggedInUser;
     this.allFormSteps = this.utilityService.formSteps
     // this.updateFormSteps();
     // this.viewStep(0);
+    this.getRegistrationData();
     this.getCurrentStep()
     //this.getProfileDetails()
   }
@@ -59,16 +65,7 @@ export class RegisterComponent implements OnInit {
     }
 
     if (this.currentStep === 0) {
-      // 🔥 Step 0 is in parent → push regType directly
-      this.utilityService.updateStep('registrationType', {
-        valid: true, // or add more validation if needed
-        value: { regType: this.regType },
-      });
-
-      //console.log('✅ Step "registrationType" saved:', { regType: this.regType });
-
-      // proceed to next step
-      this.viewStep(nextStep);
+      this.startRegistration();
       return;
     }
 
@@ -97,12 +94,19 @@ export class RegisterComponent implements OnInit {
         console.warn(`❌ Step "${currentStepName}" is invalid`, step?.value);
         return;
       }
+      else {
+        switch(stepKey) {
+          case 'personalInfo' :
+            this.savePersonalInfo(step.value, nextStep);
+        }
+
+        
+      }
 
       //console.log(`✅ Step "${currentStepName}" valid, moving to next step...`);
       //console.log('Form Value:', step.value);
 
-      // Move to next step
-      this.viewStep(nextStep);
+      
     }, 0);
   }
 
@@ -163,8 +167,7 @@ export class RegisterComponent implements OnInit {
 
   private getProfileDetails(): void {
     this.apiLoading = true;
-
-    this.sharedService.getProfileDetails(this.userId).subscribe({
+    this.sharedService.getProfileDetails().subscribe({
       next: (profile) => {
         this.apiLoading = false;
 
@@ -197,15 +200,89 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  getRegistrationData() {
+    this.sharedService.getUserRegistration().subscribe({
+      next: res => {
+        if(res.success) {
+          this.savedRegData = res.data
+          console.log(this.savedRegData)
+        }
+      },
+      error: err => {}
+    })
+  }
+
   getCurrentStep() {
     this.apiLoading = false;
-    // fallback to session storage only
-    const savedStep = Number(sessionStorage.getItem('currentStep')) || 0;
     const regData = sessionStorage.getItem('registrationData') || ''
-    this.regType = regData ? JSON.parse(regData).registrationType.regType : 1;
+    if(this.loggedInUser.registrationType) {
+      this.regType = this.loggedInUser.registrationType === 'individual' ? 1 : 2 
+    }
+    else {
+      this.regType = regData ? JSON.parse(regData).registrationType.regType : 1
+    }    
+    // fallback to session storage only
+    const savedStep = this.loggedInUser.currentStep ? this.loggedInUser.currentStep : Number(sessionStorage.getItem('currentStep')) || 0;
+    
     console.log(this.regType)
     this.updateFormSteps();
     this.viewStep(savedStep);
+  }
+
+  startRegistration() {
+    this.apiLoading = true
+    console.log(this.utilityService.userCurrentStep)
+    if(this.utilityService.userCurrentStep < 1) {
+      const payload = {
+        registrationType: this.regType === 1 ? 'individual' : 'group'
+      }
+      this.sharedService.startRegistration(payload).subscribe({
+        next: res => {
+          if (res.success) {
+            // 🔥 Step 0 is in parent → push regType directly
+            this.utilityService.updateStep('registrationType', {
+              valid: true, // or add more validation if needed
+              value: { regType: this.regType },
+            });
+
+            //console.log('✅ Step "registrationType" saved:', { regType: this.regType });
+
+            // Proceed to next step
+            this.viewStep(1);
+            this.apiLoading = false;
+            // this.notifyService.showSuccess(res.message);
+          }
+        },
+        error: err => {
+          this.notifyService.showError(err.error.message);
+          this.viewStep(1);
+          this.apiLoading = false;  
+        }
+      })
+    }
+    else {
+      // Proceed to next step
+      this.viewStep(1);
+      this.apiLoading = false;
+    }
+  }
+
+  savePersonalInfo(payload:any, nextStep:number) {
+    this.apiLoading = true;
+    this.sharedService.createPersonalInfo(payload).subscribe({
+      next: res => {
+        if(res.success) {
+          this.notifyService.showSuccess(res.message)
+          this.apiLoading = false;
+          // Move to next step
+          this.viewStep(nextStep);
+        }
+      },
+      error: err => {
+        this.apiLoading = false;
+        this.notifyService.showError(err.error.message)
+      }
+    })
   }
 
 }

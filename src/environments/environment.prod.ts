@@ -10,7 +10,7 @@ const port   = ':5000';
 const path   = '/api/';
 
 // const baseUrl = scheme + host + port + path;
-const baseUrl = 'https://eth-project-backend-1086159474664.europe-west1.run.app/v1'
+const baseUrl = 'https://eth-project-backend-1086159474664.europe-west1.run.app/api/v1'
 
 
 export const environment = {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '@shared/services/auth.service';
 import { UtilityService } from '@shared/services/utility.service';
 
 @Component({
@@ -10,25 +11,22 @@ import { UtilityService } from '@shared/services/utility.service';
 export class HeaderComponent implements OnInit {
 
   loggedInUser:any;
-  userInitials:string = 'AE';
+  userInitials!:string;
   logOutConfirm: boolean = false;
 
   constructor(
     private router: Router,
+    private authService: AuthService,
     private utilityService: UtilityService,
   ) {}
 
   ngOnInit(): void {
-      
+    this.loggedInUser = this.authService.loggedInUser;
+    this.userInitials = `${this.loggedInUser.firstName[0]}${this.loggedInUser.lastName[0]}`
   }
 
   logOut() {
-    this.router.navigate([`../login`]);
-    // sessionStorage.clear();
-    // localStorage.clear();
-    setTimeout(()=> {
-      window.location.reload();
-    }, 800)
+    this.authService.logOut();
   }
 
 }

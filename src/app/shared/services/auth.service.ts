@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -9,10 +10,20 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class AuthService {
 
   private baseUrl = `${environment.apiBaseUrl}`;
-  private _isLoggedin$ = new BehaviorSubject<boolean>(false);
+  public readonly TOKEN_NAME = 'userToken';
+  public _isLoggedin$ = new BehaviorSubject<boolean>(false);
   public isLoggedIn = this._isLoggedin$.asObservable();
   
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
+    this._isLoggedin$.next(!!this.token);
+  }
+
+  get token() {
+    return sessionStorage.getItem(this.TOKEN_NAME);
+  }
 
   get loggedInUser() {
     const user = sessionStorage.getItem('loggedInUser');
@@ -27,7 +38,7 @@ export class AuthService {
   }
 
   public verifyEmail(payload:any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/auth//verify-email`, payload);
+    return this.http.post<any>(`${this.baseUrl}/auth/forgot-password`, payload);
   }
 
   public verifyOtp(payload:any): Observable<any> {
@@ -40,5 +51,17 @@ export class AuthService {
 
   public login(payload:any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/auth/login`, payload);
+  }
+
+  public logOut() {
+    sessionStorage.removeItem(this.TOKEN_NAME);
+    sessionStorage.removeItem('loggedInUser');
+    sessionStorage.clear();
+    this.router.navigate([`../login`]);
+    // sessionStorage.clear();
+    // localStorage.clear();
+    setTimeout(()=> {
+      window.location.reload();
+    }, 800)
   }
 }

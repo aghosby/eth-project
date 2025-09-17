@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 interface StepForm {
   valid: boolean;
@@ -135,7 +136,15 @@ export class UtilityService {
     }
   ];
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
+
+  get userCurrentStep() {
+    const storedStep = Number(sessionStorage.getItem('currentStep'));
+    return this.authService.loggedInUser.currentStep ?? storedStep;
+  }
 
   getScreenSize(): 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl' {
     const width = window.innerWidth;

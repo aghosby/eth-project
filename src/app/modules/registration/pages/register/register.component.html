@@ -33,7 +33,12 @@
                 
             </div>
 
-            <app-personal-info *ngIf="currentStep == 1" (ageChange)="onAgeChange($event)" [stepName]="stepInView?.stepName"></app-personal-info>
+            <app-personal-info 
+                *ngIf="currentStep == 1" 
+                (ageChange)="onAgeChange($event)" 
+                [stepName]="stepInView?.stepName"
+                [formInitialValue]="savedRegData?.personalInfo"
+            ></app-personal-info>
             <app-talent-info *ngIf="stepInView?.stepName == 'Talent Details'" [stepName]="stepInView?.stepName"></app-talent-info>
             <app-group-info *ngIf="stepInView?.stepName == 'Group Details'" [stepName]="stepInView?.stepName"></app-group-info>
             <app-media-info *ngIf="stepInView?.stepName == 'Media Upload'" [stepName]="stepInView?.stepName"></app-media-info>
@@ -67,7 +72,7 @@
                 }"
                 role="button"
             >
-                <span *ngIf="apiLoading" class="loader spinner-border text-white"></span> {{button.text}}
+                <span *ngIf="button.action !== -1 && apiLoading" class="loader spinner-border text-white"></span> {{button.text}}
             </button>
         </div>
     </div>

@@ -23,7 +23,7 @@ import { timer } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
 
-  userAction: 'email' | 'login' | 'create' | 'change' | 'reset' | 'verify' = 'login';
+  userAction: 'email' | 'login' | 'create' | 'change' | 'reset' | 'verify' = 'change';
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   isLoading:boolean = false;
@@ -147,37 +147,39 @@ export class LoginComponent implements OnInit {
   }
 
   verifyEmail() {
-    this.changeState('verify');
-    // if(this.authForm.controls['email'].valid) {
-    //   this.isLoading = true;
-    //   let payload = {
-    //     email: this.authForm.value.email,
-    //   }
-    //   this.authService.verifyEmail(payload).subscribe({
-    //     next: res => {
-    //       //console.log(res);
-    //       if (res.status) {
-    //         this.changeState('verify')
-    //         this.isLoading = false; 
-    //         this.authForm.controls['email'].disable();
-    //         this.notifyService.showSuccess('An OTP code has been successfully sent to your email');
-    //         this.startTimer();
-    //       }
-    //     },
-    //     error: err => {
-    //       this.isLoading = false;  
-    //     }
-    //   })
-    // }
-    // else {
-    //   this.notifyService.showError('Please check that the you have filled in your email address')
-    // }
+    //this.changeState('verify');
+    if(this.authForm.controls['email'].valid) {
+      this.isLoading = true;
+      let payload = {
+        email: this.authForm.value.email,
+      }
+      this.authService.verifyEmail(payload).subscribe({
+        next: res => {
+          //console.log(res);
+          if (res.success) {
+            this.changeState('verify')
+            this.isLoading = false; 
+            this.authForm.controls['email'].disable();
+            this.notifyService.showSuccess('An OTP code has been successfully sent to your email');
+            this.startTimer();
+          }
+        },
+        error: err => {
+          this.isLoading = false;  
+        }
+      })
+    }
+    else {
+      this.notifyService.showError('Please check that the you have filled in your email address')
+    }
   }
 
   verifyOtp() {
-    this.changeState('change');
+    //this.changeState('change');
     if(this.authForm.controls['otp'].valid) {
       this.isLoading = true;
+      const userRegDetails = JSON.parse(sessionStorage.getItem('userRegDetails')!)
+      if(userRegDetails) this.authForm.controls['email'].setValue(userRegDetails.email)
       let payload = {
         email: this.authForm.value.email,
         otp: Number(this.authForm.value.otp)
@@ -186,13 +188,13 @@ export class LoginComponent implements OnInit {
         next: res => {
           //console.log(res);
           if (res.success) {
-            this.changeState('create')
+            this.changeState('change')
             this.isLoading = false; 
             this.notifyService.showSuccess(res.message)
           }
         },
         error: err => {
-          this.notifyService.showSuccess(err.message)
+          this.notifyService.showSuccess(err.error.message)
           this.isLoading = false;  
         }
       })
@@ -220,7 +222,7 @@ export class LoginComponent implements OnInit {
           }
         },
         error: err => {
-          this.notifyService.showError(err.message);
+          this.notifyService.showError(err.error.message);
           this.isLoading = false;  
         }
       })
@@ -239,6 +241,7 @@ export class LoginComponent implements OnInit {
     let payload = {
       email: this.authForm.value.email,
     }
+    console.log('payload', payload)
     this.authService.verifyEmail(payload).subscribe({
       next: (res:any) => {
         //console.log(res);
@@ -278,29 +281,31 @@ export class LoginComponent implements OnInit {
     clearInterval(this.interval);
   }
 
-  login() {
+  login(email?:string) {
     //this.router.navigate(['/register']);
     console.log(this.authForm.value)
     if((this.authForm.controls['email'].valid) && this.authForm.controls['password'].valid) {
       this.isLoading = true;
       let payload = {
-        email: this.authForm.value.email,
+        email: email ? email : this.authForm.value.email,
         password: this.authForm.value.password
       }
       this.authService.login(payload).subscribe({
         next: res => {
-          console.log(res);
           if (res.success) {
-            sessionStorage.setItem("loggedInUser", JSON.stringify(res.data))
+            console.log(res)
+            if(email) sessionStorage.removeItem('userRegDetails');
+            sessionStorage.setItem("loggedInUser", JSON.stringify(res.data.user))
             this.notifyService.showSuccess('You logged in successfully');
+            this.authService._isLoggedin$.next(true);
+            sessionStorage.setItem(this.authService.TOKEN_NAME, res.data.token);
             this.loggedInUser = this.authService.loggedInUser;
-            // this.getProfileInfo();
             this.router.navigate(['/register']);
             this.isLoading = false; 
           }
         },
         error: err => {
-          this.notifyService.showError(err.message);
+          this.notifyService.showError(err.error.message);
           this.isLoading = false;  
         }
       })
@@ -328,12 +333,12 @@ export class LoginComponent implements OnInit {
           console.log('Reset', res);
           if (res.success) {
             this.notifyService.showSuccess(res.message);
-            this.userAction = 'login';
+            this.login(payload.email)
             this.isLoading = false;   
           }
         },
         error: err => {
-          this.notifyService.showError(err.message);
+          this.notifyService.showError(err.error.message);
           this.isLoading = false;  
         }
       })

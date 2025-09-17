@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,41 @@ import { Observable } from 'rxjs';
 export class SharedService {
 
   private baseUrl = `${environment.apiBaseUrl}`;
-  
-  constructor(private http: HttpClient) { }
+  private userId = this.authService.loggedInUser.id ?? '';
 
-  public getProfileDetails(id:any): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/profile/${id}`);
+  requestOptions:any = {
+    headers: new HttpHeaders({
+      Authorization: `Bearer ${this.authService.token}`
+    })
+  };
+  
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
+
+  public getProfileDetails(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/user/profile`, this.requestOptions);
+  }
+
+  public startRegistration(payload:any): Observable<any> {
+    console.log('Headers', this.requestOptions)
+    return this.http.post<any>(`${this.baseUrl}/registrations`, payload, this.requestOptions);
+  }
+
+  public getStates(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/locations/states`);
+  }
+
+  public getLgas(state:string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/locations/states/${state}/lgas`);
+  }
+
+  public getUserRegistration(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/registrations/${this.userId}`, this.requestOptions);
+  }
+
+  public createPersonalInfo(payload:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/registrations/${this.userId}/personal-info`, payload, this.requestOptions);
   }
 }

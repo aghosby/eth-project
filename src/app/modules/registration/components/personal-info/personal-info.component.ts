@@ -64,7 +64,7 @@ export class PersonalInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'First Name',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.authService.loggedInUser.firstName ?? null,
         validators: [Validators.required],
         order: 1
       },
@@ -73,7 +73,7 @@ export class PersonalInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Last Name',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.authService.loggedInUser.lastName ?? null,
         validators: [Validators.required],
         order: 2
       },
@@ -186,12 +186,12 @@ export class PersonalInfoComponent implements OnInit {
         controlWidth: '48%',
         initialValue: null,
         selectOptions: {
-          xs: 'XS',
-          s: 'S',
-          m: 'M',
-          l: 'L',
-          xl: 'XL',
-          xxl: 'XXL'
+          XS: 'XS',
+          S: 'S',
+          M: 'M',
+          L: 'L',
+          XL: 'XL',
+          XXL: 'XXL'
         },
         validators: [Validators.required],
         order: 13
@@ -207,26 +207,14 @@ export class PersonalInfoComponent implements OnInit {
       this.grpInfoForm.addControl(field.controlName, formControl)
     });
 
-    // 🔥 Use the same map logic as parent
-    const stepKey = this.stepName == 'Group Lead Details' ? this.utilityService.mapStepName('Personal Details') : this.utilityService.mapStepName(this.stepName);
-    const saved = this.utilityService.getStep(stepKey);
-    console.log('Restoring form for', stepKey, saved);
-
-    if (saved?.value) {
-      this.grpInfoForm.patchValue(saved.value);
-    }
+    this.getRegistrationData();
 
     this.formStepLabels = this.utilityService.generateFieldMapping(this.formInfoFields);
 
     this.grpInfoForm.get('dateOfBirth')?.valueChanges.subscribe((dob: Date) => {
       if (dob) {
-        const today = new Date();
-        let age = today.getFullYear() - dob.getFullYear();
-        const m = today.getMonth() - dob.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-          age--;
-        }
-        this.ageChange.emit(age);
+        const date = typeof dob === 'string' ? new Date(dob) : dob;
+        this.handleDateOfBirthChange(date);
       }
     });
 
@@ -244,6 +232,23 @@ export class PersonalInfoComponent implements OnInit {
       return agg;
     }, {});
   }
+
+  handleDateOfBirthChange(dob: Date) {
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    this.ageChange.emit(age);
+  }
+
+  // setCountryOptions() {
+  //   const nationalityField = this.formInfoFields.find(f => f.controlName === 'nationality');
+  //   if(nationalityField) {
+  //     nationalityField.selectOptions = this.createCountryOptions();
+  //   }
+  // }
 
   createCountryOptions() {
     let reqObj = {}
@@ -275,6 +280,52 @@ export class PersonalInfoComponent implements OnInit {
         lgaField.selectOptions = lgaOptions;
       }
     });
+  }
+
+  setInitialFormValues(initial: any) {
+    if (!initial) return;
+
+    const patch = { ...initial };
+
+    // ✅ normalize dateOfBirth
+    if (patch.dateOfBirth) {
+      patch.dateOfBirth = new Date(patch.dateOfBirth);
+    }
+
+    // patch everything
+    this.grpInfoForm.patchValue(patch);
+
+    // ✅ trigger dob logic manually
+    if (patch.dateOfBirth) {
+      this.handleDateOfBirthChange(patch.dateOfBirth);
+    }
+
+    // ✅ trigger state -> lga logic manually
+    if (patch.state) {
+      this.getLgas(patch.state);
+    }
+  }
+
+
+  getRegistrationData() {
+    if (this.formInitialValue) {
+      this.setInitialFormValues(this.formInitialValue)
+      //console.log('Patched')
+    }
+    else {
+      // 🔥 Use the same map logic as parent
+      const stepKey = this.stepName == 'Group Lead Details' ? this.utilityService.mapStepName('Personal Details') : this.utilityService.mapStepName(this.stepName);
+      const storedData = this.utilityService.registrationData.personalInfo;
+      //console.log('Data', storedData)
+      const savedData = this.utilityService.getStep(stepKey);
+      //console.log('Restoring form for', stepKey, savedData);
+      if(storedData) {
+        this.setInitialFormValues(storedData);
+      }
+      else if (savedData?.value) {
+        this.grpInfoForm.patchValue(savedData.value);
+      }
+    }
   }
 
   

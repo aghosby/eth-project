@@ -45,6 +45,6 @@ export class SharedService {
   }
 
   public createPersonalInfo(payload:any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/registrations/${this.userId}/personal-info`, payload, this.requestOptions);
+    return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/personal-info`, payload, this.requestOptions);
   }
 }

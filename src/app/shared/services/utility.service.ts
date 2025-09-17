@@ -143,7 +143,21 @@ export class UtilityService {
 
   get userCurrentStep() {
     const storedStep = Number(sessionStorage.getItem('currentStep'));
-    return this.authService.loggedInUser.currentStep ?? storedStep;
+    return this.savedRegStep.currentStep ?? storedStep;
+  }
+
+  get registrationData() {
+    const storedData = sessionStorage.getItem('savedRegData')
+    if(storedData) {
+      return JSON.parse(storedData);
+    }
+  }
+
+  get savedRegStep() {
+    const storedData = sessionStorage.getItem('savedRegStep')
+    if(storedData) {
+      return JSON.parse(storedData);
+    }
   }
 
   getScreenSize(): 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl' {

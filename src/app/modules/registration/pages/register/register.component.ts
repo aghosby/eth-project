@@ -200,11 +200,26 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  updateSavedRegData(key: string, value: any) {
+    const saved = sessionStorage.getItem('savedRegData');
+    if (!saved) return; // nothing saved yet
+
+    // parse
+    const savedObj = JSON.parse(saved);
+
+    // update the section you want
+    savedObj[key] = value;
+
+    // save back
+    sessionStorage.setItem('savedRegData', JSON.stringify(savedObj));
+  }
+
   getRegistrationData() {
     this.sharedService.getUserRegistration().subscribe({
       next: res => {
         if(res.success) {
           this.savedRegData = res.data
+          sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
           console.log(this.savedRegData)
         }
       },
@@ -219,7 +234,7 @@ export class RegisterComponent implements OnInit {
       this.regType = this.loggedInUser.registrationType === 'individual' ? 1 : 2 
     }
     else {
-      this.regType = regData ? JSON.parse(regData).registrationType.regType : 1
+      this.regType = regData ? JSON.parse(regData).registrationType?.regType : 1
     }    
     // fallback to session storage only
     const savedStep = this.loggedInUser.currentStep ? this.loggedInUser.currentStep : Number(sessionStorage.getItem('currentStep')) || 0;
@@ -255,7 +270,6 @@ export class RegisterComponent implements OnInit {
         },
         error: err => {
           this.notifyService.showError(err.error.message);
-          this.viewStep(1);
           this.apiLoading = false;  
         }
       })
@@ -269,12 +283,18 @@ export class RegisterComponent implements OnInit {
 
   savePersonalInfo(payload:any, nextStep:number) {
     this.apiLoading = true;
-    this.sharedService.createPersonalInfo(payload).subscribe({
+    const payloadData = {
+      ...payload,
+      nextStep: this.currentStep + 1
+    }
+    this.sharedService.createPersonalInfo(payloadData).subscribe({
       next: res => {
         if(res.success) {
           this.notifyService.showSuccess(res.message)
           this.apiLoading = false;
           // Move to next step
+          // map display step name → storage key
+          this.updateSavedRegData('personalInfo', payload)
           this.viewStep(nextStep);
         }
       },

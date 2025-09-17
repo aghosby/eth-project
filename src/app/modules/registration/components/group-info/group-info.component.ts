@@ -40,12 +40,12 @@ export class GroupInfoComponent implements OnInit {
     Female: 'Female'
   }
   tshirtSelectOptions:any = {
-    xs: 'XS',
-    s: 'S',
-    m: 'M',
-    l: 'L',
-    xl: 'XL',
-    xxl: 'XXL'
+    XS: 'XS',
+    S: 'S',
+    M: 'M',
+    L: 'L',
+    XL: 'XL',
+    XXL: 'XXL'
   }
 
   ngOnInit(): void {

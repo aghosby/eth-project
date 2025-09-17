@@ -300,6 +300,7 @@ export class LoginComponent implements OnInit {
             this.authService._isLoggedin$.next(true);
             sessionStorage.setItem(this.authService.TOKEN_NAME, res.data.token);
             this.loggedInUser = this.authService.loggedInUser;
+            sessionStorage.setItem('savedRegStep', JSON.stringify(res.data.user.registrationInfo));
             this.router.navigate(['/register']);
             this.isLoading = false; 
           }

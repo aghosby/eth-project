@@ -1,10 +1,100 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@shared/services/auth.service';
+import { NotificationService } from '@shared/services/notification.service';
+import { SharedService } from '@shared/services/shared.service';
+import { FormStep, UtilityService } from '@shared/services/utility.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
+
+  allFormSteps:any[] = [];
+  savedRegData:any;
+  formSteps: FormStep[] = [];
+  regType!:number;
+  apiLoading:boolean = false;
+  applicantAge!: number;
+  loggedInUser:any;
+  groupInfoData:any;
+
+  activeStepTab: number | null = null;
+  toggleStepTab(index: number) {
+    this.activeStepTab = this.activeStepTab === index ? null : index;
+  }
+
+  constructor(
+    private authService: AuthService,
+    private utilityService: UtilityService,
+    private sharedService: SharedService,
+    private notifyService: NotificationService
+  ) {}
+
+  ngOnInit(): void {
+    this.allFormSteps = this.utilityService.formSteps;
+    this.loggedInUser = this.authService.loggedInUser;
+    this.getRegistrationData();
+  }
+
+  getRegistrationData() {
+    this.sharedService.getUserRegistration().subscribe({
+      next: res => {
+        if(res.success) {
+          this.savedRegData = res.data
+          console.log(this.savedRegData)
+          sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
+          this.regType = this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
+          this.groupInfoData = this.savedRegData.groupInfo;
+          this.updateFormSteps();
+          //this.getCurrentStep();
+        }
+      },
+      error: err => {
+        this.notifyService.showError(err.error.message);
+      }
+    })
+  }
+
+  updateFormSteps() {
+    let steps = [...this.allFormSteps];
+
+    steps.find(s => {
+      if(s.id === 1) s.stepName = this.regType === 1 ? 'Personal Details' : 'Group Lead Details'
+    })
+
+    // remove Group Details if not a group
+    if (this.regType !== 2) {
+      steps = steps.filter(s => s.stepName !== 'Group Details');
+    }
+
+    // remove Guardian Details if applicant is 16 or older
+    if (this.applicantAge >= 16) {
+      steps = steps.filter(s => s.stepName !== 'Guardian Details');
+    }
+
+    // reindex sequentially
+    this.formSteps = steps.map((s, i) => ({ ...s, id: i }));
+    console.log('Form Steps', this.formSteps)
+  }
+
+  // Retrieve labels for a step
+  getStepLabels(stepKey: string): { key: string; label: string; type: string }[] {
+    const labels = JSON.parse(sessionStorage.getItem('formStepLabels') || '{}');
+    return labels[stepKey] || [];
+  }
+
+  getStepDataValue(stepKey: string, valueKey:string) {
+    const savedData: any = this.utilityService.getStep(stepKey);
+    if(stepKey == 'mediaInfo') {
+      console.log(savedData)
+    }
+    return savedData.value[valueKey] ? savedData.value[valueKey] : '-';
+  }
+
+  get mediaInfo() {
+    return this.utilityService.registrationData.mediaInfo
+  }
 
 }

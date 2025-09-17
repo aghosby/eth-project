@@ -89,6 +89,11 @@ export class RegisterComponent implements OnInit {
         return;
       }
 
+      if(currentStepName == 'Success') {
+        this.router.navigate(['/register/profile']);
+        return;
+      }
+
       if (!step || !step.valid) {
         this.notifyService.showError('Please check that you have filled in all required fields')
         console.warn(`❌ Step "${currentStepName}" is invalid`, step?.value);

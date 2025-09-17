@@ -1,1 +1,132 @@
-<p>profile works!</p>
+<!-- src/app/registration-payment/registration-payment.component.html -->
+<div class="page-wrap">
+    <div class="page-hdr">
+        <!-- <h2>User Profile</h2> -->
+        <div class="summary">
+            <div class="image">
+                <img [src]="mediaInfo.profilePhoto" alt="">
+            </div>
+            <div class="info">
+                <div class="name">{{savedRegData.personalInfo.firstName}} {{savedRegData.personalInfo.lastName}}</div>
+                <div class="email">{{savedRegData.personalInfo.email}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="accordion accordion-flush mt-3" id="reviewAccordion">
+            <div *ngFor="let step of formSteps.slice(1, formSteps.length - 3); let i = index" class="accordion-item">
+                <div class="accordion-header" id="{{'flush-heading-' + i}}">
+                <button
+                    (click)="toggleStepTab(i)"
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#flush-step-' + i"
+                    aria-expanded="false"
+                    [attr.aria-controls]="'flush-step-' + i"
+                >
+                    <div class="name">{{ step.stepName }}</div>
+                    <div class="accordion-arrow" [class.active]="activeStepTab === i">
+                        <i class="bi bi-caret-down-fill"></i> <!-- Bootstrap Icons -->
+                    </div>
+                </button>
+                </div>
+
+                <div
+                    [class.show]="activeStepTab === i"
+                    id="{{'flush-step-' + i}}"
+                    class="accordion-collapse collapse"
+                    [attr.aria-labelledby]="'flush-heading-' + i"
+                    data-bs-parent="#reviewAccordion"
+                >
+                <div class="accordion-body pb-lg-4">
+                    <!-- Body content for this step goes here -->
+                    <ng-container *ngIf="step.key != 'mediaInfo' && step.key != 'groupInfo'">
+                        <div *ngFor="let field of getStepLabels(step.key)" class="field-row">
+                            <div *ngIf="field.type === 'date'" class="row-wrap">
+                                <span class="label">{{field.label}}:</span>
+                                <span class="value">{{getStepDataValue(step.key, field.key) | date:'dd  MMMM, yyyy'}}</span>
+                            </div>
+                            <div *ngIf="field.type !== 'date'" class="row-wrap">
+                                <span class="label">{{field.label}}:</span>
+                                <span class="value">{{getStepDataValue(step.key, field.key)}}</span>
+                            </div>
+                        </div>
+                    </ng-container> 
+
+                    <ng-container *ngIf="step.key === 'mediaInfo'">
+                        <div class="media-wrap">
+                            <!-- <div class="image">
+                                <img [src]="mediaInfo.profilePhoto" alt="">
+                            </div> -->
+
+                            <div class="video-wrap">
+                                <video 
+                                    class="preview" 
+                                    [src]="mediaInfo.videoUpload" 
+                                    controls 
+                                    width="100%"
+                                    height="auto"
+                                >
+                                </video>
+                            </div>
+                        </div>
+                    </ng-container> 
+
+                    <ng-container *ngIf="step.key === 'groupInfo'">
+                        <div class="field-row">
+                            <div class="row-wrap">
+                                <span class="label">Group Name:</span>
+                                <span class="value">{{groupInfoData.groupName}}</span>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div class="row-wrap">
+                                <span class="label">Number of group members:</span>
+                                <span class="value">{{groupInfoData.noOfGroupMembers}}</span>
+                            </div>
+                        </div>
+                        
+                        <div *ngFor="let member of groupInfoData.members; let i = index" class="field-group">
+                            <h4>Group Member {{i + 1}}</h4>
+                            <div class="field-row">
+                                <div class="row-wrap">
+                                    <span class="label">First Name:</span>
+                                    <span class="value">{{member.firstName}}</span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="row-wrap">
+                                    <span class="label">Last Name:</span>
+                                    <span class="value">{{member.lastName}}</span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="row-wrap">
+                                    <span class="label">Date of Birth:</span>
+                                    <span class="value">{{member.dateOfBirth | date:'dd  MMMM, yyyy'}}</span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="row-wrap">
+                                    <span class="label">Gender:</span>
+                                    <span class="value">{{member.gender}}</span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="row-wrap">
+                                    <span class="label">T-Shirt Size:</span>
+                                    <span class="value text-uppercase">{{member.tshirtSize}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container> 
+                    
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+ </div>
+

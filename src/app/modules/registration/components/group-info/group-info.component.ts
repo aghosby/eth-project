@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class GroupInfoComponent implements OnInit {
   @Input() stepName!: string;
+  @Input() formInitialValue!: any;
   private stepTrigger!: Subscription;
   maxDate!: Date;
   keepOrder = () => 0;

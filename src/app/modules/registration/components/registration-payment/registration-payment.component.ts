@@ -101,5 +101,9 @@ export class RegistrationPaymentComponent implements OnInit {
     }
     return savedData.value[valueKey] ? savedData.value[valueKey] : '-';
   }
+
+  get mediaInfo() {
+    return this.utilityService.registrationData.mediaInfo
+  }
   
 }

@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 export class TermsConditionsComponent implements OnInit {
 
   @Input() stepName!: string;
+  @Input() formInitialValue!: any;
   private stepTrigger!: Subscription;
   grpInfoForm:FormGroup = new FormGroup({});
   formInfoFields!: FormFields[];
@@ -41,6 +42,7 @@ export class TermsConditionsComponent implements OnInit {
   }
 
   get showGuardianSignature(): boolean {
+    console.log(this.applicantAge)
     return this.applicantAge !== null && this.applicantAge < 16;
   }
 
@@ -98,13 +100,37 @@ export class TermsConditionsComponent implements OnInit {
       this.grpInfoForm.addControl(field.controlName, formControl)
     });
 
-    // 🔥 Use the same map logic as parent
-    const stepKey = this.utilityService.mapStepName(this.stepName);
-    const saved = this.utilityService.getStep(stepKey);
-    console.log('Restoring form for', stepKey, saved);
+    this.getRegistrationData();
+  }
 
-    if (saved?.value) {
-      this.grpInfoForm.patchValue(saved.value);
+  setInitialFormValues(initial: any) {
+    if (!initial) return;
+    const savedRegData = this.utilityService.registrationData.termsConditions;
+    const patch = savedRegData ? { ...initial, ...savedRegData } : {...initial};
+
+    // 2. patch everything
+    this.grpInfoForm.patchValue(patch, { emitEvent: true });
+  }
+
+  getRegistrationData() {
+    if (this.formInitialValue) {
+      this.setInitialFormValues(this.formInitialValue)
+      console.log('Patched')
+    }
+    else {
+      // 🔥 Use the same map logic as parent
+      const stepKey = this.utilityService.mapStepName(this.stepName);
+      const storedData = this.utilityService.registrationData[stepKey];
+      const savedData = this.utilityService.getStep(stepKey);
+      console.log('Restoring form for', stepKey, savedData);
+
+      if(storedData) {
+        this.setInitialFormValues(storedData);
+      }
+      else if (savedData?.value) {
+        this.grpInfoForm.patchValue(savedData.value);
+      }
+      
     }
   }
 

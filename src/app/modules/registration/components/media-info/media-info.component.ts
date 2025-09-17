@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 export class MediaInfoComponent implements OnInit, OnDestroy {
 
   @Input() stepName!: string;
-
+  @Input() formInitialValue!: any;
   grpInfoForm!: FormGroup;
   profilePic!: string;
   videoUrl!: string;

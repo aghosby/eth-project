@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '@shared/services/auth.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
 import { BehaviorSubject } from 'rxjs';
+import { log } from 'util';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +16,7 @@ export class RegisterComponent implements OnInit {
   userId!: string;
   currentStep:number = 0;
   stepInView:any;
-  regType:number = 1;
+  regType!:number;
   apiLoading:boolean = false;
   applicantAge: number = 18;
   applicantAge$ = new BehaviorSubject<number | null>(null);
@@ -34,17 +36,15 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService,
     private sharedService: SharedService,
     private utilityService: UtilityService,
-    private notifyService: NotificationService
+    private notifyService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loggedInUser = this.authService.loggedInUser;
     this.allFormSteps = this.utilityService.formSteps
-    // this.updateFormSteps();
-    // this.viewStep(0);
     this.getRegistrationData();
-    this.getCurrentStep()
-    //this.getProfileDetails()
+    //this.getCurrentStep()
   }
 
   viewStep(stepNo:number) {
@@ -95,36 +95,10 @@ export class RegisterComponent implements OnInit {
         return;
       }
       else {
-        switch(stepKey) {
-          case 'personalInfo' :
-            this.savePersonalInfo(step.value, nextStep);
-        }
-
-        
-      }
-
-      //console.log(`✅ Step "${currentStepName}" valid, moving to next step...`);
-      //console.log('Form Value:', step.value);
-
-      
+        this.saveStepInfo(stepKey, step.value, nextStep);        
+      }      
     }, 0);
   }
-
-  // private mapStepName(stepName: string): string {
-  //   const map: { [key: string]: string } = {
-  //     'Personal Details': 'personalInfo',
-  //     'Group Lead Details': 'personalInfo', // for group registration
-  //     'Talent Details': 'talentInfo',
-  //     'Group Details': 'groupInfo',
-  //     'Media Upload': 'mediaInfo',
-  //     'Guardian Details': 'guardianInfo',
-  //     'Audition Details': 'auditionInfo',
-  //     'Terms & Signatures': 'termsConditions',
-  //     'Payment': 'payment',
-  //     'Success': 'success',
-  //   };
-  //   return map[stepName] || stepName;
-  // }
 
   private updateProgress(): void {
     this._formProgress = Math.ceil(
@@ -220,28 +194,42 @@ export class RegisterComponent implements OnInit {
         if(res.success) {
           this.savedRegData = res.data
           sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
-          console.log(this.savedRegData)
+          this.getCurrentStep();
         }
       },
-      error: err => {}
+      error: err => {
+        this.notifyService.showError(err.error.message);
+        this.router.navigate(['/login']);
+      }
     })
   }
 
   getCurrentStep() {
     this.apiLoading = false;
     const regData = sessionStorage.getItem('registrationData') || ''
-    if(this.loggedInUser.registrationType) {
-      this.regType = this.loggedInUser.registrationType === 'individual' ? 1 : 2 
+    if(this.loggedInUser.registrationInfo) {
+      this.regType = this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
     }
     else {
       this.regType = regData ? JSON.parse(regData).registrationType?.regType : 1
     }    
     // fallback to session storage only
     const savedStep = this.loggedInUser.currentStep ? this.loggedInUser.currentStep : Number(sessionStorage.getItem('currentStep')) || 0;
-    
-    console.log(this.regType)
+    const savedAge = this.savedRegData.personalInfo.dateOfBirth
+    this.getUserAge(new Date(savedAge))
     this.updateFormSteps();
     this.viewStep(savedStep);
+  }
+
+  getUserAge(dob: Date) {
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    this.applicantAge = age;
+    this.applicantAge$.next(age)
   }
 
   startRegistration() {
@@ -281,28 +269,111 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  savePersonalInfo(payload:any, nextStep:number) {
+  successFn(apiRes:any, stepKey:string, payload:any, nextStep:number) {
+    this.notifyService.showSuccess(apiRes.message)
+    this.apiLoading = false;
+    this.updateSavedRegData(stepKey, payload)
+    this.viewStep(nextStep);
+  }
+
+  errorFn(apiRes:any) {
+    this.apiLoading = false;
+    this.notifyService.showError(apiRes.error.message)
+  }
+
+  saveStepInfo(stepKey:string, payload:any, nextStep:number) {
     this.apiLoading = true;
     const payloadData = {
       ...payload,
       nextStep: this.currentStep + 1
     }
-    this.sharedService.createPersonalInfo(payloadData).subscribe({
-      next: res => {
-        if(res.success) {
-          this.notifyService.showSuccess(res.message)
-          this.apiLoading = false;
-          // Move to next step
-          // map display step name → storage key
-          this.updateSavedRegData('personalInfo', payload)
-          this.viewStep(nextStep);
-        }
-      },
-      error: err => {
-        this.apiLoading = false;
-        this.notifyService.showError(err.error.message)
-      }
-    })
+
+    switch(stepKey) {
+      case 'personalInfo':
+        this.sharedService.createPersonalInfo(payloadData).subscribe({
+          next: res => {
+            if(res.success) {
+              this.successFn(res, stepKey, payload, nextStep)
+            }
+          },
+          error: err => {
+            this.errorFn(err)
+          }
+        })
+        break;
+      case 'talentInfo':
+        this.sharedService.createTalentInfo(payloadData).subscribe({
+          next: res => {
+            if(res.success) {
+              this.successFn(res, stepKey, payload, nextStep)
+            }
+          },
+          error: err => {
+            this.errorFn(err)
+          }
+        })
+        break;
+      case 'mediaInfo':
+        this.sharedService.createMediaInfo(payloadData).subscribe({
+          next: res => {
+            if(res.success) {
+              this.successFn(res, stepKey, payload, nextStep)
+            }
+          },
+          error: err => {
+            this.errorFn(err)
+          }
+        })
+        break;
+      case 'guardianInfo':
+        this.sharedService.createGuardianInfo(payloadData).subscribe({
+          next: res => {
+            if(res.success) {
+              this.successFn(res, stepKey, payload, nextStep)
+            }
+          },
+          error: err => {
+            this.errorFn(err)
+          }
+        })
+        break;
+      case 'groupInfo':
+        this.sharedService.createGroupInfo(payloadData).subscribe({
+          next: res => {
+            if(res.success) {
+              this.successFn(res, stepKey, payload, nextStep)
+            }
+          },
+          error: err => {
+            this.errorFn(err)
+          }
+        })
+        break;
+      case 'auditionInfo':
+        this.sharedService.createAuditionInfo(payloadData).subscribe({
+          next: res => {
+            if(res.success) {
+              this.successFn(res, stepKey, payload, nextStep)
+            }
+          },
+          error: err => {
+            this.errorFn(err)
+          }
+        })
+        break;
+      case 'termsConditions':
+        this.sharedService.createTermsConditionsInfo(payloadData).subscribe({
+          next: res => {
+            if(res.success) {
+              this.successFn(res, stepKey, payload, nextStep)
+            }
+          },
+          error: err => {
+            this.errorFn(err)
+          }
+        })
+        break;
+    }
   }
 
 }

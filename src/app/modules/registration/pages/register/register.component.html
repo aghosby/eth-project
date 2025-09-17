@@ -2,7 +2,13 @@
 <app-donut-progress [value]="25" size="50px" thickness="8px" color="#F39C12"></app-donut-progress>
 <app-donut-progress [value]="85" size="150px" thickness="20px" color="#27AE60"></app-donut-progress> -->
 
-<div class="page-wrap">
+<div *ngIf="!savedRegData" class="page-loading">
+    <div class="spinner-wrap">
+        <span class="loader spinner-border text-white"></span>
+    </div>
+</div>
+
+<div *ngIf="savedRegData" class="page-wrap">
     <div class="page-hdr">
         <div class="title">
             <h5 *ngIf="currentStep > 0 && this.stepInView?.stepName !== 'Success'">Step {{currentStep}} of {{formSteps.length - 2}}</h5>
@@ -39,12 +45,36 @@
                 [stepName]="stepInView?.stepName"
                 [formInitialValue]="savedRegData?.personalInfo"
             ></app-personal-info>
-            <app-talent-info *ngIf="stepInView?.stepName == 'Talent Details'" [stepName]="stepInView?.stepName"></app-talent-info>
-            <app-group-info *ngIf="stepInView?.stepName == 'Group Details'" [stepName]="stepInView?.stepName"></app-group-info>
-            <app-media-info *ngIf="stepInView?.stepName == 'Media Upload'" [stepName]="stepInView?.stepName"></app-media-info>
-            <app-guardian-info *ngIf="stepInView?.stepName == 'Guardian Details'" [stepName]="stepInView?.stepName"></app-guardian-info>
-            <app-audition-info *ngIf="stepInView?.stepName == 'Audition Details'" [stepName]="stepInView?.stepName"></app-audition-info>
-            <app-terms-conditions *ngIf="stepInView?.stepName == 'Terms & Signatures'" [applicantAge]="applicantAge$ | async" [stepName]="stepInView?.stepName"></app-terms-conditions>
+            <app-talent-info 
+                *ngIf="stepInView?.stepName == 'Talent Details'" 
+                [stepName]="stepInView?.stepName"
+                [formInitialValue]="savedRegData?.talentInfo"
+            ></app-talent-info>
+            <app-group-info 
+                *ngIf="stepInView?.stepName == 'Group Details'" 
+                [stepName]="stepInView?.stepName"
+                [formInitialValue]="savedRegData?.groupInfo"
+            ></app-group-info>
+            <app-media-info 
+                *ngIf="stepInView?.stepName == 'Media Upload'" 
+                [stepName]="stepInView?.stepName"
+                [formInitialValue]="savedRegData?.mediaInfo"
+            ></app-media-info>
+            <app-guardian-info 
+                *ngIf="stepInView?.stepName == 'Guardian Details'" 
+                [stepName]="stepInView?.stepName"
+                [formInitialValue]="savedRegData?.guardianInfo"
+            ></app-guardian-info>
+            <app-audition-info 
+                *ngIf="stepInView?.stepName == 'Audition Details'" 
+                [stepName]="stepInView?.stepName"
+                [formInitialValue]="savedRegData?.auditionInfo"
+            ></app-audition-info>
+            <app-terms-conditions 
+                *ngIf="stepInView?.stepName == 'Terms & Signatures'" 
+                [applicantAge]="applicantAge$ | async" [stepName]="stepInView?.stepName"
+                [formInitialValue]="savedRegData?.termsConditions"
+            ></app-terms-conditions>
             <app-registration-payment *ngIf="stepInView?.stepName == 'Review & Payment'" [stepName]="stepInView?.stepName" [formSteps]="formSteps"></app-registration-payment>
 
             <div *ngIf="stepInView?.stepName == 'Success'" class="success mt-3">

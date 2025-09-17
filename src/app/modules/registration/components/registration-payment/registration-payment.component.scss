@@ -129,6 +129,29 @@
                     }
                 }
             }
+
+            .media-wrap {
+                .image {
+
+                    img {
+                        width: auto;
+                        height: auto;
+                        min-height: 10rem;
+                        max-height: 15rem;
+                    }
+                }
+
+                .video-wrap {
+                    width: 100%;
+                    margin-top: 3rem;
+                    overflow:hidden;
+
+                    video {
+                        border-radius: 0.3rem;
+                    }
+                }
+
+            }
         }
     }
 }

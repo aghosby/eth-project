@@ -1,5 +1,9 @@
 @import '../../../../../assets/scss/mixins.scss';
 
+.page-loading {
+    min-height: 70vh;
+}
+
 .page-wrap {
     width: 90%;
     height: 100%;

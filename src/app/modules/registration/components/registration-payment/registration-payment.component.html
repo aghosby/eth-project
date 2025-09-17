@@ -47,9 +47,20 @@
 
                     <ng-container *ngIf="step.key === 'mediaInfo'">
                         <div class="media-wrap">
-                            <!-- <div class="image">
-                                <img [src]="getStepDataValue(step.key, 'profilePhoto')" alt="">
-                            </div> -->
+                            <div class="image">
+                                <img [src]="mediaInfo.profilePhoto" alt="">
+                            </div>
+
+                            <div class="video-wrap">
+                                <video 
+                                    class="preview" 
+                                    [src]="mediaInfo.videoUpload" 
+                                    controls 
+                                    width="100%"
+                                    height="auto"
+                                >
+                                </video>
+                            </div>
                         </div>
                     </ng-container> 
 

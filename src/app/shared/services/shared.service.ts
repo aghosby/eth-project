@@ -47,4 +47,28 @@ export class SharedService {
   public createPersonalInfo(payload:any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/personal-info`, payload, this.requestOptions);
   }
+
+  public createTalentInfo(payload:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/talent-info`, payload, this.requestOptions);
+  }
+
+  public createMediaInfo(payload:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/media-info`, payload, this.requestOptions);
+  }
+
+  public createGroupInfo(payload:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/group-info`, payload, this.requestOptions);
+  }
+
+  public createGuardianInfo(payload:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/guardian-info`, payload, this.requestOptions);
+  }
+
+  public createAuditionInfo(payload:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/audition-info`, payload, this.requestOptions);
+  }
+
+  public createTermsConditionsInfo(payload:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/terms`, payload, this.requestOptions);
+  }
 }

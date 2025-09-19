@@ -39,47 +39,47 @@ export class RegistrationPaymentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (Object.keys(params).length > 0) {
-        const paymentResult = {
-          reference: params['reference'],
-          transAmount: params['transAmount'],
-          transRef: params['transRef'],
-          processorFee: params['processorFee'],
-          errorMessage: params['errorMessage'],
-          currency: params['currency'],
-          gateway: params['gateway'],
-          status: params['status']
-        };
+    // this.route.queryParams.subscribe(params => {
+    //   if (Object.keys(params).length > 0) {
+    //     const paymentResult = {
+    //       reference: params['reference'],
+    //       transAmount: params['transAmount'],
+    //       transRef: params['transRef'],
+    //       processorFee: params['processorFee'],
+    //       errorMessage: params['errorMessage'],
+    //       currency: params['currency'],
+    //       gateway: params['gateway'],
+    //       status: params['status']
+    //     };
 
-        console.log('Payment result:', paymentResult);
+    //     console.log('Payment result:', paymentResult);
 
-        this.sharedService.confirmPayment(paymentResult, this.authService.loggedInUser.id).subscribe({
-          next: res => {
-            this.notifyService.showSuccess(res.message);
-          },
-          error: err => {
-            this.notifyService.showInfo('Your payment was successful and payment status will be updated soon')
-          }
-        })
+    //     this.sharedService.confirmPayment(paymentResult, this.authService.loggedInUser.id).subscribe({
+    //       next: res => {
+    //         this.notifyService.showSuccess(res.message);
+    //       },
+    //       error: err => {
+    //         this.notifyService.showInfo('Your payment was successful and payment status will be updated soon')
+    //       }
+    //     })
         
-        this.utilityService.updateStep('payment', {
-          valid: true,
-          value: paymentResult,
-        });
+    //     this.utilityService.updateStep('payment', {
+    //       valid: true,
+    //       value: paymentResult,
+    //     });
 
-        this.router.navigate([], {
-          relativeTo: this.route,
-          queryParams: {},            // clear all params
-          replaceUrl: true            // don’t keep old URL in history
-        }).then(() => {
-          const currentStep = Number(sessionStorage.getItem('currentStep'));
-          this.goToStep(currentStep)
-        });
-      }
+    //     this.router.navigate([], {
+    //       relativeTo: this.route,
+    //       queryParams: {},            // clear all params
+    //       replaceUrl: true            // don’t keep old URL in history
+    //     }).then(() => {
+    //       const currentStep = Number(sessionStorage.getItem('currentStep'));
+    //       this.goToStep(currentStep)
+    //     });
+    //   }
       
 
-    });
+    // });
     this.setupPayment();
 
     this.groupInfoData = this.utilityService.getStep('groupInfo')?.value;
@@ -131,10 +131,42 @@ export class RegistrationPaymentComponent implements OnInit {
         console.log('Widget Closed');
       },
       callBack: (response: any) => {
-        console.log('Successful Payment');
-        window.location.href = response.callbackUrl;
+        const paymentResult = this.parsePaymentResult(response.callbackUrl);
+        this.sharedService.confirmPayment(paymentResult, this.authService.loggedInUser.id).subscribe({
+          next: res => {
+            this.notifyService.showSuccess(res.message);
+          },
+          error: err => {
+            this.notifyService.showInfo('Your payment was successful and payment status will be updated soon')
+          }
+        })
+
+        this.utilityService.updateStep('payment', {
+          valid: true,
+          value: paymentResult,
+        });
+
+        const currentStep = Number(sessionStorage.getItem('currentStep'));
+        this.goToStep(currentStep)
+        
       },
     });
+  }
+
+  parsePaymentResult(url: string) {
+    const parsedUrl = new URL(url);
+    const params = Object.fromEntries(parsedUrl.searchParams.entries());
+
+    return {
+      reference: params['reference'] || '',
+      transAmount: params['transAmount'] || '',
+      transRef: params['transRef'] || '',
+      processorFee: params['processorFee'] || '',
+      errorMessage: params['errorMessage'] || '',
+      currency: params['currency'] || '',
+      gateway: params['gateway'] || '',
+      status: params['status'] || ''
+    };
   }
 
   makePayment(): void {

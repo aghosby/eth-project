@@ -56,6 +56,7 @@ export class RegisterComponent implements OnInit {
     // save current step in session storage
     sessionStorage.setItem('currentStep', String(stepNo));
     this.updateProgress();
+    this.apiLoading = false;
   }
 
   goToStep(next: number) {

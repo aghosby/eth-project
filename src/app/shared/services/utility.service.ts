@@ -662,7 +662,7 @@ export class UtilityService {
       ? JSON.parse(sessionStorage.getItem('registrationData') as string)
       : null);
 
-      if (savedData[stepName]) {
+      if (savedData && savedData[stepName]) {
         return {
           valid: true, // assume valid if it came from API/session
           value: savedData[stepName],

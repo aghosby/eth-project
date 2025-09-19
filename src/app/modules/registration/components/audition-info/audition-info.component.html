@@ -8,7 +8,7 @@
 
                     <mat-form-field *ngSwitchCase="'text'" class="mb-lg-2" [style.width]="useFormWidth ? field.controlWidth : '100%'" appearance="outline">
                         <mat-label>{{field.controlLabel}}</mat-label>
-                        <input matInput [formControlName]="field.controlName">
+                        <input matInput [formControlName]="field.controlName" [readonly]="field.readonly">
                         <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('email')">Please enter a valid email address</mat-error>
                         <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
                     </mat-form-field>

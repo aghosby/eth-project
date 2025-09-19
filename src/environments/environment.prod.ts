@@ -20,5 +20,5 @@ export const environment = {
   envName         : EnvName.PROD,
   defaultLanguage : 'en',
   apiBaseUrl      : baseUrl,
-  credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH'
+  credoApiKey: '1PUB7593p0OB2Gy7ZHc6rmCtEf8M903b4A1HeE'
 };

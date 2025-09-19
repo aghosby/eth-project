@@ -4,6 +4,11 @@ import { FormFields } from '@shared/models/form-fields';
 import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
 import { Subscription } from 'rxjs';
+import { DateTime } from 'luxon';
+
+function makeTime(hour: number, minute: number): DateTime {
+  return DateTime.local().set({ hour, minute, second: 0, millisecond: 0 });
+}
 
 @Component({
   selector: 'app-audition-info',
@@ -21,6 +26,9 @@ export class AuditionInfoComponent implements OnInit {
   useFormWidth:boolean = true;
   keepOrder = () => 0;
   subscriptionsSetup:boolean = false;
+  talentType!: string;
+  minTime!: DateTime;
+  maxTime!: DateTime;
 
   constructor(
     private utilityService: UtilityService,
@@ -28,6 +36,15 @@ export class AuditionInfoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.minTime = DateTime.fromObject({ hour: 8, minute: 0 }) as any;
+    this.maxTime = DateTime.fromObject({ hour: 17, minute: 0 }) as any;
+    // const today = new Date();
+    // this.minTime = new Date(today);
+    // this.minTime.setHours(8, 0, 0); // 8:00 AM
+
+    // this.maxTime = new Date(today);
+    // this.maxTime.setHours(17, 0, 0);
+
     this.screenSize = this.utilityService.getScreenWidth();
     this.useFormWidth = this.screenSize > 768;
     this.setUpForm();
@@ -53,14 +70,11 @@ export class AuditionInfoComponent implements OnInit {
     this.formInfoFields = [
       {
         controlName: 'auditionLocation',
-        controlType: 'select',
+        controlType: 'text',
         controlLabel: 'Audition Location',
         controlWidth: '48%',
-        initialValue: '',
-        selectOptions: {
-          Lagos: 'Lagos',
-          Benin: 'Benin'
-        },
+        initialValue: 'No 3 Imuetinyan Street, Off Ihama, Opposite Ebenezer Junction, GRA, Benin City',
+        readonly: true,
         validators: [Validators.required],
         visible: true,
         order: 1
@@ -139,9 +153,35 @@ export class AuditionInfoComponent implements OnInit {
     });
 
     this.getRegistrationData();
+    const regData = this.utilityService.registrationData 
+      ?? JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+
+    this.talentType = regData?.talentInfo?.talentCategory || '';
+    this.setTalentDate(this.talentType);
 
     this.formStepLabels = this.utilityService.generateFieldMapping(this.formInfoFields);
   }
+
+  dateFilter = (d: Date | null): boolean => {
+    if (!d) return false;
+
+    const date = d.getDate();
+    const month = d.getMonth(); // 0 = Jan, 11 = Dec
+
+    // Only December
+    if (month !== 11) return false;
+
+    switch (this.talentType.toLowerCase()) {
+      case 'singing':
+        return date === 1;
+      case 'comedy':
+        return date === 2;
+      case 'dancing':
+        return date === 3;
+      default:
+        return date === 5 || date === 6;
+    }
+  };
 
   private setupConditionalLogic() {
     // TalentCategory → show/hide OtherTalentCategory
@@ -199,7 +239,7 @@ export class AuditionInfoComponent implements OnInit {
     else {
       // 🔥 Use the same map logic as parent
       const stepKey = this.utilityService.mapStepName(this.stepName);
-      const storedData = this.utilityService.registrationData[stepKey];
+      const storedData = this.utilityService.registrationData && this.utilityService.registrationData[stepKey];
       const savedData = this.utilityService.getStep(stepKey);
       console.log('Restoring form for', stepKey, savedData);
 
@@ -220,6 +260,32 @@ export class AuditionInfoComponent implements OnInit {
     if (audtionRequirement) {
       this.grpInfoForm.get('audtionRequirement')?.setValue(audtionRequirement);
     }
+  }
+
+  private setTalentDate(talentType:string): void {
+    const year = new Date().getFullYear();
+    let selectedDate: Date;
+
+    switch (talentType?.toLowerCase()) {
+      case 'singing':
+        selectedDate = new Date(year, 11, 1); // Dec 1
+        break;
+      case 'comedy':
+        selectedDate = new Date(year, 11, 2); // Dec 2
+        break;
+      case 'dancing':
+        selectedDate = new Date(year, 11, 3); // Dec 3
+        break;
+      default:
+        selectedDate = new Date(year, 11, 5); // Default Dec 5
+        break;
+    }
+
+    // Set the value into the form
+    this.grpInfoForm.get('auditionDate')?.setValue(selectedDate);
+
+    // Disable the picker so user cannot change
+    //this.grpInfoForm.get('auditionDate')?.disable();
   }
 
 }

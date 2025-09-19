@@ -71,4 +71,8 @@ export class SharedService {
   public createTermsConditionsInfo(payload:any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/registrations/${this.userId}/terms`, payload, this.requestOptions);
   }
+
+  public confirmPayment(payload:any, userId:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/payments/save-info/${userId}`, payload, this.requestOptions);
+  }
 }

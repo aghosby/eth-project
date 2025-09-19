@@ -2,6 +2,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@env/environment';
+import { AuthService } from '@shared/services/auth.service';
+import { NotificationService } from '@shared/services/notification.service';
+import { SharedService } from '@shared/services/shared.service';
 import { FormStep, UtilityService } from '@shared/services/utility.service';
 import { Subscription } from 'rxjs';
 
@@ -27,7 +30,10 @@ export class RegistrationPaymentComponent implements OnInit {
   @Output() stepChange = new EventEmitter<number>();
 
   constructor(
+    private authService: AuthService,
     private utilityService: UtilityService,
+    private notifyService: NotificationService,
+    private sharedService: SharedService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -47,6 +53,15 @@ export class RegistrationPaymentComponent implements OnInit {
         };
 
         console.log('Payment result:', paymentResult);
+
+        this.sharedService.confirmPayment(paymentResult, this.authService.loggedInUser.id).subscribe({
+          next: res => {
+            this.notifyService.showSuccess(res.message);
+          },
+          error: err => {
+            this.notifyService.showInfo('Your payment was successful and payment status will be updated soon')
+          }
+        })
         
         this.utilityService.updateStep('payment', {
           valid: true,

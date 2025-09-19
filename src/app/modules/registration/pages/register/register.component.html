@@ -79,7 +79,7 @@
                 *ngIf="stepInView?.stepName == 'Review & Payment'" 
                 [stepName]="stepInView?.stepName" 
                 [formSteps]="formSteps"
-                (stepChange)="viewStep($event)"
+                (stepChange)="viewStep($event + 1)"
             ></app-registration-payment>
 
             <div *ngIf="stepInView?.stepName == 'Success'" class="success mt-3">

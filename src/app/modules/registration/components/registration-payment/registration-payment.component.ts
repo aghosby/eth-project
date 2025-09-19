@@ -26,7 +26,7 @@ export class RegistrationPaymentComponent implements OnInit {
   }
 
   groupInfoData:any;
-  amountDue:number = 10000;
+  amountDue:number = 500;
   @Output() stepChange = new EventEmitter<number>();
 
   constructor(
@@ -74,7 +74,7 @@ export class RegistrationPaymentComponent implements OnInit {
           replaceUrl: true            // don’t keep old URL in history
         }).then(() => {
           const currentStep = Number(sessionStorage.getItem('currentStep'));
-          this.goToStep(currentStep+1)
+          this.goToStep(currentStep)
         });
       }
       
@@ -96,6 +96,7 @@ export class RegistrationPaymentComponent implements OnInit {
   }
 
   goToStep(stepNo: number) {
+    console.log('Sent Step', stepNo)
     this.stepChange.emit(stepNo);
   }
 
@@ -148,7 +149,7 @@ export class RegistrationPaymentComponent implements OnInit {
     const formLabels = sessionStorage.getItem('formStepLabels') && JSON.parse(sessionStorage.getItem('formStepLabels') as string);
     const labels = this.utilityService.generateFieldMapping(<any>formFields);
     //  = JSON.parse(sessionStorage.getItem('formStepLabels') || '{}');
-    return formLabels || labels;
+    return labels || formLabels;
   }
 
   getStepDataValue(stepKey: string, valueKey:string) {

@@ -1,5 +1,6 @@
 // src/app/registration-payment/registration-payment.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { FormStep, UtilityService } from '@shared/services/utility.service';
 import { Subscription } from 'rxjs';
@@ -23,10 +24,47 @@ export class RegistrationPaymentComponent implements OnInit {
 
   groupInfoData:any;
   amountDue:number = 10000;
+  @Output() stepChange = new EventEmitter<number>();
 
-  constructor(private utilityService: UtilityService) {}
+  constructor(
+    private utilityService: UtilityService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (Object.keys(params).length > 0) {
+        const paymentResult = {
+          reference: params['reference'],
+          transAmount: params['transAmount'],
+          transRef: params['transRef'],
+          processorFee: params['processorFee'],
+          errorMessage: params['errorMessage'],
+          currency: params['currency'],
+          gateway: params['gateway'],
+          status: params['status']
+        };
+
+        console.log('Payment result:', paymentResult);
+        
+        this.utilityService.updateStep('payment', {
+          valid: true,
+          value: paymentResult,
+        });
+
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {},            // clear all params
+          replaceUrl: true            // don’t keep old URL in history
+        }).then(() => {
+          const currentStep = Number(sessionStorage.getItem('currentStep'));
+          this.goToStep(currentStep+1)
+        });
+      }
+      
+
+    });
     this.setupPayment();
 
     this.groupInfoData = this.utilityService.getStep('groupInfo')?.value;
@@ -34,11 +72,7 @@ export class RegistrationPaymentComponent implements OnInit {
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
       console.log('Step', stepName)
-      this.makePayment();
-      this.utilityService.updateStep('payment', {
-        valid: true,
-        value: {paymentSuccessful: true},
-      });
+      if(stepName !== 'Success') this.makePayment();
     });
   }
 
@@ -46,11 +80,16 @@ export class RegistrationPaymentComponent implements OnInit {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
+  goToStep(stepNo: number) {
+    this.stepChange.emit(stepNo);
+  }
+
   private setupPayment(): void {
-    const transRef = `iy67f${this.generateRandomNumber(10, 60)}hvc${this.generateRandomNumber(10, 90)}`;
+    const regNo = this.utilityService.registrationData.registrationNumber
+    const transRef = `${regNo}${this.generateRandomNumber(10, 60)}hvc${this.generateRandomNumber(10, 90)}`;
 
     this.handler = CredoWidget.setup({
-      key: environment.credoApiKey, // ⚠️ Move this to environment.ts
+      key: environment.credoApiKey,
       customerFirstName: this.getStepDataValue('personalInfo', 'firstName'),
       customerLastName: this.getStepDataValue('personalInfo', 'lastName'),
       email: this.getStepDataValue('personalInfo', 'email'),
@@ -70,13 +109,13 @@ export class RegistrationPaymentComponent implements OnInit {
       //     },
       //   ],
       // },
-      callbackUrl: 'https://merchant-test-line.netlify.app/successful',
+      // callbackUrl: window.location.hostname + '/register',
+      callbackUrl: 'http://localhost:4200/register',
       onClose: () => {
         console.log('Widget Closed');
       },
       callBack: (response: any) => {
         console.log('Successful Payment');
-        console.log(response);
         window.location.href = response.callbackUrl;
       },
     });
@@ -89,9 +128,12 @@ export class RegistrationPaymentComponent implements OnInit {
   }
 
   // Retrieve labels for a step
-  getStepLabels(stepKey: string): { key: string; label: string; type: string }[] {
-    const labels = JSON.parse(sessionStorage.getItem('formStepLabels') || '{}');
-    return labels[stepKey] || [];
+  getStepLabels(stepKey: string): any[] {
+    const formFields = this.utilityService.formSteps.find(step => step.key === stepKey)?.formFields;
+    const formLabels = sessionStorage.getItem('formStepLabels') && JSON.parse(sessionStorage.getItem('formStepLabels') as string);
+    const labels = this.utilityService.generateFieldMapping(<any>formFields);
+    //  = JSON.parse(sessionStorage.getItem('formStepLabels') || '{}');
+    return formLabels || labels;
   }
 
   getStepDataValue(stepKey: string, valueKey:string) {

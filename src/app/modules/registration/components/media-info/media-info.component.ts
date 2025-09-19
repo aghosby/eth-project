@@ -50,7 +50,7 @@ export class MediaInfoComponent implements OnInit, OnDestroy {
   }
 
   private restoreFromSession(): void {
-    const savedRegData = this.utilityService.registrationData.mediaInfo;
+    const savedRegData = this.utilityService.registrationData?.mediaInfo;
     // const patch = savedRegData ? { ...initial, ...savedRegData } : {...initial};
     const saved = savedRegData ? savedRegData : JSON.parse(sessionStorage.getItem('mediaUpload') || '{}');
 
@@ -86,7 +86,7 @@ export class MediaInfoComponent implements OnInit, OnDestroy {
     sessionStorage.setItem('mediaUpload', JSON.stringify(mediaData));
     const stepKey = this.utilityService.mapStepName(this.stepName);
     this.utilityService.updateStep(stepKey, {
-      valid: this.grpInfoForm.valid,
+      valid: mediaData.profilePhoto && mediaData.videoUpload,
       value: mediaData,
     });
   }

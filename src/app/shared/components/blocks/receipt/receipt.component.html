@@ -1,0 +1,21 @@
+<!-- receipt.component.html -->
+<div id="receipt" class="receipt-container" style="display: none;">
+  <div class="receipt-header">
+    <img src="assets/logo.png" alt="Logo" class="logo" />
+    <h2>Transaction Receipt</h2>
+    <p>Your payment has been made successfully</p>
+  </div>
+
+  <div class="section">
+    <h3>Customer Details</h3>
+    <p>{{ customer.name }}</p>
+    <p>{{ customer.email }}</p>
+  </div>
+
+  <div class="section">
+    <h3>Transaction Details</h3>
+    <p><strong>Reference:</strong> {{ transaction.reference }}</p>
+    <p><strong>Amount:</strong> {{ transaction.amount | currency:transaction.currency }}</p>
+    <p><strong>Status:</strong> {{ transaction.status }}</p>
+  </div>
+</div>

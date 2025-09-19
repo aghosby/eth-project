@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AuthService } from './auth.service';
+import { FormFields } from '@shared/models/form-fields';
+import { Validators } from '@angular/forms';
 
 interface StepForm {
   valid: boolean;
@@ -20,6 +22,7 @@ export interface FormStep {
   description: string;
   buttons: FormStepButton[];
   key: string; // unique key like 'personalInfo', 'talentInfo' etc.
+  formFields?: FormFields[];
 }
 
 @Injectable({
@@ -52,7 +55,146 @@ export class UtilityService {
         { text: 'Back', action: -1 },
         { text: 'Next', action: +1 }
       ],
-      key: 'personalInfo'
+      key: 'personalInfo',
+      formFields: [
+        {
+          controlName: 'firstName',
+          controlType: 'text',
+          controlLabel: 'First Name',
+          controlWidth: '48%',
+          initialValue: this.authService.loggedInUser.firstName ?? null,
+          validators: [Validators.required],
+          order: 1
+        },
+        {
+          controlName: 'lastName',
+          controlType: 'text',
+          controlLabel: 'Last Name',
+          controlWidth: '48%',
+          initialValue: this.authService.loggedInUser.lastName ?? null,
+          validators: [Validators.required],
+          order: 2
+        },
+        {
+          controlName: 'email',
+          controlType: 'text',
+          controlLabel: 'Email Address',
+          controlWidth: '48%',
+          initialValue: this.authService.loggedInUser.email ?? null,
+          validators: [Validators.required, Validators.email],
+          order: 3
+        },
+        {
+          controlName: 'phoneNo',
+          controlType: 'text',
+          controlLabel: 'Phone Number',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required],
+          order: 4
+        },
+        {
+          controlName: 'dateOfBirth',
+          controlType: 'date',
+          controlLabel: 'Date of Birth',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required],
+          order: 5
+        },
+        {
+          controlName: 'placeOfBirth',
+          controlType: 'select',
+          controlLabel: 'Place of birth',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {},
+          validators: [],
+          order: 6
+        },
+        {
+          controlName: 'gender',
+          controlType: 'select',
+          controlLabel: 'Gender',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Male: 'Male',
+            Female: 'Female'
+          },
+          validators: [Validators.required],
+          order: 7
+        },
+        {
+          controlName: 'maritalStatus',
+          controlType: 'select',
+          controlLabel: 'Marital Status',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Single: 'Single',
+            Married: 'Married'
+          },
+          validators: [],
+          order: 8
+        },
+        {
+          controlName: 'address',
+          controlType: 'text',
+          controlLabel: 'Address',
+          controlWidth: '100%',
+          initialValue: null,
+          validators: [],
+          order: 9
+        },
+        {
+          controlName: 'state',
+          controlType: 'select',
+          controlLabel: 'State of Origin',
+          controlWidth: '48%',
+          initialValue: null,
+          selectOptions: {},
+          validators: [],
+          order: 10
+        },
+        {
+          controlName: 'lga',
+          controlType: 'select',
+          controlLabel: 'LGA',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {},
+          validators: [],
+          order: 11
+        },
+        {
+          controlName: 'nationality',
+          controlType: 'select',
+          controlLabel: 'Nationality',
+          controlWidth: '48%',
+          initialValue: null,
+          selectOptions: {},
+          validators: [],
+          order: 12
+        },
+        {
+          controlName: 'tshirtSize',
+          controlType: 'select',
+          controlLabel: 'T-Shirt Size',
+          controlWidth: '48%',
+          initialValue: null,
+          selectOptions: {
+            XS: 'XS',
+            S: 'S',
+            M: 'M',
+            L: 'L',
+            XL: 'XL',
+            XXL: 'XXL'
+          },
+          validators: [Validators.required],
+          order: 13
+        }
+      ]
     },
     {
       id: 2,
@@ -62,7 +204,126 @@ export class UtilityService {
         { text: 'Back', action: -1 },
         { text: 'Next', action: +1 }
       ],
-      key: 'talentInfo'
+      key: 'talentInfo',
+      formFields: [
+        {
+          controlName: 'talentCategory',
+          controlType: 'select',
+          controlLabel: 'Talent Category',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Singing: 'Singing',
+            Dancing: 'Dancing',
+            Acting: 'Acting',
+            Comedy: 'Comedy',
+            Drama: 'Drama',
+            Instrumental: 'Instrumental',
+            Other: 'Other'
+          },
+          validators: [Validators.required],
+          visible: true,
+          order: 1
+        },
+        {
+          controlName: 'otherTalentCategory',
+          controlType: 'text',
+          controlLabel: 'Other Talent',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [],
+          visible: false,
+          order: 1
+        },
+        {
+          controlName: 'skillLevel',
+          controlType: 'select',
+          controlLabel: 'Skill Level',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Beginner: 'Beginner',
+            Intermediate: 'Intermediate',
+            Advanced: 'Advanced'
+          },
+          validators: [Validators.required],
+          visible: true,
+          order: 2
+        },
+        {
+          controlName: 'stageName',
+          controlType: 'text',
+          controlLabel: 'Stage Name',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [],
+          visible: true,
+          order: 3
+        },
+        {
+          controlName: 'previouslyParticipated',
+          controlType: 'select',
+          controlLabel: 'Previously participated in a talent hunt ?',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Yes: 'Yes',
+            No: 'No',
+          },
+          validators: [],
+          visible: true,
+          order: 4
+        },
+        {
+          controlName: 'previousParticipationCategory',
+          controlType: 'select',
+          controlLabel: 'Participation Category',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Singing: 'Singing',
+            Dancing: 'Dancing',
+            Acting: 'Acting',
+            Comedy: 'Comedy',
+            Drama: 'Drama',
+            Instrumental: 'Instrumental',
+            Other: 'Other'
+          },
+          validators: [],
+          visible: false,
+          order: 5
+        },
+        {
+          controlName: 'previousParticipationOtherCategory',
+          controlType: 'text',
+          controlLabel: 'Other Talent',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [],
+          visible: false,
+          order: 5
+        },
+        {
+          controlName: 'competitionName',
+          controlType: 'text',
+          controlLabel: 'Competition Name',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [],
+          visible: false,
+          order: 6
+        },
+        {
+          controlName: 'participationPosition',
+          controlType: 'text',
+          controlLabel: 'Participation Position',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [],
+          visible: false,
+          order: 7
+        }
+      ]
     },
     {
       id: 3,
@@ -92,7 +353,104 @@ export class UtilityService {
         { text: 'Back', action: -1 },
         { text: 'Next', action: +1 }
       ],
-      key: 'guardianInfo'
+      key: 'guardianInfo',
+      formFields: [
+        {
+          controlName: 'title',
+          controlType: 'select',
+          controlLabel: 'Title',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Mr: 'Mr',
+            Mrs: 'Mrs',
+            Miss: 'Miss'
+          },
+          validators: [Validators.required],
+          visible: true,
+          order: 1
+        },
+        {
+          controlName: 'guardianName',
+          controlType: 'text',
+          controlLabel: 'Guardian Name',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required],
+          visible: true,
+          order: 2
+        },
+        {
+          controlName: 'relationship',
+          controlType: 'select',
+          controlLabel: 'Relationship',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Father: 'Father',
+            Mother: 'Mother',
+            Aunt: 'Aunt',
+            Uncle: 'Uncle',
+            Brother: 'Brother',
+            Sister: 'Sister',
+            Other: 'Other'
+          },
+          validators: [Validators.required],
+          visible: true,
+          order: 3
+        },
+        {
+          controlName: 'otherRelationship',
+          controlType: 'text',
+          controlLabel: 'Other Relationship',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required],
+          visible: false,
+          order: 3
+        },
+        {
+          controlName: 'guardianEmail',
+          controlType: 'text',
+          controlLabel: 'Guardian Email Address',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required, Validators.email],
+          visible: true,
+          order: 4
+        },
+        {
+          controlName: 'guardianPhoneNo',
+          controlType: 'text',
+          controlLabel: 'Guardian Phone Number',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required],
+          visible: true,
+          order: 5
+        },
+        {
+          controlName: 'guardianAddress',
+          controlType: 'text',
+          controlLabel: 'Guardian Address',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [],
+          visible: true,
+          order: 6
+        },
+        {
+          controlName: 'guardianState',
+          controlType: 'select',
+          controlLabel: 'Guardian State',
+          controlWidth: '48%',
+          initialValue: null,
+          selectOptions: {},
+          validators: [],
+          visible: true,
+          order: 7
+        }
+      ]
     },
     {
       id: 6,
@@ -102,7 +460,87 @@ export class UtilityService {
         { text: 'Back', action: -1 },
         { text: 'Next', action: +1 }
       ],
-      key: 'auditionInfo'
+      key: 'auditionInfo',
+      formFields: [
+        {
+          controlName: 'auditionLocation',
+          controlType: 'select',
+          controlLabel: 'Audition Location',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Lagos: 'Lagos',
+            Benin: 'Benin'
+          },
+          validators: [Validators.required],
+          visible: true,
+          order: 1
+        },
+        {
+          controlName: 'auditionDate',
+          controlType: 'date',
+          controlLabel: 'Audition Date',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required],
+          visible: true,
+          order: 2
+        },
+        {
+          controlName: 'auditionTime',
+          controlType: 'time',
+          controlLabel: 'Audition Time',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [Validators.required],
+          visible: true,
+          order: 3
+        },
+        {
+          controlName: 'audtionRequirement',
+          controlType: 'select',
+          controlLabel: 'Instrument Required',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Microphone: 'Microphone',
+            Guitar: 'Guitar',
+            Bass: 'Bass',
+            Drum: 'Drum',
+            BackgroundMusic: 'Background Music',
+            StageLighting: 'Stage Lighting',
+            Projector: 'Projector',
+            Other: 'Other'
+          },
+          validators: [],
+          visible: true,
+          order: 4
+        },
+        {
+          controlName: 'otherRequirement',
+          controlType: 'text',
+          controlLabel: 'Other Requirement',
+          controlWidth: '48%',
+          initialValue: null,
+          validators: [],
+          visible: false,
+          order: 4
+        },
+        {
+          controlName: 'hasInstrument',
+          controlType: 'select',
+          controlLabel: 'Do you have your own instrument ?',
+          controlWidth: '48%',
+          initialValue: '',
+          selectOptions: {
+            Yes: 'Yes',
+            No: 'No'
+          },
+          validators: [],
+          visible: true,
+          order: 5
+        }
+      ]
     },
     {
       id: 7,
@@ -122,14 +560,14 @@ export class UtilityService {
         { text: 'Back', action: -1 },
         { text: 'Make Payment', action: +1 }
       ],
-      key: 'payment'
+      key: 'paymentInfo'
     },
     {
       id: 9,
       stepName: 'Success',
       description: 'Registration Successful!!!',
       buttons: [
-        { text: 'Back', action: -1 },
+        // { text: 'Back', action: -1 },
         { text: 'View Profile', action: +1 }
       ],
       key: 'success'
@@ -215,14 +653,21 @@ export class UtilityService {
     }
 
     // fallback: check sessionStorage
-    const savedData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+    const savedData =
+      (sessionStorage.getItem('savedRegData') 
+        ? JSON.parse(sessionStorage.getItem('savedRegData') as string)
+        : null) 
+      ?? 
+      (sessionStorage.getItem('registrationData') 
+      ? JSON.parse(sessionStorage.getItem('registrationData') as string)
+      : null);
 
-    if (savedData[stepName]) {
-      return {
-        valid: true, // assume valid if it came from API/session
-        value: savedData[stepName],
-      };
-    }
+      if (savedData[stepName]) {
+        return {
+          valid: true, // assume valid if it came from API/session
+          value: savedData[stepName],
+        };
+      }
 
     return undefined;
   }

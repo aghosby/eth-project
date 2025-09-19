@@ -44,6 +44,7 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { SignaturePadComponent } from './components/blocks/signature-pad/signature-pad.component';
 import { ProfilePhotoComponent } from './components/blocks/profile-photo/profile-photo.component';
 import { VideoPreviewComponent } from './components/blocks/video-preview/video-preview.component';
+import { ReceiptComponent } from './components/blocks/receipt/receipt.component';
 
 const SHARED_COMP = [
   MatFormFieldModule,
@@ -97,7 +98,8 @@ const SHARED_COMP = [
     DonutProgressComponent,
     SignaturePadComponent,
     ProfilePhotoComponent,
-    VideoPreviewComponent
+    VideoPreviewComponent,
+    ReceiptComponent
   ],
   exports:[
     // Angular modules

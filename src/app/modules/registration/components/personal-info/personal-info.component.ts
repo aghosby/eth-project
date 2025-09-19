@@ -315,7 +315,7 @@ export class PersonalInfoComponent implements OnInit {
     else {
       // 🔥 Use the same map logic as parent
       const stepKey = this.stepName == 'Group Lead Details' ? this.utilityService.mapStepName('Personal Details') : this.utilityService.mapStepName(this.stepName);
-      const storedData = this.utilityService.registrationData.personalInfo;
+      const storedData = this.utilityService.registrationData?.personalInfo ?? null;
       //console.log('Data', storedData)
       const savedData = this.utilityService.getStep(stepKey);
       //console.log('Restoring form for', stepKey, savedData);

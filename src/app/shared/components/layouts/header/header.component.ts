@@ -29,4 +29,8 @@ export class HeaderComponent implements OnInit {
     this.authService.logOut();
   }
 
+  get currentStep() {
+    const step = Number(sessionStorage.getItem('currentStep'))
+    return step
+  }
 }

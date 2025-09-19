@@ -283,9 +283,9 @@ export class TalentInfoComponent implements OnInit {
     else {
       // 🔥 Use the same map logic as parent
       const stepKey = this.utilityService.mapStepName(this.stepName);
-      const storedData = this.utilityService.registrationData[stepKey];
+      const storedData = this.utilityService.registrationData?.talentInfo;
       const savedData = this.utilityService.getStep(stepKey);
-      console.log('Restoring form for', stepKey, savedData);
+      console.log('Restoring form for', stepKey, savedData, storedData);
 
       if(storedData) {
         console.log('I am here')

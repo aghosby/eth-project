@@ -43,9 +43,10 @@ export class ProfileComponent implements OnInit {
       next: res => {
         if(res.success) {
           this.savedRegData = res.data
-          console.log(this.savedRegData)
+          //console.log(this.savedRegData)
           sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
           this.regType = this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
+          this.applicantAge = this.getUserAge(this.savedRegData.personalInfo.dateOfBirth)
           this.groupInfoData = this.savedRegData.groupInfo;
           this.updateFormSteps();
           //this.getCurrentStep();
@@ -76,13 +77,15 @@ export class ProfileComponent implements OnInit {
 
     // reindex sequentially
     this.formSteps = steps.map((s, i) => ({ ...s, id: i }));
-    console.log('Form Steps', this.formSteps)
+    //console.log('Form Steps', this.formSteps)
   }
 
   // Retrieve labels for a step
-  getStepLabels(stepKey: string): { key: string; label: string; type: string }[] {
-    const labels = JSON.parse(sessionStorage.getItem('formStepLabels') || '{}');
-    return labels[stepKey] || [];
+  getStepLabels(stepKey: string): any[] {
+    const formFields = this.utilityService.formSteps.find(step => step.key === stepKey)?.formFields;
+    const labels = this.utilityService.generateFieldMapping(<any>formFields);
+    //  = JSON.parse(sessionStorage.getItem('formStepLabels') || '{}');
+    return labels || [];
   }
 
   getStepDataValue(stepKey: string, valueKey:string) {
@@ -97,4 +100,14 @@ export class ProfileComponent implements OnInit {
     return this.utilityService.registrationData.mediaInfo
   }
 
+  getUserAge(date: Date) {
+    const dob = typeof date === 'string' ? new Date(date) : date;
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age
+  }
 }

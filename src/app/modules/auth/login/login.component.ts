@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   isLoading:boolean = false;
+  userEmail:string = '';
 
   resendingOtp:boolean = false;
   resetToken:string = '';
@@ -62,12 +63,15 @@ export class LoginComponent implements OnInit {
           break;
         case 'reset-password':
           this.userAction = 'reset';
+          this.setUserEmail();
           break;
         case 'verify':
           this.userAction = 'verify';
+          this.setUserEmail();
           break;
         case 'set-password':
           this.userAction = 'change';
+          this.setUserEmail();
           break;
         default:
           this.userAction = 'login';
@@ -99,6 +103,11 @@ export class LoginComponent implements OnInit {
 
   get matchValid() {
     return this.authForm.controls["password"].touched && this.authForm.controls["confirmPassword"].touched && !this.authForm.controls["confirmPassword"].hasError("not_matching");
+  }
+
+  setUserEmail() {
+    this.userEmail = <string>sessionStorage.getItem('userRegDetails')
+    this.userEmail && this.authForm.controls['email'].setValue(JSON.parse(this.userEmail).email)
   }
 
   checkPasswords: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
@@ -153,6 +162,7 @@ export class LoginComponent implements OnInit {
       let payload = {
         email: this.authForm.value.email,
       }
+      sessionStorage.setItem('userRegDetails', JSON.stringify(payload));
       this.authService.verifyEmail(payload).subscribe({
         next: res => {
           //console.log(res);
@@ -178,8 +188,7 @@ export class LoginComponent implements OnInit {
     //this.changeState('change');
     if(this.authForm.controls['otp'].valid) {
       this.isLoading = true;
-      const userRegDetails = JSON.parse(sessionStorage.getItem('userRegDetails')!)
-      if(userRegDetails) this.authForm.controls['email'].setValue(userRegDetails.email)
+      console.log(this.userEmail, this.authForm.value.eamil)
       let payload = {
         email: this.authForm.value.email,
         otp: Number(this.authForm.value.otp)
@@ -237,11 +246,12 @@ export class LoginComponent implements OnInit {
     this.isLoading = true
     this.startTimer();
     this.resendingOtp = true;
-    const userRegDetails = JSON.parse(sessionStorage.getItem('userRegDetails')!)
-    if(userRegDetails) this.authForm.controls['email'].setValue(userRegDetails.email)
+    // const userRegDetails = JSON.parse(sessionStorage.getItem('userRegDetails')!)
+    // if(userRegDetails) this.authForm.controls['email'].setValue(userRegDetails.email)
     let payload = {
       email: this.authForm.value.email,
     }
+    sessionStorage.setItem('userRegDetails', JSON.stringify(payload));
     console.log('payload', payload)
     this.authService.verifyEmail(payload).subscribe({
       next: (res:any) => {
@@ -304,7 +314,8 @@ export class LoginComponent implements OnInit {
             sessionStorage.setItem(this.authService.TOKEN_NAME, res.data.token);
             this.loggedInUser = this.authService.loggedInUser;
             sessionStorage.setItem('savedRegStep', JSON.stringify(res.data.user.registrationInfo));
-            this.router.navigate(['/register']);
+            const status = this.loggedInUser.registrationInfo.paymentStatus
+            status && status !== 'pending' ? this.router.navigate(['/profile']) : this.router.navigate(['/register']);
             this.isLoading = false; 
           }
         },

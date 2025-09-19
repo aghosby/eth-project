@@ -20,7 +20,7 @@
             <span class="text-uppercase">{{userInitials ? userInitials : ''}}</span>
 
             <div *ngIf="logOutConfirm" class="mini-menu">
-                <div class="item">
+                <div *ngIf="(loggedInUser.registrationInfo.currentStep > 1) || (currentStep && currentStep > 1)" class="item">
                     <a [routerLink]="['profile']" [routerLinkActive]="'active'">Go to Profile</a>
                 </div>
                 <div class="item">

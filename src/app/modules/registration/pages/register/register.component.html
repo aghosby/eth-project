@@ -75,7 +75,12 @@
                 [applicantAge]="applicantAge$ | async" [stepName]="stepInView?.stepName"
                 [formInitialValue]="savedRegData?.termsConditions"
             ></app-terms-conditions>
-            <app-registration-payment *ngIf="stepInView?.stepName == 'Review & Payment'" [stepName]="stepInView?.stepName" [formSteps]="formSteps"></app-registration-payment>
+            <app-registration-payment 
+                *ngIf="stepInView?.stepName == 'Review & Payment'" 
+                [stepName]="stepInView?.stepName" 
+                [formSteps]="formSteps"
+                (stepChange)="viewStep($event)"
+            ></app-registration-payment>
 
             <div *ngIf="stepInView?.stepName == 'Success'" class="success mt-3">
                 <img src="assets/img/project/success.gif" alt="edo-talent-hunt">
@@ -93,7 +98,7 @@
                 *ngFor="let button of stepInView?.buttons; let i = index" 
                 (click)="goToStep(button.action)" 
                 type="submit" 
-                class="cta my-3 px-5"
+                class="cta my-3 px-4 px-lg-5"
                 [ngClass]="{
                     'w-100': stepInView?.buttons.length == 1,
                     'w-48': stepInView?.buttons.length == 2,

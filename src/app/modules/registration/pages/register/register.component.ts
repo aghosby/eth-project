@@ -87,23 +87,23 @@ export class RegisterComponent implements OnInit {
       const step = this.utilityService.getStep(stepKey);
       console.log(step)
 
-      if(currentStepName == 'Review & Payment') {
-        this.viewStep(nextStep);
-        return;
-      }
+      // if(currentStepName == 'Review & Payment') {
+      //   this.viewStep(nextStep);
+      //   return;
+      // }
 
       if(currentStepName == 'Success') {
         this.router.navigate(['/register/profile']);
         return;
       }
 
-      if (!step || !step.valid) {
+      if ((!step || !step.valid) && stepKey !== 'paymentInfo') {
         this.notifyService.showError('Please check that you have filled in all required fields')
         console.warn(`❌ Step "${currentStepName}" is invalid`, step?.value);
         return;
       }
       else {
-        this.saveStepInfo(stepKey, step.value, nextStep);        
+        this.saveStepInfo(stepKey, step?.value, nextStep);        
       }      
     }, 0);
   }
@@ -224,7 +224,7 @@ export class RegisterComponent implements OnInit {
       console.log('else')
     }    
     // fallback to session storage only
-    const savedStep = this.loggedInUser.currentStep ? this.loggedInUser.currentStep : Number(sessionStorage.getItem('currentStep')) || 0;
+    const savedStep = this.loggedInUser.registrationInfo.completedSteps[0] ? this.loggedInUser.registrationInfo.completedSteps[0] : Number(sessionStorage.getItem('currentStep')) || 0;
     if(this.savedRegData && this.savedRegData.personalInfo) {
       const savedAge = this.savedRegData.personalInfo.dateOfBirth
       this.getUserAge(new Date(savedAge))
@@ -285,6 +285,7 @@ export class RegisterComponent implements OnInit {
     this.notifyService.showSuccess(apiRes.message)
     this.apiLoading = false;
     this.updateSavedRegData(stepKey, payload)
+    console.log('Next Step', nextStep, this.formSteps)
     this.viewStep(nextStep);
   }
 
@@ -385,6 +386,20 @@ export class RegisterComponent implements OnInit {
           }
         })
         break;
+      // case 'paymentInfo':
+      //   console.log('I got here', payload)
+      //   if(payload) this.successFn(payload, stepKey, payload, nextStep)
+      //   // this.sharedService.createTermsConditionsInfo(payloadData).subscribe({
+      //   //   next: res => {
+      //   //     if(res.success) {
+      //   //       this.successFn(res, stepKey, payload, nextStep)
+      //   //     }
+      //   //   },
+      //   //   error: err => {
+      //   //     this.errorFn(err)
+      //   //   }
+      //   // })
+      //   break;
     }
   }
 

@@ -14,6 +14,7 @@ import { GuardianInfoComponent } from './components/guardian-info/guardian-info.
 import { TermsConditionsComponent } from './components/terms-conditions/terms-conditions.component';
 import { RegistrationPaymentComponent } from './components/registration-payment/registration-payment.component';
 import { AuditionInfoComponent } from './components/audition-info/audition-info.component';
+import { AuditionPassComponent } from './pages/audition-pass/audition-pass.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { AuditionInfoComponent } from './components/audition-info/audition-info.
     GuardianInfoComponent,
     TermsConditionsComponent,
     RegistrationPaymentComponent,
-    AuditionInfoComponent
+    AuditionInfoComponent,
+    AuditionPassComponent
   ],
   imports: [
     CommonModule,

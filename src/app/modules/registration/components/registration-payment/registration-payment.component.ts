@@ -26,7 +26,7 @@ export class RegistrationPaymentComponent implements OnInit {
   }
 
   groupInfoData:any;
-  amountDue:number = 500;
+  amountDue:number = 10000;
   @Output() stepChange = new EventEmitter<number>();
 
   constructor(

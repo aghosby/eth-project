@@ -73,7 +73,7 @@ export class AuditionInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Audition Location',
         controlWidth: '48%',
-        initialValue: 'No 3 Imuetinyan Street, Off Ihama, Opposite Ebenezer Junction, GRA, Benin City',
+        initialValue: 'No 3 Imuetinyan Street, Off Ihama, GRA, Benin City',
         readonly: true,
         validators: [Validators.required],
         visible: true,

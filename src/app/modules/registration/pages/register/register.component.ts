@@ -246,39 +246,47 @@ export class RegisterComponent implements OnInit {
 
   startRegistration() {
     this.apiLoading = true
-    console.log(this.utilityService.userCurrentStep)
-    if(this.utilityService.userCurrentStep < 1) {
-      const payload = {
-        registrationType: this.regType === 1 ? 'individual' : 'group'
-      }
-      this.sharedService.startRegistration(payload).subscribe({
-        next: res => {
-          if (res.success) {
-            // 🔥 Step 0 is in parent → push regType directly
-            this.utilityService.updateStep('registrationType', {
-              valid: true, // or add more validation if needed
-              value: { regType: this.regType },
-            });
-
-            //console.log('✅ Step "registrationType" saved:', { regType: this.regType });
-
-            // Proceed to next step
-            this.viewStep(1);
-            this.apiLoading = false;
-            // this.notifyService.showSuccess(res.message);
-          }
-        },
-        error: err => {
-          this.notifyService.showError(err.error.message);
-          this.apiLoading = false;  
-        }
-      })
-    }
-    else {
-      // Proceed to next step
+    const alreadyStarted = this.loggedInUser.registrationInfo.registrationType
+    if(alreadyStarted) {
       this.viewStep(1);
       this.apiLoading = false;
     }
+    else {
+      console.log(this.utilityService.userCurrentStep)
+      if(this.utilityService.userCurrentStep < 1) {
+        const payload = {
+          registrationType: this.regType === 1 ? 'individual' : 'group'
+        }
+        this.sharedService.startRegistration(payload).subscribe({
+          next: res => {
+            if (res.success) {
+              // 🔥 Step 0 is in parent → push regType directly
+              this.utilityService.updateStep('registrationType', {
+                valid: true, // or add more validation if needed
+                value: { regType: this.regType },
+              });
+
+              //console.log('✅ Step "registrationType" saved:', { regType: this.regType });
+
+              // Proceed to next step
+              this.viewStep(1);
+              this.apiLoading = false;
+              // this.notifyService.showSuccess(res.message);
+            }
+          },
+          error: err => {
+            this.notifyService.showError(err.error.message);
+            this.apiLoading = false;  
+          }
+        })
+      }
+      else {
+        // Proceed to next step
+        this.viewStep(1);
+        this.apiLoading = false;
+      }
+    }
+    
   }
 
   successFn(apiRes:any, stepKey:string, payload:any, nextStep:number) {

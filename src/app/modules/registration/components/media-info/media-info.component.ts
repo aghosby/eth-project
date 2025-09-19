@@ -84,9 +84,10 @@ export class MediaInfoComponent implements OnInit, OnDestroy {
     };
 
     sessionStorage.setItem('mediaUpload', JSON.stringify(mediaData));
+    console.log('Form Valid', this.grpInfoForm.valid)
     const stepKey = this.utilityService.mapStepName(this.stepName);
     this.utilityService.updateStep(stepKey, {
-      valid: mediaData.profilePhoto && mediaData.videoUpload,
+      valid: this.grpInfoForm.valid,
       value: mediaData,
     });
   }

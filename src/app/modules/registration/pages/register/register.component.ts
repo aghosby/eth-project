@@ -106,7 +106,7 @@ export class RegisterComponent implements OnInit {
       else {
         this.saveStepInfo(stepKey, step?.value, nextStep);        
       }      
-    }, 0);
+    }, 200);
   }
 
   private updateProgress(): void {

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AuditionPassComponent } from './pages/audition-pass/audition-pass.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       { 
         path: 'profile', 
         component: ProfileComponent 
+      },
+      { 
+        path: 'audition-pass', 
+        component: AuditionPassComponent 
       }
     ]
   }

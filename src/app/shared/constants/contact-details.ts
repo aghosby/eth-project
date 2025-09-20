@@ -1,4 +1,4 @@
 export const ContactDetails = {
-    email: ['Info@edotalenthunt.com'],
+    email: ['edotalenthunt01@gmail.com'],
     phone: ['07083375885', '07051653832', '09033198807']
 } 

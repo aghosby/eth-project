@@ -16,7 +16,7 @@
         Next
     </button>
 
-    <mat-form-field appearance="outline" class="page-size-select">
+    <mat-form-field appearance="outline" class="page-size-select" style="width: 5rem;">
         <mat-label>Items per page</mat-label>
         <mat-select [value]="pageSize" (selectionChange)="changePageSize($event.value)">
         <mat-option *ngFor="let size of pageSizes" [value]="size">

@@ -8,7 +8,7 @@ import { map, Observable, tap } from 'rxjs';
   styleUrls: ['./registration-list.component.scss']
 })
 export class RegistrationListComponent implements OnInit {
-   @Input() showFilters:boolean = false;
+  @Input() showFilters:boolean = false;
   dashboardDetails: any;
   paymentStats!:any;
   registrationDetails:any;

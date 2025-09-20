@@ -339,22 +339,29 @@ export class RegisterComponent implements OnInit {
         })
         break;
       case 'mediaInfo':
-        const formData = new FormData();
-        const profilePhoto = this.base64ToFile(payload.profilePhoto, 'profilePhoto')
-        const videoUpload = this.base64ToFile(payload.videoUpload, 'auditionVideo')
-        formData.append('profilePhoto', profilePhoto);
-        formData.append('videoUpload', videoUpload);
-        formData.append('nextStep', String(this.currentStep + 1));
-        this.sharedService.createMediaInfo(formData).subscribe({
-          next: res => {
-            if(res.success) {
-              this.successFn(res, stepKey, payload, nextStep)
+        const mediaExists = this.utilityService.registrationData.mediaInfo ? true : false
+        if(mediaExists) {
+          this.successFn(this.utilityService.registrationData.mediaInfo, stepKey, payload, nextStep)
+        }
+        else {
+          const formData = new FormData();
+          const profilePhoto = this.base64ToFile(payload.profilePhoto, 'profilePhoto')
+          const videoUpload = this.base64ToFile(payload.videoUpload, 'auditionVideo')
+          formData.append('profilePhoto', profilePhoto);
+          formData.append('videoUpload', videoUpload);
+          formData.append('nextStep', String(this.currentStep + 1));
+          this.sharedService.createMediaInfo(formData).subscribe({
+            next: res => {
+              if(res.success) {
+                this.successFn(res, stepKey, payload, nextStep)
+              }
+            },
+            error: err => {
+              this.errorFn(err)
             }
-          },
-          error: err => {
-            this.errorFn(err)
-          }
-        })
+          })
+        }
+        
         break;
       case 'guardianInfo':
         this.sharedService.createGuardianInfo(payloadData).subscribe({

@@ -216,7 +216,8 @@ export class AuditionInfoComponent implements OnInit {
   setInitialFormValues(initial: any) {
     if (!initial) return;
     const savedRegData = this.utilityService.registrationData.auditionInfo;
-    const patch = savedRegData ? { ...initial, ...savedRegData } : {...initial};
+    const patch = savedRegData && savedRegData.auditionDate ? { ...initial, ...savedRegData } : {...initial};
+    console.log(savedRegData, patch, initial);
 
     // 1. setup subscriptions first (only once!)
     if (!this.subscriptionsSetup) {
@@ -226,6 +227,7 @@ export class AuditionInfoComponent implements OnInit {
 
     // 2. patch everything
     this.grpInfoForm.patchValue(patch, { emitEvent: true });
+    this.grpInfoForm.controls['auditionLocation'].setValue('No 3 Imuetinyan Street, Off Ihama, GRA, Benin City')
 
     // 3. manually trigger conditional logic for pre-filled values
     this.runInitialConditionalChecks();

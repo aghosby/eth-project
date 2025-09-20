@@ -55,8 +55,8 @@ export class MediaInfoComponent implements OnInit, OnDestroy {
     const saved = savedRegData ? savedRegData : JSON.parse(sessionStorage.getItem('mediaUpload') || '{}');
 
     if (saved.profilePhoto || saved.videoUpload) {
-      this.profilePic = saved.profilePhoto || '';
-      this.videoUrl = saved.videoUpload || '';
+      this.profilePic = saved.profilePhoto ? (saved.profilePhoto.url ? saved.profilePhoto.url : saved.profilePhoto) : '';
+      this.videoUrl = saved.videoUpload ? (saved.videoUpload.url ? saved.videoUpload.url : saved.videoUpload) : '';
 
       this.grpInfoForm.patchValue({
         profilePhoto: saved.profilePhoto || '',

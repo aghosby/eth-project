@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ReceiptComponent } from '@shared/components/blocks/receipt/receipt.component';
 import { AuthService } from '@shared/services/auth.service';
 import { NotificationService } from '@shared/services/notification.service';
@@ -31,7 +32,8 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private utilityService: UtilityService,
     private sharedService: SharedService,
-    private notifyService: NotificationService
+    private notifyService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +58,7 @@ export class ProfileComponent implements OnInit {
       },
       error: err => {
         this.notifyService.showError(err.error.message);
+        this.router.navigate(['login'])
       }
     })
   }
@@ -120,5 +123,9 @@ export class ProfileComponent implements OnInit {
   // called after child finishes download
   onReceiptDownloaded() {
     console.log('✅ Receipt has been downloaded!');
+  }
+
+  viewAuditionPass() {
+    this.router.navigate(['register/audition-pass'])
   }
 }

@@ -1,1 +1,70 @@
-<p>audition-pass works!</p>
+<button (click)="goBack()" class="back-btn"><i class="bi bi-arrow-left"></i> <span>Back</span></button>
+<div class="page-wrap">
+    <div class="page-hdr">
+        <div (click)="downloadPass()" class="download"><i class="bi bi-file-earmark-arrow-down"></i></div>
+        <div class="summary">
+            <div class="image">
+                <img [src]="auditionDetails?.mediaInfo?.profilePhoto" alt="">
+            </div>
+            <div class="info">
+                <div *ngIf="!auditionDetails.groupInfo" class="name">{{auditionDetails.personalInfo.firstName}} {{auditionDetails.personalInfo.lastName}}</div>
+                <div *ngIf="auditionDetails.groupInfo" class="name">{{auditionDetails.groupInfo.groupName}}</div>
+                <div *ngIf="auditionDetails?.talentInfo.talentCategory == 'Other'" class="text">{{auditionDetails?.talentInfo.otherTalentCategory}}</div>
+                <div *ngIf="auditionDetails?.talentInfo.talentCategory != 'Other'" class="text">{{auditionDetails?.talentInfo.talentCategory}}</div>
+                <div class="regId">{{auditionDetails?.registrationNumber}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="watermark">
+            <img src="assets/img/project/eth-logo-wht.png" alt="">
+        </div>
+        <div class="details">
+            <div *ngFor="let item of auditionLabels" class="info">
+                <div class="label">{{item.label}}</div>
+                <div [class.lowercase]="item.valueKey == 'email'" *ngIf="item.parentKey && item.type !== 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.parentKey][item.valueKey]}}</div>
+                <div *ngIf="item.parentKey && item.type == 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.parentKey][item.valueKey] | date:'dd  MMMM, yyyy'}}</div>
+                <div *ngIf="item.parentKey && item.type !== 'date' && item.type == 'time'" class="value">{{auditionDetails[item.parentKey][item.valueKey] | date: 'h:mm a'}}</div>
+
+                <div *ngIf="!item.parentKey && item.type !== 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.valueKey]}}</div>
+                <div *ngIf="!item.parentKey && item.type == 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.valueKey] | date:'dd  MMMM, yyyy'}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="page-wrap downloadable" id="auditionPass">
+    <div class="page-hdr">
+        <div class="summary">
+            <div class="image">
+                <img [src]="auditionDetails?.mediaInfo?.profilePhoto" alt="">
+            </div>
+            <div class="info">
+                <div *ngIf="!auditionDetails.groupInfo" class="name">{{auditionDetails.personalInfo.firstName}} {{auditionDetails.personalInfo.lastName}}</div>
+                <div *ngIf="auditionDetails.groupInfo" class="name">{{auditionDetails.groupInfo.groupName}}</div>
+                <div *ngIf="auditionDetails?.talentInfo.talentCategory == 'Other'" class="text">{{auditionDetails?.talentInfo.otherTalentCategory}}</div>
+                <div *ngIf="auditionDetails?.talentInfo.talentCategory != 'Other'" class="text">{{auditionDetails?.talentInfo.talentCategory}}</div>
+                <div class="regId">{{auditionDetails?.registrationNumber}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="watermark">
+            <img src="assets/img/project/eth-logo-wht.png" alt="">
+        </div>
+        <div class="details">
+            <div *ngFor="let item of auditionLabels" class="info">
+                <div class="label">{{item.label}}</div>
+                <div [class.lowercase]="item.valueKey == 'email'" *ngIf="item.parentKey && item.type !== 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.parentKey][item.valueKey]}}</div>
+                <div *ngIf="item.parentKey && item.type == 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.parentKey][item.valueKey] | date:'dd  MMMM, yyyy'}}</div>
+                <div *ngIf="item.parentKey && item.type !== 'date' && item.type == 'time'" class="value">{{auditionDetails[item.parentKey][item.valueKey] | date: 'h:mm a'}}</div>
+
+                <div *ngIf="!item.parentKey && item.type !== 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.valueKey]}}</div>
+                <div *ngIf="!item.parentKey && item.type == 'date' && item.type !== 'time'" class="value">{{auditionDetails[item.valueKey] | date:'dd  MMMM, yyyy'}}</div>
+            </div>
+        </div>
+    </div>
+</div>

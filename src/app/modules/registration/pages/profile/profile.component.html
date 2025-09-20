@@ -4,7 +4,7 @@
         <!-- <h2>User Profile</h2> -->
         <div class="summary">
             <div class="image">
-                <img [src]="mediaInfo.profilePhoto" alt="">
+                <img [src]="mediaInfo?.profilePhoto.url" alt="">
             </div>
             <div class="info">
                 <div class="name">{{savedRegData.personalInfo.firstName}} {{savedRegData.personalInfo.lastName}}</div>

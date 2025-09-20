@@ -9,6 +9,7 @@ import { Validators } from '@angular/forms';
 interface StepForm {
   valid: boolean;
   value: any;
+  formDataValue?: any
 }
 
 export interface FormStepButton {

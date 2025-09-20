@@ -173,7 +173,7 @@ export class PersonalInfoComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Nationality',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: 'Nigeria',
         selectOptions: this.createCountryOptions(),
         validators: [],
         order: 12

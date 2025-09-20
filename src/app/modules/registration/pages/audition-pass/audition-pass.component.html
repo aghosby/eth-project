@@ -4,7 +4,7 @@
         <div (click)="downloadPass()" class="download"><i class="bi bi-file-earmark-arrow-down"></i></div>
         <div class="summary">
             <div class="image">
-                <img [src]="auditionDetails?.mediaInfo?.profilePhoto" alt="">
+                <img [src]="auditionDetails?.mediaInfo?.profilePhoto.url" alt="">
             </div>
             <div class="info">
                 <div *ngIf="!auditionDetails.groupInfo" class="name">{{auditionDetails.personalInfo.firstName}} {{auditionDetails.personalInfo.lastName}}</div>
@@ -39,7 +39,7 @@
     <div class="page-hdr">
         <div class="summary">
             <div class="image">
-                <img [src]="auditionDetails?.mediaInfo?.profilePhoto" alt="">
+                <img [src]="auditionDetails?.mediaInfo?.profilePhoto.url" alt="">
             </div>
             <div class="info">
                 <div *ngIf="!auditionDetails.groupInfo" class="name">{{auditionDetails.personalInfo.firstName}} {{auditionDetails.personalInfo.lastName}}</div>

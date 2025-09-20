@@ -101,7 +101,7 @@ export class RegistrationPaymentComponent implements OnInit {
   }
 
   private setupPayment(): void {
-    const regNo = this.utilityService.registrationData.registrationNumber
+    const regNo = this.utilityService.registrationData ? this.utilityService.registrationData.registrationNumber : 'ETH202500003';
     const transRef = `${regNo}${this.generateRandomNumber(10, 60)}hvc${this.generateRandomNumber(10, 90)}`;
 
     this.handler = CredoWidget.setup({
@@ -193,7 +193,12 @@ export class RegistrationPaymentComponent implements OnInit {
   }
 
   get mediaInfo() {
-    return this.utilityService.registrationData.mediaInfo
+    if (this.utilityService.registrationData) {
+      return this.utilityService.registrationData.mediaInfo;
+    } else {
+      const stored = sessionStorage.getItem('mediaUpload');
+      return stored ? JSON.parse(stored) : null;
+    }
   }
   
 }

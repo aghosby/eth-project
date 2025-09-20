@@ -103,6 +103,9 @@ export class RegisterComponent implements OnInit {
         console.warn(`❌ Step "${currentStepName}" is invalid`, step?.value);
         return;
       }
+      else if(stepKey == 'mediaInfo') {
+        this.saveStepInfo(stepKey, step?.value, nextStep, step?.formDataValue);    
+      }
       else {
         this.saveStepInfo(stepKey, step?.value, nextStep);        
       }      
@@ -303,7 +306,7 @@ export class RegisterComponent implements OnInit {
     this.notifyService.showError(apiRes.error.message)
   }
 
-  saveStepInfo(stepKey:string, payload:any, nextStep:number) {
+  saveStepInfo(stepKey:string, payload:any, nextStep:number, formDataVal?:any) {
     this.apiLoading = true;
     const payloadData = {
       ...payload,
@@ -336,7 +339,13 @@ export class RegisterComponent implements OnInit {
         })
         break;
       case 'mediaInfo':
-        this.sharedService.createMediaInfo(payloadData).subscribe({
+        const formData = new FormData();
+        const profilePhoto = this.base64ToFile(payload.profilePhoto, 'profilePhoto')
+        const videoUpload = this.base64ToFile(payload.videoUpload, 'auditionVideo')
+        formData.append('profilePhoto', profilePhoto);
+        formData.append('videoUpload', videoUpload);
+        formData.append('nextStep', String(this.currentStep + 1));
+        this.sharedService.createMediaInfo(formData).subscribe({
           next: res => {
             if(res.success) {
               this.successFn(res, stepKey, payload, nextStep)
@@ -410,6 +419,21 @@ export class RegisterComponent implements OnInit {
       //   // })
       //   break;
     }
+  }
+
+
+  base64ToFile(base64: string, filename: string): File {
+    const arr = base64.split(',');
+    const mime = arr[0].match(/:(.*?);/)![1]; // extract mime type
+    const bstr = atob(arr[1]); // decode base64
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
   }
 
 }

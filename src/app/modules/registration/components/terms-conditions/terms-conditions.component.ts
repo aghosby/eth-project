@@ -119,7 +119,7 @@ export class TermsConditionsComponent implements OnInit {
     else {
       // 🔥 Use the same map logic as parent
       const stepKey = this.utilityService.mapStepName(this.stepName);
-      const storedData = this.utilityService.registrationData[stepKey];
+      const storedData = this.utilityService.registrationData && this.utilityService.registrationData[stepKey];
       const savedData = this.utilityService.getStep(stepKey);
       // console.log('Restoring form for', stepKey, savedData);
 

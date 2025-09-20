@@ -102,7 +102,12 @@ export class ProfileComponent implements OnInit {
   }
 
   get mediaInfo() {
-    return this.utilityService.registrationData.mediaInfo
+    if (this.utilityService.registrationData) {
+      return this.utilityService.registrationData.mediaInfo;
+    } else {
+      const stored = sessionStorage.getItem('mediaUpload');
+      return stored ? JSON.parse(stored) : null;
+    }
   }
 
   getUserAge(date: Date) {

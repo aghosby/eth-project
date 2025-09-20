@@ -1,0 +1,35 @@
+<div class="admin-page-wrap">
+    <div class="header">
+        <header>
+            <div class="inner-wrap">
+                <div class="logo-wrap">
+                    <img class="logo"
+                         src="assets/img/project/eth-logo-wht.png"
+                        alt="edotalenthunt"
+                        [routerLink]="'/corporate/users/home'"
+                    />
+                </div>
+                <div class="other-info">
+                    <div class="user-details">
+                        <div class="user" (click)="activeMenu = ''">
+                            <div class="image"><i class="bi bi-person-circle"></i></div>
+                            <div class="name">Admin {{loggedInUser.lastName}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div class="main-page">
+        <div class="menu-wrap">
+            <app-menu></app-menu>
+        </div>
+
+        <div class="page-content">
+            <div class="inner-wrap">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

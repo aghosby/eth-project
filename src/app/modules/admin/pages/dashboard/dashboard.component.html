@@ -1,0 +1,132 @@
+<div class="page-wrap">
+
+    <div class="admin-heading d-flex justify-content-between align-items-center">
+        <h1 class="title xl">Dashboard</h1>
+        <!-- <div class="actions mt-0">
+            <div (click)="openModal(export, 'export');" class="btn trans"><i class="bi bi-upload me-lg-2"></i> Export</div>
+        </div> -->
+    </div>
+
+    <div class="section dashboard-stats mt-lg-3 mt-1">
+        <div class="stats-wrap">
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-ui-checks"></i></div>
+                <div class="info">
+                    <div class="card-hld">{{registrationDetails ? registrationDetails?.count : 0}}</div>
+                    <div class="card-hld">Total Registrations</div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-people-fill"></i></div>
+                <div class="info">
+                    <div class="card-hld">{{dashboardDetails?.users.total }}</div>
+                    <div class="card-hld">Total Users</div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="icon"> <i class="bi bi-wallet-fill"></i></div>
+                <div class="info">
+                    <div class="card-hld">{{paymentStats ? paymentStats?.count : 0}}</div>
+                    <div class="card-hld">Successful Transactions</div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-cash-stack"></i></div>
+                <div class="info">
+                    <div style="white-space: nowrap;"  class="card-hld">₦{{ paymentStats ? paymentStats?.totalAmount.toLocaleString() : 0}}</div>
+                    <div class="card-hld">Total Amount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showFilters" class="section mt-lg-5">
+        <div class="table-filters">
+            <span class="" [class.active]="activeTab=='all'">All Registrations</span>
+            <span class="pending" (click)="activeTab = 'pending'" [class.active]="activeTab=='pending'">Draft</span>
+            <span class="approved" (click)="activeTab = 'completed'" [class.active]="activeTab=='completed'">Completed</span>
+            <span class="declined" (click)="activeTab = 'notStarted'" [class.active]="activeTab=='notStarted'">Not Started</span>
+        </div>
+    </div>
+
+    <div class="section eth-table">
+        <div class="table-container mt-lg-4">
+            <div class="table-hdr">
+                <div class="title">Registrations <span *ngIf="totalItems > 0" class="count">{{totalItems}}</span></div>
+                <!-- <div *ngIf="showFilters" class="quick-filters">
+                    <div class="filter-title">Filter By:</div>
+                    <button [class.active]="filterState == 'custom'">Custom Period</button>
+                    <button [class.active]="filterState == 'currentWeek'">Current Week</button>
+                    <button [class.active]="filterState == 'lastWeek'">Last Week</button>
+                </div> -->
+            </div>
+
+            <table class="table align-middle mb-0 bg-white">
+                <thead class="bg-light">
+                    <tr>
+                        <ng-container *ngFor = 'let col of tableColumns'>
+                            <th [style.width]="col.colWidth">{{col.label}}</th>
+                        </ng-container>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let item of tableData; let i = index">
+                        <tr>
+                            <td>
+                                <span *ngIf="item?.groupInfo.members.length == 0">{{item?.personalInfo?.firstName}} {{item?.personalInfo?.lastName}}</span>
+                                <span *ngIf="item?.groupInfo.members.length > 0">{{item?.groupInfo.groupName}}</span>
+                            </td> 
+                            <td>
+                                <span>{{item?.registrationNumber}}</span>
+                            </td>
+                            <td>
+                                <span>{{item?.personalInfo?.phoneNo}}</span>
+                            </td>
+                            <td>
+                                <span>{{item?.personalInfo?.gender}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item?.talentInfo?.talentCategory === 'Other'" class="pending">{{item?.talentInfo?.otherTalentCategory}}</span>
+                                <span *ngIf="item?.talentInfo?.talentCategory !== 'Other'">{{item?.talentInfo?.talentCategory}}</span>
+                            </td>  
+                            <td>
+                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'dd-MM-YYYY'}} {{item.createdAt | date : 'h:mm a'}}</span>
+                            </td> 
+                            <td>
+                                <span *ngIf="item?.personalInfo && item?.status === 'draft'" class="text-secondary">Pending</span>
+                                <span *ngIf="!item?.personalInfo" class="text-danger">Not Started</span>
+                                <span *ngIf="item?.personalInfo && item?.status === 'success'" class="text-success">Completed</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item?.paymentInfo.paymentStatus !== 'pending'" class="approved">Paid</span>
+                                <span *ngIf="item?.paymentInfo.paymentStatus === 'pending'" class="pending">Pending</span>
+                            </td>                            
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <!-- use the custom pagination component -->
+            <app-pagination
+                [currentPage]="currentPage"
+                [pageSize]="pageSize"
+                [totalItems]="totalItems"
+                (pageChange)="onPageChange($event)"
+                (pageSizeChange)="onPageSizeChange($event)"
+            >
+            </app-pagination>
+
+            <div class="d-flex justify-content-center align-items-center py-4" *ngIf="isLoading && tableData.length < 1">
+                <span class="loader spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status"></span>
+            </div>
+            <div *ngIf="!isLoading && tableData.length == 0" class="empty-state">
+                <span><i class="bi bi-folder2-open"></i></span>
+                No records were found
+            </div>
+        </div>
+    </div>
+</div>

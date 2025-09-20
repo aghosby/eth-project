@@ -45,6 +45,7 @@ import { SignaturePadComponent } from './components/blocks/signature-pad/signatu
 import { ProfilePhotoComponent } from './components/blocks/profile-photo/profile-photo.component';
 import { VideoPreviewComponent } from './components/blocks/video-preview/video-preview.component';
 import { ReceiptComponent } from './components/blocks/receipt/receipt.component';
+import { PaginationComponent } from './components/blocks/pagination/pagination.component';
 
 const SHARED_COMP = [
   MatFormFieldModule,
@@ -99,7 +100,8 @@ const SHARED_COMP = [
     SignaturePadComponent,
     ProfilePhotoComponent,
     VideoPreviewComponent,
-    ReceiptComponent
+    ReceiptComponent,
+    PaginationComponent
   ],
   exports:[
     // Angular modules
@@ -119,6 +121,7 @@ const SHARED_COMP = [
 
     // Components
     ToastComponent,
+    PaginationComponent,
     ProgressBarComponent,
     DonutProgressComponent,
 

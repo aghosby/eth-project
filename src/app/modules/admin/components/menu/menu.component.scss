@@ -1,0 +1,115 @@
+.menu {
+    height: 100%;
+    font-family: 'Roboto';
+    background-color: var(--primary);
+
+    nav {
+        height: 100%;
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1.7rem 0 10vh;
+
+        ul {
+            width: 100%;
+            display: inline-block;
+
+            &.mini {
+                position: relative;
+
+                .log-out {
+                    position: absolute;
+                    bottom: 2.5rem;
+                    right: 1rem;
+                    padding: 1.2rem;
+                    border-radius: 0.3rem;
+                    background-color: white;
+                    box-shadow: 0 16px 43px rgba(0,0,0,.06);
+
+                    .text {
+
+                        &:first-child {
+                            font-size: 0.75rem;
+                            color: rgba(#000, 0.3);
+                            padding-bottom: 0.5rem;
+                            border-bottom: 1px solid rgba(#000, 0.1);
+                        }
+
+                        &:last-child {
+                            font-size: 0.8rem;
+                            letter-spacing: 0.03rem;
+                            padding-top: 0.5rem;
+                            cursor: pointer;
+                            color: var(--primary);
+                        }
+                    }
+                }
+            }
+
+            li {
+                width: 100%;
+                font-size: 0.9rem;
+                font-weight: 400;
+                border-radius: 0.3rem;
+                letter-spacing: 0.04rem;
+                transition: all 0.4s ease;
+                align-items: center;
+                display: inline-flex;
+                padding: 0.7rem 10%;
+                cursor: pointer;
+                gap: 0.4rem;
+                color: white;
+
+                &:nth-child(n+2) {
+                    margin-top: 0.5rem;
+                }
+
+                i {
+                    font-size: 1rem;
+                }
+
+                &.active, 
+                &:hover {
+                    padding: 0.7rem 10% 0.7rem 12%;
+                    border-right: 3px solid rgba(#000, 0.1);
+                    background-color: rgba(#fff, 0.13);
+                }
+
+                &.sub-menu {
+                    display: none;
+                    max-height: 0;
+                    padding: 0;
+                    overflow: hidden;
+                    transition: all 0.4s ease;
+
+                    &.active {
+                        display: block;
+                        max-height: 6rem;
+                        border-right: 0;
+                        background-color: transparent;
+                    }
+
+                    &:hover {
+                        padding: 0;
+                        border-right: 0;
+                        background-color: transparent;
+                    }
+
+                    ul {
+
+                        li {
+                            font-size: 0.75rem;
+                            letter-spacing: 0.03rem;
+                            padding: 0.6rem 10% 0.6rem 15%;
+
+                            &:hover {
+                                padding: 0.6rem 10% 0.6rem 17%;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}

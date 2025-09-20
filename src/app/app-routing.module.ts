@@ -5,6 +5,7 @@ import { RouterModule }      from '@angular/router';
 
 // Components
 import { NotFoundComponent } from './static/not-found/not-found.component';
+import { adminGuard } from '@shared/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +19,11 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule),
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),
+    canMatch: [adminGuard],
   },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent }

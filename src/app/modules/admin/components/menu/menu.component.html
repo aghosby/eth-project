@@ -1,0 +1,38 @@
+<div class="menu">
+    <nav>
+        <ul>
+            <li class="nav-item" [class.active]="activeMenu=='dashboard'" (click)="activeMenu = 'dashboard'" [routerLink]="'/admin'">
+                <i class="bi bi-grid-fill"></i>
+                <span>Dashboard</span>
+            </li>
+            <li class="nav-item" [class.active]="activeMenu=='registrations'" (click)="activeMenu = 'registrations'" [routerLink]="'/admin/registrations'">
+                <i class="bi bi-ui-checks"></i>
+                <span>Registrations</span>
+            </li>
+            <li class="nav-item" [class.active]="activeMenu=='transactions'" (click)="activeMenu = 'transactions'" [routerLink]="'/admin/transactions'">
+                <i class="bi bi-wallet-fill"></i>
+                <span>Transactions</span>
+            </li>
+            <li class="nav-item" [class.active]="activeMenu=='users'" (click)="activeMenu = 'users'" [routerLink]="'/admin/users'">
+                <i class="bi bi-people-fill"></i>
+                <span>Users</span>
+            </li>
+        </ul>
+
+        <ul class="mini">
+            <li class="nav-item" [routerLink]="'/admin/support'">
+                <i class="bi bi-chat-fill"></i>
+                <span>Support</span>
+            </li>
+            <li (click)="logOutConfirm = !logOutConfirm" class="nav-item">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Logout</span>
+            </li>
+
+            <div *ngIf="logOutConfirm" class="log-out">
+                <div class="text">You're logged in</div>
+                <div (click)="logOut()" class="text">Logout</div>
+            </div>
+        </ul>
+    </nav>
+</div>

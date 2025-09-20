@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, startWith, Subject, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
+import { Paging } from '@shared/models/paging';
 
 @Injectable({
   providedIn: 'root'
@@ -78,4 +79,59 @@ export class SharedService {
   public getPaymentDetails(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/payments`, this.requestOptions);
   }
+
+
+  /*****************************ADMIN ENDPOINTS*******************************************************************************************/
+
+  public getDashboardDetails(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/admin/dashboard`, this.requestOptions);
+  }
+
+  public getRegistrations(paging: Paging = { page: 1, limit: 10 }) {
+    const url = `${this.baseUrl}/admin/registrations`;
+    return this.paging$(url, paging, this.requestOptions);
+  }
+
+  public getUsers(paging: Paging = { page: 1, limit: 10 }) {
+    const url = `${this.baseUrl}/admin/users`;
+    return this.paging$(url, paging, this.requestOptions);
+  }
+
+  public getTransactions(paging: Paging = { page: 1, limit: 10 }) {
+    const url = `${this.baseUrl}/admin/transactions`;
+    return this.paging$(url, paging, this.requestOptions);
+  }
+
+  paging$(
+    url: string,
+    initialPaging: Paging = { page: 1, limit: 10 },
+    requestOptions: any = this.requestOptions
+  ) {
+    const pagingSubject = new Subject<Paging>();
+    let currentPaging: Paging = initialPaging;
+
+    const data$: Observable<any> = pagingSubject.pipe(
+      startWith(currentPaging),
+      switchMap(paging => {
+        let params = new HttpParams();
+        Object.entries(paging).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            params = params.set(key, value.toString());
+          }
+        });
+
+        const options = { ...requestOptions, params };
+        return this.http.get<any>(url, options);
+      })
+    );
+
+    const setPaging = (pagingUpdate: Partial<Paging>) => {
+      // merge new values into the current state
+      currentPaging = { ...currentPaging, ...pagingUpdate } as Paging;
+      pagingSubject.next(currentPaging);
+    };
+
+    return { data$, setPaging };
+  }
+
 }

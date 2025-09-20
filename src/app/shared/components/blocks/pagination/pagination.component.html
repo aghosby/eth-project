@@ -1,0 +1,27 @@
+<div class="pagination-container">
+    <button mat-stroked-button (click)="prevPage()" [disabled]="currentPage === 1">
+        Prev
+    </button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button
+        mat-button
+        [color]="i + 1 === currentPage ? 'primary' : undefined"
+        (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+        </button>
+    </ng-container>
+
+    <button mat-stroked-button (click)="nextPage()" [disabled]="currentPage === totalPages">
+        Next
+    </button>
+
+    <mat-form-field appearance="outline" class="page-size-select">
+        <mat-label>Items per page</mat-label>
+        <mat-select [value]="pageSize" (selectionChange)="changePageSize($event.value)">
+        <mat-option *ngFor="let size of pageSizes" [value]="size">
+            {{ size }}
+        </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

@@ -84,7 +84,7 @@ export class GroupInfoComponent implements OnInit {
     // 🔥 Use the same map logic as parent
     const stepKey = this.utilityService.mapStepName(this.stepName);
     const saved = this.utilityService.getStep(stepKey);
-    console.log('Restoring form for', stepKey, saved);
+    //console.log('Restoring form for', stepKey, saved);
 
     if (saved?.value) {
       this.grpInfoForm.patchValue({
@@ -121,7 +121,7 @@ export class GroupInfoComponent implements OnInit {
       agg[item['_id']] = item[key];
       return agg;
     }, {})
-    console.log(reqObj);
+    //console.log(reqObj);
     return reqObj;
   }
 

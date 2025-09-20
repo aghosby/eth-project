@@ -3,16 +3,13 @@
     <div class="contact">
         <div class="label">Email :</div>
         <div class="value">
-            <a href="mailto:edotalenthunt@gmail.com">edotalenthunt@gmail.com</a>
+            <a [href]="'mailto:' + contactDetails.email[0]">{{contactDetails.email[0]}}</a>
         </div>
     </div>
     <div class="contact">
         <div class="label">Phone :</div>
         <div class="value">
-            <a href="tel:08148454621">08148454621</a>
-            <a href="tel:08152638185">08152638185</a>
-            <a href="tel:07051653832">07051653832</a>
-            <a href="tel:09033198807">09033198807</a>
+            <a *ngFor="let phone of contactDetails.phone" [href]="'tel:'+phone">{{phone}}</a>
         </div>
     </div>
 </footer>

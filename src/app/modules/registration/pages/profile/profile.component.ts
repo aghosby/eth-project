@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ReceiptComponent } from '@shared/components/blocks/receipt/receipt.component';
 import { AuthService } from '@shared/services/auth.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
@@ -19,6 +20,7 @@ export class ProfileComponent implements OnInit {
   applicantAge!: number;
   loggedInUser:any;
   groupInfoData:any;
+  @ViewChild(ReceiptComponent) receiptComp!: ReceiptComponent;
 
   activeStepTab: number | null = null;
   toggleStepTab(index: number) {
@@ -91,7 +93,7 @@ export class ProfileComponent implements OnInit {
   getStepDataValue(stepKey: string, valueKey:string) {
     const savedData: any = this.utilityService.getStep(stepKey);
     if(stepKey == 'mediaInfo') {
-      console.log(savedData)
+      //console.log(savedData)
     }
     return savedData.value[valueKey] ? savedData.value[valueKey] : '-';
   }
@@ -109,5 +111,14 @@ export class ProfileComponent implements OnInit {
       age--;
     }
     return age
+  }
+
+  triggerDownload() {
+    this.receiptComp.downloadReceipt();
+  }
+
+  // called after child finishes download
+  onReceiptDownloaded() {
+    console.log('✅ Receipt has been downloaded!');
   }
 }

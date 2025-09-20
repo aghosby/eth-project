@@ -42,7 +42,7 @@ export class TermsConditionsComponent implements OnInit {
   }
 
   get showGuardianSignature(): boolean {
-    console.log(this.applicantAge)
+    //console.log(this.applicantAge)
     return this.applicantAge !== null && this.applicantAge < 16;
   }
 
@@ -115,14 +115,13 @@ export class TermsConditionsComponent implements OnInit {
   getRegistrationData() {
     if (this.formInitialValue) {
       this.setInitialFormValues(this.formInitialValue)
-      console.log('Patched')
     }
     else {
       // 🔥 Use the same map logic as parent
       const stepKey = this.utilityService.mapStepName(this.stepName);
       const storedData = this.utilityService.registrationData[stepKey];
       const savedData = this.utilityService.getStep(stepKey);
-      console.log('Restoring form for', stepKey, savedData);
+      // console.log('Restoring form for', stepKey, savedData);
 
       if(storedData) {
         this.setInitialFormValues(storedData);

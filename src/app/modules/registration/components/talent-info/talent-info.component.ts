@@ -53,7 +53,6 @@ export class TalentInfoComponent implements OnInit {
   }
 
   setUpForm = async () => {
-    console.log('Talent Info', this.formInitialValue);
     this.formInfoFields = [
       {
         controlName: 'talentCategory',
@@ -193,7 +192,6 @@ export class TalentInfoComponent implements OnInit {
       agg[item['_id']] = item[key];
       return agg;
     }, {})
-    console.log(reqObj);
     return reqObj;
   }
 
@@ -278,14 +276,12 @@ export class TalentInfoComponent implements OnInit {
   getRegistrationData() {
     if (this.formInitialValue) {
       this.setInitialFormValues(this.formInitialValue)
-      console.log('Patched')
     }
     else {
       // 🔥 Use the same map logic as parent
       const stepKey = this.utilityService.mapStepName(this.stepName);
       const storedData = this.utilityService.registrationData?.talentInfo;
       const savedData = this.utilityService.getStep(stepKey);
-      console.log('Restoring form for', stepKey, savedData, storedData);
 
       if(storedData) {
         console.log('I am here')

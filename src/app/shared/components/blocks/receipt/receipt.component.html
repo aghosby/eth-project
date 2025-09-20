@@ -1,21 +1,76 @@
 <!-- receipt.component.html -->
-<div id="receipt" class="receipt-container" style="display: none;">
-  <div class="receipt-header">
-    <img src="assets/logo.png" alt="Logo" class="logo" />
-    <h2>Transaction Receipt</h2>
-    <p>Your payment has been made successfully</p>
-  </div>
+<div id="receipt" class="receipt-container">
+    <div class="receipt-header">
+        <img src="assets/img/project/eth-logo-wht.png" alt="Logo" class="logo" />
+        <h2>Transaction Receipt</h2>
+        <p>Your payment has been made successfully</p>
+    </div>
 
-  <div class="section">
-    <h3>Customer Details</h3>
-    <p>{{ customer.name }}</p>
-    <p>{{ customer.email }}</p>
-  </div>
+    <div class="receipt-body">
+        <div class="section">
+            <div class="hdr-details">
+                <div class="info">
+                    <div class="label">Name :</div>
+                    <div class="value">{{paymentDetails?.userId.firstName}} {{paymentDetails?.userId.lastName}}</div>
+                </div>
+                <div class="info">
+                    <div class="label">Email :</div>
+                    <div class="value">{{paymentDetails?.userId.email}}</div>
+                </div>
+                <div class="info">
+                    <div class="label">Registration ID :</div>
+                    <div class="value">{{paymentDetails?.registrationId.registrationNumber}}</div>
+                </div>
+                
+            </div>
+            <div class="image">
+                <img src="assets/img/project/paid.png" />
+            </div>
+        </div>
 
-  <div class="section">
-    <h3>Transaction Details</h3>
-    <p><strong>Reference:</strong> {{ transaction.reference }}</p>
-    <p><strong>Amount:</strong> {{ transaction.amount | currency:transaction.currency }}</p>
-    <p><strong>Status:</strong> {{ transaction.status }}</p>
-  </div>
+        <div class="section mt-3">
+            <div class="details">
+                <div class="info">
+                    <div class="label">Transaction Reference</div>
+                    <div class="value">{{paymentDetails?.gatewayResponse.frontendData.transRef}}</div>
+                </div>
+                <div class="info">
+                    <div class="label">Date</div>
+                    <div class="value">{{paymentDetails?.processedAt | date: 'dd MMM, YYYY'}}</div>
+                </div>
+                <div class="info">
+                    <div class="label">Time</div>
+                    <div class="value">{{paymentDetails?.processedAt | date: 'h:mm a'}}</div>
+                </div>
+                <div class="info">
+                    <div class="label">Amount</div>
+                    <div class="value">₦{{paymentDetails?.gatewayResponse.frontendData.transAmount.toLocaleString()}}</div>
+                </div>
+                <div class="info">
+                    <div class="label">Transaction Status</div>
+                    <div class="value status">Successful</div>
+                </div>
+                <div class="info">
+                    <div class="label">Payment Reference</div>
+                    <div class="value">{{paymentDetails?.gatewayResponse.frontendData.reference}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="receipt-footer footer">
+        <div class="copyright">© Edo Talent hunt 2025. Let your light shine.</div>
+        <div class="contact">
+            <div class="label">Email :</div>
+            <div class="value">
+                <a [href]="'mailto:' + contactDetails.email[0]">{{contactDetails.email[0]}}</a>
+            </div>
+        </div>
+        <div class="contact">
+            <div class="label">Phone :</div>
+            <div class="value">
+                <a *ngFor="let phone of contactDetails.phone" [href]="'tel:'+phone">{{phone}}</a>
+            </div>
+        </div>
+    </div>
 </div>

@@ -86,7 +86,7 @@ export class RegistrationPaymentComponent implements OnInit {
 
     // 🔥 listen for trigger from parent
     this.stepTrigger = this.utilityService.trigger$.subscribe((stepName) => {
-      console.log('Step', stepName)
+      //console.log('Step', stepName)
       if(stepName !== 'Success') this.makePayment();
     });
   }
@@ -96,7 +96,7 @@ export class RegistrationPaymentComponent implements OnInit {
   }
 
   goToStep(stepNo: number) {
-    console.log('Sent Step', stepNo)
+    //console.log('Sent Step', stepNo)
     this.stepChange.emit(stepNo);
   }
 
@@ -128,7 +128,7 @@ export class RegistrationPaymentComponent implements OnInit {
       // callbackUrl: window.location.hostname + '/register',
       callbackUrl: 'http://localhost:4200/register',
       onClose: () => {
-        console.log('Widget Closed');
+        //console.log('Widget Closed');
       },
       callBack: (response: any) => {
         const paymentResult = this.parsePaymentResult(response.callbackUrl);
@@ -187,7 +187,7 @@ export class RegistrationPaymentComponent implements OnInit {
   getStepDataValue(stepKey: string, valueKey:string) {
     const savedData: any = this.utilityService.getStep(stepKey);
     if(stepKey == 'mediaInfo') {
-      console.log(savedData)
+      //console.log(savedData)
     }
     return savedData.value[valueKey] ? savedData.value[valueKey] : '-';
   }

@@ -57,7 +57,6 @@ export class PersonalInfoComponent implements OnInit {
   }
 
   setUpForm = async () => {
-    console.log('Personal Info', this.formInitialValue);
     this.formInfoFields = [
       {
         controlName: 'firstName',

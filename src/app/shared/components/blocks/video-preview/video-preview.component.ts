@@ -27,7 +27,7 @@ export class VideoPreviewComponent implements ControlValueAccessor {
   private onTouched: any = () => {};
   disabled = false;
 
-  readonly MAX_SIZE = 10 * 1024 * 1024; // 10MB
+  readonly MAX_SIZE = 30 * 1024 * 1024; // 10MB
 
   // Handle value from parent form control or initialUrl
   writeValue(value: string | File | null): void {

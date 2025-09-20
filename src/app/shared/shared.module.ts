@@ -134,6 +134,7 @@ const SHARED_COMP = [
     PageLayoutComponent,
     HeaderComponent,
     FooterComponent,
+    ReceiptComponent,
 
     // Pipes
 

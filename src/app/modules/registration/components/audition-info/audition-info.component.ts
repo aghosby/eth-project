@@ -209,7 +209,7 @@ export class AuditionInfoComponent implements OnInit {
       agg[item['id']] = item[key];
       return agg;
     }, {})
-    console.log(reqObj);
+    //console.log(reqObj);
     return reqObj;
   }
 
@@ -234,21 +234,19 @@ export class AuditionInfoComponent implements OnInit {
   getRegistrationData() {
     if (this.formInitialValue) {
       this.setInitialFormValues(this.formInitialValue)
-      console.log('Patched')
+      //console.log('Patched')
     }
     else {
       // 🔥 Use the same map logic as parent
       const stepKey = this.utilityService.mapStepName(this.stepName);
       const storedData = this.utilityService.registrationData && this.utilityService.registrationData[stepKey];
       const savedData = this.utilityService.getStep(stepKey);
-      console.log('Restoring form for', stepKey, savedData);
+      //console.log('Restoring form for', stepKey, savedData);
 
       if(storedData) {
-        console.log('I am here')
         this.setInitialFormValues(storedData);
       }
       else if (savedData?.value) {
-        console.log('Saved here')
         this.grpInfoForm.patchValue(savedData.value);
       }
       

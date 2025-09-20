@@ -127,10 +127,11 @@
             </div>
         </div>
 
+        <app-receipt (downloaded)="onReceiptDownloaded()"></app-receipt>
+
         <div *ngIf="this.loggedInUser.registrationInfo.paymentStatus == 'pending'" class="btn-hld d-lg-flex justify-content-lg-between my-5 gap-lg-5 gap-0">
-            <button class="cta cta-wht px-1 px-lg-5 w-lg-auto w-100">Download Receipt</button>
+            <button (click)="triggerDownload()" class="cta cta-wht px-1 px-lg-5 w-lg-auto w-100">Download Receipt</button>
             <button class="cta cta-primary mt-lg-0 mt-3 px-1 px-lg-5 w-lg-auto w-100">View Audition Pass</button>
         </div>
     </div>
- </div>
-
+</div>

@@ -86,7 +86,7 @@ export class RegisterComponent implements OnInit {
     // Wait for the child to respond before deciding
     setTimeout(() => {
       const step = this.utilityService.getStep(stepKey);
-      console.log(step)
+      //console.log(step)
 
       // if(currentStepName == 'Review & Payment') {
       //   this.viewStep(nextStep);
@@ -222,7 +222,7 @@ export class RegisterComponent implements OnInit {
     }
     else {
       this.regType = regData ? JSON.parse(regData).registrationType?.regType : 1
-      console.log('else')
+      //console.log('else')
     }    
     // fallback to session storage only
     const savedStep = this.loggedInUser.registrationInfo.completedSteps[0] ? this.loggedInUser.registrationInfo.completedSteps[0] : Number(sessionStorage.getItem('currentStep')) || 0;
@@ -253,7 +253,7 @@ export class RegisterComponent implements OnInit {
       this.apiLoading = false;
     }
     else {
-      console.log(this.utilityService.userCurrentStep)
+      //console.log(this.utilityService.userCurrentStep)
       if(this.utilityService.userCurrentStep < 1) {
         const payload = {
           registrationType: this.regType === 1 ? 'individual' : 'group'
@@ -294,7 +294,7 @@ export class RegisterComponent implements OnInit {
     this.notifyService.showSuccess(apiRes.message)
     this.apiLoading = false;
     this.updateSavedRegData(stepKey, payload)
-    console.log('Next Step', nextStep, this.formSteps)
+    //console.log('Next Step', nextStep, this.formSteps)
     this.viewStep(nextStep);
   }
 

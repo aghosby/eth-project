@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------------------
 // NOTE Project ---------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
+@import './mixins.scss';
 
 html, 
 body { 
@@ -107,6 +108,58 @@ body {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
+footer, .footer {
+    width: 100%;
+    margin: 2rem auto 2rem;
+    text-align: center;
+
+    .copyright {
+        font-size: 0.75rem;
+        letter-spacing: 0.05rem;
+        color: rgba(0, 0, 0, 0.7);
+
+        @include screen-media-min(md) {
+            font-size: 0.85rem;
+        }
+    }
+
+    .contact {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 0.5rem;
+        gap: 0.5rem;
+
+        .label {
+            font-weight: 500;
+            display: none;
+            letter-spacing: 0.05rem;
+
+            @include screen-media-min(md) {
+                display: block;
+            }
+        }
+
+        .value {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.7rem;
+        }
+
+        a {
+            font-size: 0.75rem;
+            text-decoration: underline;
+            color: var(--primary);
+
+            @include screen-media-min(md) {
+                font-size: 0.85rem;
+            }
+        }
+    }
+
+}
 // NOTE Nav -------------------------------------------------------------------------------------
 
 // NOTE Table -----------------------------------------------------------------------------------

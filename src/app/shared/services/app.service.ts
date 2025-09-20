@@ -135,14 +135,14 @@ export class AppService
   {
     instance.interceptors.request.use((config) =>
     {
-      console.log('interceptors.request.config', config);
+      //console.log('interceptors.request.config', config);
       this.storeService.setIsLoading(true);
 
       return config;
     },
     (error) =>
     {
-      console.log('interceptors.request.error', error);
+      //console.log('interceptors.request.error', error);
       this.storeService.setIsLoading(false);
 
       this.toastManager.quickShow(error);

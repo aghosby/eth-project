@@ -28,7 +28,6 @@ export class SharedService {
   }
 
   public startRegistration(payload:any): Observable<any> {
-    console.log('Headers', this.requestOptions)
     return this.http.post<any>(`${this.baseUrl}/registrations`, payload, this.requestOptions);
   }
 
@@ -74,5 +73,9 @@ export class SharedService {
 
   public confirmPayment(payload:any, userId:string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/payments/save-info/${userId}`, payload, this.requestOptions);
+  }
+
+  public getPaymentDetails(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/payments`, this.requestOptions);
   }
 }

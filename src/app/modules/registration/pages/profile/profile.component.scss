@@ -9,6 +9,8 @@
 .page-wrap {
     width: 90%;
     margin: 0 auto;
+    position: relative;
+    z-index: 5;
 
     @include screen-media-min(md) {
         width: 70%;

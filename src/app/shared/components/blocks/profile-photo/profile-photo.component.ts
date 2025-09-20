@@ -59,7 +59,7 @@ export class ProfilePhotoComponent implements ControlValueAccessor {
 
       // Validate size (max 2MB)
       if (file.size > 2 * 1024 * 1024) {
-        this.errorMessage = 'File size must be less than 2MB';
+        this.errorMessage = 'Image size must be less than 5MB';
         this.file = null;
         this.profilePic = this.initialUrl || null;
         this.onChange(null);

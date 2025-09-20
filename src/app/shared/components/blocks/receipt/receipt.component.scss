@@ -1,0 +1,126 @@
+
+@media screen {
+    .receipt-container {
+        width: 600px;   /* fixed width for desktop layout */
+        max-width: 100%;
+    }
+}
+.receipt-container {
+    width: 700px;
+    position: absolute;
+    max-width: 700px;
+    background: #fff !important;
+    border-radius: 0.3rem;
+    padding: 2.2rem 0;
+    height: auto;
+    margin: 0 auto;
+    left: -9999px;
+    top: 0;
+
+    .receipt-header {
+        text-align: center;
+
+        img {
+            width: auto;
+            height: 5rem;
+        }
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.04rem;
+            margin: 0.6rem 0 0;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        p {
+            color: rgba(0, 0, 0, 0.7);
+        }
+    }
+
+    .receipt-body {
+        padding: 0 2rem;
+        margin-top: 1rem;
+
+        .section {
+
+            &:first-child {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-radius: 0.3rem;
+                background: rgba(#fcf0e2, 0.6);
+                padding: 1rem 1.5rem;
+
+                .hdr-details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+
+                    .info {
+                        display: flex;
+                        gap: 0.5rem;
+                        letter-spacing: 0.04rem;
+
+                        .label {
+                            color: rgba(0, 0, 0, 0.7);
+                        }
+
+                        .value {
+                            font-size: 0.85rem;
+                            font-weight: 600;
+                        }
+                    }
+                }
+
+                .image {
+                    img {
+                        width: auto;
+                        height: 4rem;
+                    }
+                }
+            }
+
+            .hdr {
+                margin-top: 1rem;
+                h3 {
+                    font-size: 1rem;
+                    font-weight: 600;
+                }
+            }
+
+            .details {
+                display: flex;
+                flex-direction: column;
+
+                .info {
+                    display: flex;
+                    gap: 0.5rem;
+                    padding: 0.6rem 1rem;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                    letter-spacing: 0.04rem;
+
+                    .label {
+                        color: rgba(0, 0, 0, 0.7);
+                    }
+
+                    .value {
+                        font-size: 0.85rem;
+                        font-weight: 600;
+
+                        &.status {
+                            font-size: 0.8rem;
+                            font-weight: 400;
+                            border-radius: 2rem;
+                            color: white;
+                            padding: 0.2rem 0.7rem;
+                            background: var(--approved);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

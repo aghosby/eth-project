@@ -188,7 +188,7 @@ export class LoginComponent implements OnInit {
     //this.changeState('change');
     if(this.authForm.controls['otp'].valid) {
       this.isLoading = true;
-      console.log(this.userEmail, this.authForm.value.eamil)
+      //console.log(this.userEmail, this.authForm.value.eamil)
       let payload = {
         email: this.authForm.value.email,
         otp: Number(this.authForm.value.otp)
@@ -252,7 +252,7 @@ export class LoginComponent implements OnInit {
       email: this.authForm.value.email,
     }
     sessionStorage.setItem('userRegDetails', JSON.stringify(payload));
-    console.log('payload', payload)
+    //console.log('payload', payload)
     this.authService.verifyEmail(payload).subscribe({
       next: (res:any) => {
         //console.log(res);
@@ -296,7 +296,7 @@ export class LoginComponent implements OnInit {
 
   login(email?:string) {
     //this.router.navigate(['/register']);
-    console.log(this.authForm.value)
+    //console.log(this.authForm.value)
     if((this.authForm.controls['email'].valid) && this.authForm.controls['password'].valid) {
       this.isLoading = true;
       let payload = {
@@ -306,7 +306,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(payload).subscribe({
         next: res => {
           if (res.success) {
-            console.log(res)
+            //console.log(res)
             if(email) sessionStorage.removeItem('userRegDetails');
             sessionStorage.setItem("loggedInUser", JSON.stringify(res.data.user))
             this.notifyService.showSuccess('You logged in successfully');
@@ -315,7 +315,7 @@ export class LoginComponent implements OnInit {
             this.loggedInUser = this.authService.loggedInUser;
             sessionStorage.setItem('savedRegStep', JSON.stringify(res.data.user.registrationInfo));
             const status = this.loggedInUser.registrationInfo.paymentStatus
-            status && status !== 'pending' ? this.router.navigate(['/profile']) : this.router.navigate(['/register']);
+            status && status !== 'pending' ? this.router.navigate(['register/profile']) : this.router.navigate(['/register']);
             this.isLoading = false; 
           }
         },
@@ -345,7 +345,7 @@ export class LoginComponent implements OnInit {
       }
       this.authService.setPassword(payload).subscribe({
         next: res => {
-          console.log('Reset', res);
+          //console.log('Reset', res);
           if (res.success) {
             this.notifyService.showSuccess(res.message);
             this.login(payload.email)

@@ -95,28 +95,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @include mat.form-field-density(-1);
 
-// /* Input text size */
-// .mat-mdc-input-element {
-//     font-size: 0.8rem !important;
-//     padding: 0.2rem 0 !important;
-// }
-
-// /* Make all Material form fields smaller */
-// .mat-mdc-form-field .mdc-text-field {
-//     height: 45px;            /* default is 56px */
-//     min-height: 40px;
-//     padding: 0 8px; 
-
-//     @include screen-media-min(md) {
-//         height: 50px;
-//     }
-// }
-
-// .mat-mdc-form-field .mat-mdc-input-element {
-//     font-size: 0.85rem;      /* shrink text */
-//     padding: 0;              /* remove extra vertical padding */
-// }
-
 .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
     font-size: 0.85rem;
 

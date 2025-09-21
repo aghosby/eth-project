@@ -113,8 +113,9 @@ export class SharedService {
     const data$: Observable<any> = pagingSubject.pipe(
       startWith(currentPaging),
       switchMap(paging => {
+        currentPaging = { ...currentPaging, ...paging };
         let params = new HttpParams();
-        Object.entries(paging).forEach(([key, value]) => {
+        Object.entries(currentPaging).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
             params = params.set(key, value.toString());
           }

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SharedService } from '@shared/services/shared.service';
-import { map, Observable, Subject, tap } from 'rxjs';
+import { UtilityService } from '@shared/services/utility.service';
+import { debounceTime, distinctUntilChanged, map, merge, Observable, Subject, tap } from 'rxjs';
 
 
 @Component({
@@ -42,6 +43,10 @@ export class DashboardComponent implements OnInit {
       colWidth: '10%'
     },
     {
+      label: 'Age',
+      colWidth: '5%'
+    },
+    {
       label: 'Gender',
       colWidth: '10%'
     },
@@ -51,7 +56,11 @@ export class DashboardComponent implements OnInit {
     },
     {
       label: 'Started',
-      colWidth: '15%'
+      colWidth: '12%'
+    },
+    {
+      label: 'Current Step',
+      colWidth: '12%'
     },
     {
       label: 'Reg Status',
@@ -59,12 +68,13 @@ export class DashboardComponent implements OnInit {
     },
     {
       label: 'Payment Status',
-      colWidth: '12%'
+      colWidth: '10%'
     },
   ]
 
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    public utilityService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -73,16 +83,38 @@ export class DashboardComponent implements OnInit {
     this.pagingController = this.sharedService.getRegistrations({ page: this.currentPage, limit: this.pageSize });
     this.tableData$ = this.pagingController.data$;
 
-    this.tableData$ = this.pagingController.data$.pipe(
+    this.tableData$ = merge(
+      this.pagingController.data$,
+      this.searchEvent$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(term => {
+          this.searchTerm = term;
+          this.currentPage = 1; // reset to first page when searching
+          this.pagingController.setPaging({
+            page: this.currentPage,
+            limit: this.pageSize,
+            search: this.searchTerm
+          });
+        }),
+        // Don't emit items here; only trigger paging updates
+        // We return EMPTY to not mess with the stream
+        map(() => null)
+      )
+    ).pipe(
+      tap(() => (this.isLoading = true)),
       tap(res => {
-        this.totalItems = res.data.pagination.totalCount;
+        if (res) {
+          this.totalItems = res.data.pagination.totalCount;
+        }
       }),
-      map(res => res.data.registrations) // only use items in the table
+      map(res => (res ? res.data.registrations : this.tableData)),
+      tap(() => (this.isLoading = false))
     );
 
     this.tableData$.subscribe(res => {
       this.tableData = res
-      console.log('Registrations', res)
+      //console.log('Registrations', res)
     })
     
   }
@@ -121,11 +153,30 @@ export class DashboardComponent implements OnInit {
 
   onSearch(event: Event) {
     const term =(event.target as HTMLInputElement).value
+    //console.log('Search', term)
     this.searchEvent$.next(term);
   }
 
   clearSearch() {
+    //console.log('Clear')
     this.searchTerm = '';
     this.searchEvent$.next('');
+  }
+
+  getUserAge(dob: string | Date) {
+    if (!dob) {
+      return '-';
+    }
+
+    // ensure dob is a Date object
+    const birthDate = dob instanceof Date ? dob : new Date(dob);
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
   }
 }

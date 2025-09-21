@@ -700,4 +700,56 @@ export class UtilityService {
     existing[stepKey] = fieldMapping;
     sessionStorage.setItem('formStepLabels', JSON.stringify(existing));
   }
+
+
+  //FOR ADMIN PURPOSES
+  getFormStepsForUser(
+    registrationType: string,
+    dob: string | Date,
+    allFormSteps: any[] = this.formSteps
+  ): FormStep[] {
+    const steps = [...allFormSteps];
+
+    // Calculate age
+    const birthDate = dob instanceof Date ? dob : new Date(dob);
+    const today = new Date();
+    let applicantAge = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      applicantAge--;
+    }
+
+    // Adjust stepName for step 1 based on registrationType
+    steps.find(s => {
+      if (s.id === 1) {
+        s.stepName = registrationType === 'individual' ? 'Personal Details' : 'Group Lead Details';
+      }
+    });
+
+    // Remove Group Details if registrationType is individual
+    let filteredSteps = steps;
+    if (registrationType === 'individual') {
+      filteredSteps = filteredSteps.filter(s => s.stepName !== 'Group Details');
+    }
+
+    // Remove Guardian Details if applicant is 16 or older
+    if (applicantAge >= 16) {
+      filteredSteps = filteredSteps.filter(s => s.stepName !== 'Guardian Details');
+    }
+
+    // Reindex sequentially
+    filteredSteps = filteredSteps.map((s, i) => ({ ...s, id: i }));
+
+    return filteredSteps;
+  }
+
+  getCurrentStepName(
+    stepIndex: number,
+    registrationType: string,
+    dob: string | Date,
+  ): string {
+    const steps = this.getFormStepsForUser(registrationType, dob, this.formSteps);
+    const step = steps.find(s => s.id === stepIndex);
+    return step ? step.stepName : '-';
+  }
 }

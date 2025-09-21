@@ -47,7 +47,7 @@ export class RegistrationListComponent implements OnInit {
     },
     {
       label: 'Gender',
-      colWidth: '10%'
+      colWidth: '5%'
     },
     {
       label: 'Category',
@@ -67,7 +67,7 @@ export class RegistrationListComponent implements OnInit {
     },
     {
       label: 'Payment Status',
-      colWidth: '10%'
+      colWidth: '15%'
     },
   ]
 

@@ -31,32 +31,28 @@ export class TransactionListComponent implements OnInit {
       colWidth: '15%'
     },
     {
-      label: 'Reg No.',
-      colWidth: '10%'
-    },
-    {
-      label: 'Phone',
-      colWidth: '10%'
-    },
-    {
-      label: 'Gender',
-      colWidth: '10%'
-    },
-    {
-      label: 'Category',
-      colWidth: '10%'
-    },
-    {
-      label: 'Started',
+      label: 'Reference No',
       colWidth: '15%'
     },
     {
-      label: 'Reg Status',
+      label: 'Amount',
       colWidth: '10%'
     },
     {
+      label: 'Date',
+      colWidth: '10%'
+    },
+    {
+      label: 'Time',
+      colWidth: '10%'
+    },
+    {
+      label: 'Trans Reference',
+      colWidth: '15%'
+    },
+    {
       label: 'Payment Status',
-      colWidth: '12%'
+      colWidth: '15%'
     },
   ]
 

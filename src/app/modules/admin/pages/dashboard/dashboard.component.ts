@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
     },
     {
       label: 'Gender',
-      colWidth: '10%'
+      colWidth: '5%'
     },
     {
       label: 'Category',
@@ -68,7 +68,7 @@ export class DashboardComponent implements OnInit {
     },
     {
       label: 'Payment Status',
-      colWidth: '10%'
+      colWidth: '15%'
     },
   ]
 
@@ -125,7 +125,7 @@ export class DashboardComponent implements OnInit {
         this.dashboardDetails = res.data
         console.log(this.dashboardDetails)
         this.paymentStats = this.dashboardDetails.payments.byStatus.find((x: any) => x._id == 'successful')
-        this.registrationDetails = this.dashboardDetails.payments.byStatus.find((x: any) => x._id == 'submitted')
+        this.registrationDetails = this.dashboardDetails.payments.byStatus.find((x: any) => x._id == 'successful')
       },
       error: err => {}
     })

@@ -77,24 +77,28 @@
                     <ng-container *ngFor="let item of tableData; let i = index">
                         <tr>
                             <td>
-                                <span >{{item?.firstName}}</span>
+                                <span >{{item?.userId.firstName}} {{item?.userId.lastName}}</span>
                             </td> 
                             <td>
-                                <span >{{item?.lastName}}</span>
+                                <span >{{item?.reference}}</span>
                             </td>
                             <td>
-                                <span>{{item?.email}}</span>
+                                <span >₦{{item?.gatewayResponse?.frontendData.transAmount.toLocaleString()}}</span>
+                            </td>
+                            
+                            <td>
+                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'dd-MM-YYYY'}}</span>
                             </td>
                             <td>
-                                <span class="text-capitalize">{{item?.role}}</span>
+                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'h:mm a'}}</span>
                             </td>
                             <td>
-                                <span *ngIf="!item?.isEmailVerified" class="declined">Inactive</span>
-                                <span *ngIf="item?.isEmailVerified" class="approved">Active</span>
+                                <span >{{item?.gatewayResponse?.frontendData.transRef}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item?.status !== 'successful'" class="declined">Failed</span>
+                                <span *ngIf="item?.status === 'successful'" class="approved">Successful</span>
                             </td>  
-                            <td>
-                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'dd-MM-YYYY'}} {{item.createdAt | date : 'h:mm a'}}</span>
-                            </td> 
                         </tr>
                     </ng-container>
                 </tbody>

@@ -70,6 +70,7 @@ export class ProfileComponent implements OnInit {
       if(s.id === 1) s.stepName = this.regType === 1 ? 'Personal Details' : 'Group Lead Details'
     })
 
+    steps = steps.filter(s => s.stepName !== 'Media Upload');
     // remove Group Details if not a group
     if (this.regType !== 2) {
       steps = steps.filter(s => s.stepName !== 'Group Details');

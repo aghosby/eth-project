@@ -10,7 +10,7 @@
                         <app-profile-photo formControlName="profilePhoto" [initialUrl]="profilePic"></app-profile-photo>
                     </div>
 
-                    <div class="video-upoad w-100 mt-3 mt-lg-0">
+                    <div *ngIf class="video-upoad w-100 mt-3 mt-lg-0">
                         <app-video-preview formControlName="videoUpload" [initialUrl]="videoUrl"></app-video-preview>
                     </div>
                     

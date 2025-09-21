@@ -92,7 +92,7 @@ export class MediaInfoComponent implements OnInit, OnDestroy {
     console.log('Form Valid', this.grpInfoForm.valid)
     const stepKey = this.utilityService.mapStepName(this.stepName);
     this.utilityService.updateStep(stepKey, {
-      valid: mediaData.profilePhoto,
+      valid: true,
       value: mediaData,
     });
   }

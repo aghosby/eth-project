@@ -98,13 +98,13 @@ export class RegistrationListComponent implements OnInit {
 
   onPageChange(newPage: number) {
     this.currentPage = newPage;
-    this.pagingController.setPaging({ page: newPage, pageSize: this.pageSize });
+    this.pagingController.setPaging({ page: newPage, limit: this.pageSize });
   }
 
   onPageSizeChange(newSize: number) {
     this.pageSize = newSize;
     this.currentPage = 1; // reset to first page
-    this.pagingController.setPaging({ page: this.currentPage, pageSize: newSize });
+    this.pagingController.setPaging({ page: this.currentPage, limit: newSize });
   }
 
   onValueChange(value: Date, dateType?: string): void {

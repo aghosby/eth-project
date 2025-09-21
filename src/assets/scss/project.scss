@@ -25,6 +25,12 @@ body {
   margin-right: 0.4rem;
 }
 
+.small-field {
+  font-size: 12px;
+  --mat-form-field-container-height: 32px;
+  --mat-form-field-container-vertical-padding: 0px;
+}
+
 .spinner-wrap {
   width: 100%;
   height: 100vh;

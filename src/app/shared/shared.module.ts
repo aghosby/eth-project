@@ -46,9 +46,11 @@ import { ProfilePhotoComponent } from './components/blocks/profile-photo/profile
 import { VideoPreviewComponent } from './components/blocks/video-preview/video-preview.component';
 import { ReceiptComponent } from './components/blocks/receipt/receipt.component';
 import { PaginationComponent } from './components/blocks/pagination/pagination.component';
+import { MatIconModule } from '@angular/material/icon';
 
 const SHARED_COMP = [
   MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatSelectModule,
   MatDatepickerModule,

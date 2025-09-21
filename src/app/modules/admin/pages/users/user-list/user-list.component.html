@@ -102,6 +102,7 @@
 
             <!-- use the custom pagination component -->
             <app-pagination
+                *ngIf="totalItems > pageSize"
                 [currentPage]="currentPage"
                 [pageSize]="pageSize"
                 [totalItems]="totalItems"

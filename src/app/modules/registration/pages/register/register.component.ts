@@ -98,7 +98,7 @@ export class RegisterComponent implements OnInit {
         return;
       }
 
-      if ((!step || !step.valid) && stepKey !== 'paymentInfo') {
+      if ((!step || !step.valid) && stepKey !== 'paymentInfo' && stepKey !== 'mediaInfo') {
         this.notifyService.showError('Please check that you have filled in all required fields')
         console.warn(`❌ Step "${currentStepName}" is invalid`, step?.value);
         return;

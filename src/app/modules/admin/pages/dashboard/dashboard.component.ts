@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SharedService } from '@shared/services/shared.service';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, Subject, tap } from 'rxjs';
 
 
 @Component({
@@ -21,6 +21,8 @@ export class DashboardComponent implements OnInit {
   isLoading: boolean = false;
 
   tableData$!: Observable<any>;
+  searchTerm = '';
+  private searchEvent$ = new Subject<string>();
   private pagingController!: { data$: Observable<any>; setPaging: (paging: Partial<any>) => void };
   currentPage = 1;
   pageSize = 5;
@@ -99,13 +101,13 @@ export class DashboardComponent implements OnInit {
 
   onPageChange(newPage: number) {
     this.currentPage = newPage;
-    this.pagingController.setPaging({ page: newPage, pageSize: this.pageSize });
+    this.pagingController.setPaging({ page: newPage, limit: this.pageSize });
   }
 
   onPageSizeChange(newSize: number) {
     this.pageSize = newSize;
     this.currentPage = 1; // reset to first page
-    this.pagingController.setPaging({ page: this.currentPage, pageSize: newSize });
+    this.pagingController.setPaging({ page: this.currentPage, limit: newSize });
   }
 
   onValueChange(value: Date, dateType?: string): void {
@@ -115,5 +117,15 @@ export class DashboardComponent implements OnInit {
     else {
       if(value != undefined) this.filterEndDate = value;
     }
+  }
+
+  onSearch(event: Event) {
+    const term =(event.target as HTMLInputElement).value
+    this.searchEvent$.next(term);
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.searchEvent$.next('');
   }
 }

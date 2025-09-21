@@ -100,7 +100,7 @@
                             </td> 
                             <td>
                                 <span *ngIf="item?.status !== 'submitted'">{{utilityService.getCurrentStepName(item?.currentStep, item?.registrationType, item?.personalInfo?.dateOfBirth)}}</span>
-                                <span *ngIf="item?.status === 'submitted'">Successful</span>
+                                <span class="text-success" *ngIf="item?.status === 'submitted'">Successful</span>
                             </td>
                             <td>
                                 <span *ngIf="item?.personalInfo && item?.status === 'draft'" class="text-secondary">Pending</span>

@@ -339,9 +339,9 @@ export class RegisterComponent implements OnInit {
         })
         break;
       case 'mediaInfo':
-        const mediaExists = this.utilityService.registrationData.mediaInfo ? true : false
+        const mediaExists = this.utilityService.registrationData?.mediaInfo ? true : false
         if(mediaExists) {
-          this.successFn(this.utilityService.registrationData.mediaInfo, stepKey, payload, nextStep)
+          this.successFn(this.utilityService.registrationData?.mediaInfo, stepKey, payload, nextStep)
         }
         else {
           const formData = new FormData();

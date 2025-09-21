@@ -345,7 +345,7 @@ export class RegisterComponent implements OnInit {
         }
         else {
           const formData = new FormData();
-          const profilePhoto = this.base64ToFile(payload.profilePhoto, 'profilePhoto')
+          const profilePhoto = payload.profilePhoto ? this.base64ToFile(payload.profilePhoto, 'profilePhoto') : ''
           // const videoUpload = this.base64ToFile(payload.videoUpload, 'auditionVideo')
           const videoUpload = ''
           formData.append('profilePhoto', profilePhoto);

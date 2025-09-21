@@ -47,11 +47,11 @@
 
                     <ng-container *ngIf="step.key === 'mediaInfo'">
                         <div class="media-wrap">
-                            <div class="image">
-                                <img [src]="mediaInfo.profilePhoto" alt="">
+                            <div *ngIf="mediaInfo?.profilePhoto?.url || mediaInfo?.profilePhoto" class="image">
+                                <img [src]="mediaInfo?.profilePhoto?.url ? mediaInfo?.profilePhoto?.url : mediaInfo?.profilePhoto" alt="">
                             </div>
 
-                            <div class="video-wrap">
+                            <!-- <div class="video-wrap">
                                 <video 
                                     class="preview" 
                                     [src]="mediaInfo.videoUpload" 
@@ -60,7 +60,7 @@
                                     height="auto"
                                 >
                                 </video>
-                            </div>
+                            </div> -->
                         </div>
                     </ng-container> 
 

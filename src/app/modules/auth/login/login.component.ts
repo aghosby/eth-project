@@ -14,7 +14,7 @@ import { AppService }   from '@services/app.service';
 import { AuthService } from '@services/auth.service';
 import { NotificationService } from '@services/notification.service';
 import { StoreService } from '@services/store.service';
-import { timer } from 'rxjs';
+import { take, timer } from 'rxjs';
 
 @Component({
   selector    : 'app-login',
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
           break;
         case 'verify':
           this.userAction = 'verify';
-          this.setUserEmail();
+          this.getEmailQuery();
           break;
         case 'set-password':
           this.userAction = 'change';
@@ -77,8 +77,23 @@ export class LoginComponent implements OnInit {
           this.userAction = 'login';
           break;
       }
+    }); 
+  }
+
+  getEmailQuery(): void {
+    this.route.queryParamMap.pipe(take(1)).subscribe(params => {
+      const emailParam = params.get('email');
+
+      if (emailParam) {
+        // Use the email from the URL
+        this.userEmail = emailParam;
+        console.log('Email from query param:', this.userEmail);
+        this.userEmail && this.authForm.controls['email'].setValue(this.userEmail)
+        return;
+      }
+
+      this.setUserEmail();
     });
-      
   }
 
   private initFormGroup(): void {

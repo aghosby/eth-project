@@ -10,8 +10,8 @@
                 <i class="bi bi-person-vcard-fill"></i>
             </div>
             <div *ngIf="regType === 3" class="info">
-                <div class="name">{{loggedInUser.firstName}} {{loggedInUser.lastName}}</div>
-                <div class="email">{{loggedInUser.email}}</div>
+                <div class="name">{{loggedInUser?.firstName}} {{loggedInUser?.lastName}}</div>
+                <div class="email">{{loggedInUser?.email}}</div>
                 <div *ngIf="bulkRegistrationData && availableSlots" class="notice">You have <span>{{availableSlots}}</span> available {{availableSlots > 1 ? 'slots' : 'slot'}}</div>
             </div>
             <div *ngIf="regType !== 3" class="info">

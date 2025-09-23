@@ -3,17 +3,25 @@
     <div class="page-hdr">
         <!-- <h2>User Profile</h2> -->
         <div class="summary">
-            <div class="image">
+            <div *ngIf="regType !== 3" class="image">
                 <img [src]="mediaInfo?.profilePhoto.url ? mediaInfo?.profilePhoto.url : mediaInfo?.profilePhoto" alt="">
             </div>
-            <div class="info">
+            <div *ngIf="regType === 3" class="icon">
+                <i class="bi bi-person-vcard-fill"></i>
+            </div>
+            <div *ngIf="regType === 3" class="info">
+                <div class="name">{{loggedInUser.firstName}} {{loggedInUser.lastName}}</div>
+                <div class="email">{{loggedInUser.email}}</div>
+                <div *ngIf="bulkRegistrationData && availableSlots" class="notice">You have <span>{{availableSlots}}</span> available {{availableSlots > 1 ? 'slots' : 'slot'}}</div>
+            </div>
+            <div *ngIf="regType !== 3" class="info">
                 <div class="name">{{savedRegData.personalInfo.firstName}} {{savedRegData.personalInfo.lastName}}</div>
                 <div class="email">{{savedRegData.personalInfo.email}}</div>
             </div>
         </div>
     </div>
     <div class="page-body">
-        <div class="accordion accordion-flush mt-3" id="reviewAccordion">
+        <div *ngIf="regType !== 3" class="accordion accordion-flush mt-3" id="reviewAccordion">
             <div *ngFor="let step of formSteps.slice(1, formSteps.length - 3); let i = index" class="accordion-item">
                 <div class="accordion-header" id="{{'flush-heading-' + i}}">
                 <button
@@ -127,11 +135,18 @@
             </div>
         </div>
 
+        <div *ngIf="regType === 3" class="bulk-user">
+            <div class="btn-hld d-lg-flex justify-content-lg-between my-5 gap-lg-5 gap-0">
+                <button (click)="purchaseSlots()" class="cta cta-primary px-1 px-lg-5 w-lg-auto w-100">Purchase Slots</button>
+                <button *ngIf="availableSlots > 0" (click)="addContestant()" class="cta cta-wht mt-lg-0 mt-3 px-1 px-lg-5 w-lg-auto w-100">Add Contestant</button>
+            </div>
+        </div>
+
         <app-receipt (downloaded)="onReceiptDownloaded()"></app-receipt>
 
         <div *ngIf="this.loggedInUser.registrationInfo.paymentStatus !== 'pending'" class="btn-hld d-lg-flex justify-content-lg-between my-5 gap-lg-5 gap-0">
             <button (click)="triggerDownload()" class="cta cta-wht px-1 px-lg-5 w-lg-auto w-100">Download Receipt</button>
-            <button (click)="viewAuditionPass()" class="cta cta-primary mt-lg-0 mt-3 px-1 px-lg-5 w-lg-auto w-100">View Audition Pass</button>
+            <button *ngIf="regType !== 3" (click)="viewAuditionPass()" class="cta cta-primary mt-lg-0 mt-3 px-1 px-lg-5 w-lg-auto w-100">View Audition Pass</button>
         </div>
     </div>
 </div>

@@ -15,6 +15,8 @@ import { TermsConditionsComponent } from './components/terms-conditions/terms-co
 import { RegistrationPaymentComponent } from './components/registration-payment/registration-payment.component';
 import { AuditionInfoComponent } from './components/audition-info/audition-info.component';
 import { AuditionPassComponent } from './pages/audition-pass/audition-pass.component';
+import { BulkUserInfoComponent } from './components/bulk-user-info/bulk-user-info.component';
+import { BulkSlotsInfoComponent } from './components/bulk-slots-info/bulk-slots-info.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { AuditionPassComponent } from './pages/audition-pass/audition-pass.compo
     TermsConditionsComponent,
     RegistrationPaymentComponent,
     AuditionInfoComponent,
-    AuditionPassComponent
+    AuditionPassComponent,
+    BulkUserInfoComponent,
+    BulkSlotsInfoComponent
   ],
   imports: [
     CommonModule,

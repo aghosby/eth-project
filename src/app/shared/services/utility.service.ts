@@ -44,7 +44,7 @@ export class UtilityService {
     {
       id: 0,
       stepName: 'Registration Type',
-      description: 'Are you registering as an individual or a group?',
+      description: 'Are you registering as an individual, group or you are buying in bulk?',
       buttons: [{ text: 'Next', action: +1 }],
       key: 'registrationType'
     },

@@ -251,7 +251,7 @@ export class RegisterComponent implements OnInit {
   startRegistration() {
     this.apiLoading = true
     const alreadyStarted = this.loggedInUser.registrationInfo.registrationType
-    if(alreadyStarted) {
+    if(alreadyStarted && alreadyStarted !== 'bulk') {
       this.viewStep(1);
       this.apiLoading = false;
     }
@@ -259,7 +259,7 @@ export class RegisterComponent implements OnInit {
       //console.log(this.utilityService.userCurrentStep)
       if(this.utilityService.userCurrentStep < 1) {
         const payload = {
-          registrationType: this.regType === 1 ? 'individual' : 'group'
+          registrationType: this.regType === 3 ? 'bulk' : this.regType === 1 ? 'individual' : 'group'
         }
         this.sharedService.startRegistration(payload).subscribe({
           next: res => {
@@ -273,7 +273,8 @@ export class RegisterComponent implements OnInit {
               //console.log('✅ Step "registrationType" saved:', { regType: this.regType });
 
               // Proceed to next step
-              this.viewStep(1);
+              if(this.regType === 3) this.router.navigate(['register/profile']);
+              else this.viewStep(1);
               this.apiLoading = false;
               // this.notifyService.showSuccess(res.message);
             }

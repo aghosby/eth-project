@@ -80,6 +80,18 @@ export class SharedService {
     return this.http.get<any>(`${this.baseUrl}/payments`, this.requestOptions);
   }
 
+  public getBulkRegistrations(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/bulk-registrations`, this.requestOptions);
+  }
+
+  public purchaseBulkSlots(payload:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/bulk-registrations`, payload, this.requestOptions);
+  }
+
+  public addBulkContestant(regId:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/bulk-registrations/${regId}/participants`, this.requestOptions);
+  }
+
 
   /*****************************ADMIN ENDPOINTS*******************************************************************************************/
 

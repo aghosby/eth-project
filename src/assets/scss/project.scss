@@ -104,6 +104,47 @@ body {
 // NOTE Button ----------------------------------------------------------------------------------
 
 // NOTE Modal -----------------------------------------------------------------------------------
+.modal-wrap {
+  width: 100%;
+  
+  .modal-hdr {
+    position: relative;
+    .main {
+      margin: 0.5rem;
+      padding: 0.4rem 0.7rem;
+      background: var(--bkg-2);
+      border-radius: 0.3rem;
+
+      h2 {
+        font-size: 0.9rem;
+        letter-spacing: 0.04rem;
+        color: rgba(0, 0, 0, 0.7);
+        margin: 0;
+      }
+
+      .close {
+        font-size: 1.3rem;
+        position: absolute;
+        color: var(--warning);
+        right: 1.2rem;
+        top: 0.6rem;
+      }
+    }
+
+    .preamble {
+
+    }
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-ft {
+    width: 100%;
+    padding: 1rem;
+  }
+}
 
 // NOTE Toast -----------------------------------------------------------------------------------
 
@@ -199,7 +240,7 @@ footer, .footer {
           display: inline-flex;
           flex-direction: column;
           justify-content: space-between;
-          padding: 1.3rem 3%;
+          padding: 1.3rem 1.2rem;
           border-radius: 0.3rem;
           background-color: white;
           box-shadow: 0 16px 43px rgba(0,0,0,.06);

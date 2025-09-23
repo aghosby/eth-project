@@ -64,6 +64,19 @@
                 }
             }
 
+            .icon {
+                width: 8rem;
+                height: 8rem;
+                border-radius: 50%;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                background: var(--bkg-2);
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                font-size: 4rem;
+                color: rgba(0, 0, 0, 0.8);
+            }
+
             .info {
                 text-align: center;
 
@@ -89,6 +102,25 @@
                     @include screen-media-min(md) {
                         font-size: 1rem;
                         margin-top: 0.4rem;
+                    }
+                }
+
+                .notice {
+                    font-size: 0.85rem;
+                    font-weight: 500;
+                    letter-spacing: 0.05rem;
+                    text-align: center;
+                    padding: 0.4rem 0.7rem;
+                    border-radius: 0.3rem;
+                    border: 1px solid rgba(#eb5757, 0.5);
+                    background: rgba(#eb5757, 0.1);
+                    color: rgba(0, 0, 0, 0.6);
+                    margin-top: 1rem;
+
+                    span {
+                        color: black;
+                        font-size: 0.9rem;
+                        font-weight: 600;
                     }
                 }
             }

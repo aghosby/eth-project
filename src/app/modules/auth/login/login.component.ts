@@ -313,7 +313,11 @@ export class LoginComponent implements OnInit {
             this.authService._isLoggedin$.next(true);
             sessionStorage.setItem(this.authService.TOKEN_NAME, res.data.token);
             this.loggedInUser = this.authService.loggedInUser;
-            if(this.loggedInUser.role === 'contestant') {
+            if(this.loggedInUser.registrationInfo.registrationType === 'bulk') {
+              sessionStorage.setItem('savedRegStep', JSON.stringify(res.data.user.registrationInfo));
+              this.router.navigate(['register/profile'])
+            }
+            else if(this.loggedInUser.role === 'contestant') {
               sessionStorage.setItem('savedRegStep', JSON.stringify(res.data.user.registrationInfo));
               const status = this.loggedInUser.registrationInfo.paymentStatus
               status && status !== 'pending' ? this.router.navigate(['register/profile']) : this.router.navigate(['/register']);

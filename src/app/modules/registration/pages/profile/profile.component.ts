@@ -5,6 +5,9 @@ import { AuthService } from '@shared/services/auth.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
 import { FormStep, UtilityService } from '@shared/services/utility.service';
+import { BulkSlotsInfoComponent } from '../../components/bulk-slots-info/bulk-slots-info.component';
+import { MatDialog } from '@angular/material/dialog';
+import { BulkUserInfoComponent } from '../../components/bulk-user-info/bulk-user-info.component';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +25,9 @@ export class ProfileComponent implements OnInit {
   loggedInUser:any;
   groupInfoData:any;
   @ViewChild(ReceiptComponent) receiptComp!: ReceiptComponent;
+  screenSize!:number;
+  bulkRegistrationData: any;
+  availableSlots!:number;
 
   activeStepTab: number | null = null;
   toggleStepTab(index: number) {
@@ -33,10 +39,12 @@ export class ProfileComponent implements OnInit {
     private utilityService: UtilityService,
     private sharedService: SharedService,
     private notifyService: NotificationService,
+    public dialog: MatDialog,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.screenSize = this.utilityService.getScreenWidth();
     this.allFormSteps = this.utilityService.formSteps;
     this.loggedInUser = this.authService.loggedInUser;
     this.getRegistrationData();
@@ -47,12 +55,17 @@ export class ProfileComponent implements OnInit {
       next: res => {
         if(res.success) {
           this.savedRegData = res.data
-          //console.log(this.savedRegData)
+          console.log(this.savedRegData)
           sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
-          this.regType = this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
-          this.applicantAge = this.getUserAge(this.savedRegData.personalInfo.dateOfBirth)
-          this.groupInfoData = this.savedRegData.groupInfo;
-          this.updateFormSteps();
+          this.regType = this.loggedInUser.registrationInfo.registrationType === 'bulk' ? 3 : this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
+          if(this.regType !== 3) {
+            this.applicantAge = this.getUserAge(this.savedRegData.personalInfo.dateOfBirth)
+            this.groupInfoData = this.savedRegData.groupInfo;
+            this.updateFormSteps();
+          }
+          else {
+            this.getBulkRegistrationData();
+          }
           //this.getCurrentStep();
         }
       },
@@ -62,6 +75,21 @@ export class ProfileComponent implements OnInit {
       }
     })
   }
+
+  getBulkRegistrationData() {
+    this.sharedService.getBulkRegistrations().subscribe(res => {
+      this.bulkRegistrationData = res.data
+      console.log('Bulk Data', res.data)
+      if(this.bulkRegistrationData.length > 0) {
+        this.availableSlots = this.countAvailableSlots(this.bulkRegistrationData)
+      }
+    })
+  }
+
+  countAvailableSlots(registrations: any[]): number {
+    return registrations.reduce((sum, reg) => sum + (reg.availableSlots || 0), 0);
+  }
+
 
   updateFormSteps() {
     let steps = [...this.allFormSteps];
@@ -133,5 +161,25 @@ export class ProfileComponent implements OnInit {
 
   viewAuditionPass() {
     this.router.navigate(['register/audition-pass'])
+  }
+
+  purchaseSlots() {
+    let dialogRef = this.dialog.open(BulkSlotsInfoComponent, {
+      width: this.screenSize > 768 ? '35%' : '95%',
+      height: 'auto',
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.getRegistrationData();
+    }); 
+  }
+
+  addContestant() {
+    let dialogRef = this.dialog.open(BulkUserInfoComponent, {
+      width: this.screenSize > 768 ? '45%' : '95%',
+      height: 'auto',
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.getRegistrationData();
+    }); 
   }
 }

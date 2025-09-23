@@ -77,8 +77,13 @@
                     <ng-container *ngFor="let item of tableData; let i = index">
                         <tr>
                             <td>
-                                <span *ngIf="item?.groupInfo.members.length == 0">{{item?.personalInfo?.firstName}} {{item?.personalInfo?.lastName}}</span>
-                                <span *ngIf="item?.groupInfo.members.length > 0">{{item?.groupInfo.groupName}}</span>
+                                <ng-container *ngIf="!item?.isBulkParticipant">
+                                    <span *ngIf="item?.groupInfo.members.length == 0">{{item?.personalInfo?.firstName}} {{item?.personalInfo?.lastName}}</span>
+                                    <span *ngIf="item?.groupInfo.members.length > 0">{{item?.groupInfo.groupName}}</span>
+                                </ng-container>
+                                <ng-container *ngIf="item?.isBulkParticipant">
+                                    <span>{{item?.userId?.firstName}} {{item?.userId?.lastName}}</span>
+                                </ng-container>
                             </td> 
                             <td>
                                 <span>{{item?.registrationNumber}}</span>
@@ -93,20 +98,37 @@
                                 <span>{{item?.personalInfo?.gender}}</span>
                             </td>
                             <td>
-                                <span *ngIf="item?.talentInfo?.talentCategory === 'Other'" class="pending">{{item?.talentInfo?.otherTalentCategory}}</span>
-                                <span *ngIf="item?.talentInfo?.talentCategory !== 'Other'">{{item?.talentInfo?.talentCategory}}</span>
+                                <ng-container *ngIf="!item?.isBulkParticipant">
+                                    <span *ngIf="item?.talentInfo?.talentCategory === 'Other'" class="pending">{{item?.talentInfo?.otherTalentCategory}}</span>
+                                    <span *ngIf="item?.talentInfo?.talentCategory !== 'Other'">{{item?.talentInfo?.talentCategory}}</span>
+                                </ng-container>
+                                <ng-container *ngIf="item?.isBulkParticipant">
+                                    <span>Bulk - {{item?.bulkRegistration.totalSlots}} {{item?.bulkRegistration.totalSlots > 1 ? 'slots' : 'slot'}}</span>
+                                </ng-container>
                             </td>  
                             <td>
                                 <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'dd-MM-YYYY'}} {{item.createdAt | date : 'h:mm a'}}</span>
                             </td> 
                             <td>
-                                <span *ngIf="item?.status !== 'submitted'">{{utilityService.getCurrentStepName(item?.currentStep, item?.registrationType, item?.personalInfo?.dateOfBirth)}}</span>
-                                <span class="text-success" *ngIf="item?.status === 'submitted'">Successful</span>
+                                <ng-container *ngIf="!item?.isBulkParticipant">
+                                    <span *ngIf="item?.status !== 'submitted'">{{utilityService.getCurrentStepName(item?.currentStep, item?.registrationType, item?.personalInfo?.dateOfBirth)}}</span>
+                                    <span class="text-success" *ngIf="item?.status === 'submitted'">Successful</span>
+                                </ng-container>
+                                <ng-container *ngIf="item?.isBulkParticipant">
+                                    <span *ngIf="item.paymentInfo.paymentStatus === 'completed'" class="text-success">Success</span>
+                                    <span *ngIf="item.paymentInfo.paymentStatus !== 'completed'" class="text-danger">Slot Purchase</span>
+                                </ng-container>
                             </td>
                             <td>
-                                <span *ngIf="item?.personalInfo && item?.status === 'draft'" class="text-secondary">Pending</span>
-                                <span *ngIf="!item?.personalInfo" class="text-danger">Not Started</span>
-                                <span *ngIf="item?.personalInfo && item?.status === 'submitted'" class="text-success">Completed</span>
+                                <ng-container *ngIf="!item?.isBulkParticipant">
+                                    <span *ngIf="item?.personalInfo && item?.status === 'draft'" class="text-secondary">Pending</span>
+                                    <span *ngIf="!item?.personalInfo" class="text-danger">Not Started</span>
+                                    <span *ngIf="item?.personalInfo && item?.status === 'submitted'" class="text-success">Completed</span>
+                                </ng-container>
+
+                                <ng-container *ngIf="item?.isBulkParticipant">
+                                    <span>{{item?.bulkRegistration.usedSlots}} {{item?.bulkRegistration.usedSlots > 1 ? 'slots' : 'slot'}} Used</span>
+                                </ng-container>
                             </td>
                             <td>
                                 <span *ngIf="item?.paymentInfo.paymentStatus !== 'pending'" class="approved">Paid</span>

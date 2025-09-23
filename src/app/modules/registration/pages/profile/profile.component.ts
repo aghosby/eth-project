@@ -56,8 +56,10 @@ export class ProfileComponent implements OnInit {
         if(res.success) {
           this.savedRegData = res.data
           console.log(this.savedRegData)
+          console.log('loggedIn', this.loggedInUser)
+          console.log('Registration Type', this.regType)
           sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
-          this.regType = this.loggedInUser.registrationInfo.registrationType === 'bulk' ? 3 : this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
+          this.regType = this.savedRegData.registrationType === 'bulk' ? 3 : this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
           if(this.regType !== 3) {
             this.applicantAge = this.getUserAge(this.savedRegData.personalInfo.dateOfBirth)
             this.groupInfoData = this.savedRegData.groupInfo;

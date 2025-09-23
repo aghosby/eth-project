@@ -313,7 +313,10 @@ export class LoginComponent implements OnInit {
             this.authService._isLoggedin$.next(true);
             sessionStorage.setItem(this.authService.TOKEN_NAME, res.data.token);
             this.loggedInUser = this.authService.loggedInUser;
-            if(this.loggedInUser.registrationInfo.registrationType === 'bulk') {
+            if(this.loggedInUser.role === 'admin') {
+              this.router.navigate(['admin'])
+            }
+            else if(this.loggedInUser.registrationInfo.registrationType === 'bulk') {
               sessionStorage.setItem('savedRegStep', JSON.stringify(res.data.user.registrationInfo));
               this.router.navigate(['register/profile'])
             }
@@ -321,9 +324,6 @@ export class LoginComponent implements OnInit {
               sessionStorage.setItem('savedRegStep', JSON.stringify(res.data.user.registrationInfo));
               const status = this.loggedInUser.registrationInfo.paymentStatus
               status && status !== 'pending' ? this.router.navigate(['register/profile']) : this.router.navigate(['/register']);
-            }
-            else {
-              this.router.navigate(['admin'])
             }
             
             this.isLoading = false; 

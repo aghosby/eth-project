@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
       colWidth: '15%'
     },
     {
-      label: 'Reg No.',
+      label: 'Email',
       colWidth: '10%'
     },
     {

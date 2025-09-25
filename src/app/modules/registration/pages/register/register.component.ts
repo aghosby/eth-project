@@ -229,6 +229,7 @@ export class RegisterComponent implements OnInit {
     }    
     // fallback to session storage only
     const savedStep = this.loggedInUser.registrationInfo.completedSteps[0] ? this.loggedInUser.registrationInfo.completedSteps[0] : Number(sessionStorage.getItem('currentStep')) || 0;
+    console.log('Saved Step', savedStep)
     if(this.savedRegData && this.savedRegData.personalInfo) {
       const savedAge = this.savedRegData.personalInfo.dateOfBirth
       this.getUserAge(new Date(savedAge))

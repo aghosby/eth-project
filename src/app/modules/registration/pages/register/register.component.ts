@@ -204,8 +204,9 @@ export class RegisterComponent implements OnInit {
     this.sharedService.getUserRegistration().subscribe({
       next: res => {
         if(res.success) {
-          this.savedRegData = res.data[0]
-          sessionStorage.setItem('savedRegData', JSON.stringify(res.data[0]));
+          this.savedRegData = res.data[0];
+          console.log('Saved', this.savedRegData)
+          sessionStorage.setItem('savedRegData', JSON.stringify(this.savedRegData));
           this.getCurrentStep();
         }
       },

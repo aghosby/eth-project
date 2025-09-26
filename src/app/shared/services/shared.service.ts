@@ -92,6 +92,10 @@ export class SharedService {
     return this.http.post<any>(`${this.baseUrl}/bulk-registrations/${regId}/participants`, this.requestOptions);
   }
 
+  public sendMessage(payload:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/complaints`, this.requestOptions);
+  }
+
 
   /*****************************ADMIN ENDPOINTS*******************************************************************************************/
 

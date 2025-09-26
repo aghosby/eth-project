@@ -37,7 +37,9 @@
     <div class="modal-ft">
         <div *ngIf="grpInfoForm.value.firstName && grpInfoForm.value.lastName" class="notice">You're about add <span class="text-black">{{grpInfoForm.value.firstName}} {{grpInfoForm.value.lastName}}</span> as a contestant</div>
         <div class="btn-hld d-lg-flex justify-content-lg-between my-3 gap-lg-5 gap-0">
-            <button (click)="addContestant()" class="cta cta-primary mt-lg-0 px-1 px-lg-5 w-lg-auto w-100">Add Contestant</button>
+            <button (click)="addContestant()" class="cta cta-primary mt-lg-0 px-1 px-lg-5 w-lg-auto w-100">
+                <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Add Contestant
+            </button>
         </div>
     </div>
 </div>

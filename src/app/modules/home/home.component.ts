@@ -1,30 +1,109 @@
 // Angular modules
 import { Component } from '@angular/core';
 import { OnInit }    from '@angular/core';
+import { UtilityService } from '@shared/services/utility.service';
 
 @Component({
   selector    : 'app-home',
   templateUrl : './home.component.html',
   styleUrls   : ['./home.component.scss']
 })
-export class HomeComponent implements OnInit
-{
+export class HomeComponent implements OnInit {
   public isLoading : boolean = true;
+  partners = [
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-1.jpg',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-2.png',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-3.jpg',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-4.png',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-5.png',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-6.png',
+      websiteUrl: '',
+    },
+    // {
+    //   name: '',
+    //   image: 'assets/img/project/partners/logo-7.png',
+    //   websiteUrl: '',
+    // },{
+    //   name: '',
+    //   image: 'assets/img/project/partners/logo-8.png',
+    //   websiteUrl: '',
+    // },
+    // {
+    //   name: '',
+    //   image: 'assets/img/project/partners/logo-9.png',
+    //   websiteUrl: '',
+    // },
+    // {
+    //   name: '',
+    //   image: 'assets/img/project/partners/logo-10.jpg',
+    //   websiteUrl: '',
+    // },
+    // {
+    //   name: '',
+    //   image: 'assets/img/project/partners/logo-11.jpg',
+    //   websiteUrl: '',
+    // },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-12.png',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-13.png',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-14.png',
+      websiteUrl: '',
+    },{
+      name: '',
+      image: 'assets/img/project/partners/logo-15.png',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-16.jpg',
+      websiteUrl: '',
+    },
+  ]
 
-  constructor
-  (
+  constructor(
+    private utilityService: UtilityService
   ) { }
 
-  // -------------------------------------------------------------------------------
-  // NOTE Init ---------------------------------------------------------------------
-  // -------------------------------------------------------------------------------
-
-  public ngOnInit() : void
-  {
+  ngOnInit() : void {
     setTimeout(_ =>
     {
       this.isLoading = false;
     }, 2000);
+  }
+
+  contactForm() {
+    this.utilityService.contactForm();
   }
 
   // -------------------------------------------------------------------------------

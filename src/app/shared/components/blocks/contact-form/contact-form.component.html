@@ -1,0 +1,58 @@
+<div class="modal-wrap">
+    <div class="modal-hdr">
+        <div class="main">
+            <h2>Contact Us</h2>
+            <div (click)="closeDialog()" role="button" class="close">&times;</div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="form-wrap mt-0">
+            <div class="form-hld">
+
+                <form [formGroup]="grpInfoForm" class="form-container" style="font-size: 0.8rem;">
+
+                    <ng-container class="d-flex" *ngFor="let field of formInfoFields">
+                        <ng-container [ngSwitch]="field.controlType">
+
+                            <mat-form-field *ngSwitchCase="'select'" class="mb-lg-2" [style.width]="useFormWidth ? field.controlWidth : '100%'" appearance="outline">
+                                <mat-label>{{field.controlLabel}}</mat-label>
+                                <mat-select
+                                    class="selectField"
+                                    disableOptionCentering
+                                    panelClass="matDropdown"
+                                    [formControlName]="field.controlName"
+                                >
+                                    <mat-option *ngFor="let option of field.selectOptions | keyvalue: keepOrder" [value]="option.key">{{option.value}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngSwitchCase="'text'" class="mb-lg-2" [style.width]="useFormWidth ? field.controlWidth : '100%'" appearance="outline">
+                                <mat-label>{{field.controlLabel}}</mat-label>
+                                <input matInput [formControlName]="field.controlName" [readonly]="field.readonly">
+                                <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('email')">Please enter a valid email address</mat-error>
+                                <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngSwitchCase="'textarea'" class="mb-lg-1" [style.width]="field.controlWidth" appearance="outline">
+                                <mat-label>{{field.controlLabel}}</mat-label>
+                                <textarea [readonly]="field.readonly" type="field.controlType" rows="4" matInput [formControlName]="field.controlName"></textarea>
+                                <mat-error *ngIf="grpInfoForm.get(field.controlName)?.touched && grpInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                            </mat-form-field>
+
+                        </ng-container>
+                    </ng-container>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-ft">
+        <div *ngIf="grpInfoForm.valid" class="notice">You will get a response within 2hrs. Thanks for reaching out.</div>
+        <div class="btn-hld d-lg-flex justify-content-lg-between my-3 gap-lg-5 gap-0">
+            <button (click)="sendMessage()" class="cta cta-primary mt-lg-0 px-1 px-lg-5 w-lg-auto w-100">
+                <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Send Message
+            </button>
+        </div>
+    </div>
+</div>

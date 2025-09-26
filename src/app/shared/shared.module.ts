@@ -47,6 +47,7 @@ import { VideoPreviewComponent } from './components/blocks/video-preview/video-p
 import { ReceiptComponent } from './components/blocks/receipt/receipt.component';
 import { PaginationComponent } from './components/blocks/pagination/pagination.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ContactFormComponent } from './components/blocks/contact-form/contact-form.component';
 
 const SHARED_COMP = [
   MatFormFieldModule,
@@ -103,7 +104,8 @@ const SHARED_COMP = [
     ProfilePhotoComponent,
     VideoPreviewComponent,
     ReceiptComponent,
-    PaginationComponent
+    PaginationComponent,
+    ContactFormComponent
   ],
   exports:[
     // Angular modules

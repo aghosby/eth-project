@@ -1,7 +1,8 @@
+ <!-- <router-outlet></router-outlet> -->
 <div class="page-wrap">
-  <button class="back-btn"><i class="bi bi-arrow-left"></i> <span>Home</span></button>
+  <button routerLink="/" class="back-btn"><i class="bi bi-arrow-left"></i> <span>Home</span></button>
   <div class="pg-hdr text-center text-primary mb-4">
-    <img class="logo" src="assets/img/project/eth-logo-wht.png" alt="edo-talent-hunt">
+    <img routerLink="/" class="logo" src="assets/img/project/eth-logo-wht.png" alt="edo-talent-hunt">
     <!-- <h1>Sign In</h1>
     <p>Welcome back, enter your details to login</p> -->
   </div>
@@ -60,7 +61,7 @@
       </div>
 
       <div *ngIf="userAction == 'login'" class="text-end mb-3">
-        <span (click)="changeState('reset')" class="cta sm">Forgot Password?</span>
+        <span (click)="changeState('reset')" class="cta sm" role="button">Forgot Password?</span>
       </div>
 
       <div class="text-center">

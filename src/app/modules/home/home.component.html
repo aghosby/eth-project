@@ -1,13 +1,192 @@
-<app-page-layout>
-  <div class="container my-3">
 
-    <app-progress-bar *ngIf="isLoading"></app-progress-bar>
+<!-- <app-progress-bar *ngIf="isLoading"></app-progress-bar> -->
 
-    <ng-container *ngIf="!isLoading">
-      <div class="text-center">
-        Let's start the project!
+<div class="page-wrap">
+  <header>
+    <div class="logo">
+      <img routerLink="/" src="assets/img/project/eth-logo-wht.png" alt="">
+    </div>
+
+    <nav>
+      <ul>
+        <li>
+          <a href="">About</a>
+        </li>
+        <li>
+          <a href="">Auditions</a>
+        </li>
+        <li>
+          <a href="">How to Participate</a>
+        </li>
+        <li>
+          <a (click)="contactForm()" role="button">Contact Us</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="header-ctas">
+      
+      <div class="user">
+        <div class="image"><i class="bi bi-person-circle"></i></div>
+        <span routerLink="/login">Login</span>
+        <!-- <div class="name">Admin {{loggedInUser.lastName}}</div> -->
       </div>
-    </ng-container>
+      <button routerLink="/login">Register</button>
+    </div>
+  </header>
 
-  </div>
-</app-page-layout>
+  <main>
+    <section class="hero" style="background-image: url('assets/img/project/hero-bkg.jpg');">
+      <div class="overlay"></div>
+
+      <div class="caption-wrap">
+        <h1>✨ Edo Talent Hunt 2025! ✨</h1>
+        <div class="sec-text">
+          Are you gifted in singing, dance, comedy, nusic, or any unique talent? <br/> This is your chance to shine! Edo State is searching for the next big star, and it could be YOU.
+        </div>
+        <button class="cta cta-primary mt-5" routerLink="/login">Register Now</button>
+      </div>
+    </section>
+
+    <section class="partners pad-x">
+      <div class="row d-flex flex-column justify-content-center align-items-center position-relative" style="z-index: 4;">
+        <div class="sec-hdr xs mb-5">Supported By</div>
+      </div>      
+      <div class="partner-container">
+        <div class="partner-wrap">
+          <div *ngFor="let partner of partners; let i = index" class="partner-hld">
+            <a [href]="">
+              <img [src]="partner?.image" />
+            </a>
+          </div>
+
+          <div *ngFor="let partner of partners; let i = index" class="partner-hld">
+            <a [href]="">
+              <img [src]="partner?.image"/>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about pad-x my-5">
+      <div class="row d-flex justify-content-between align-items-center">
+        <div class="col-lg-6" style="z-index: 4;">
+          <h4 class="sec-hdr xs mb-3">Edo Talent Hunt 2025!</h4>
+          <h2 class="sec-hdr lg mb-3">✨ Let your light Shine ✨ </h2>
+          <div class="sec-text">
+            <p>The Edo Talent Hunt 2025 is set to discover, nurture, and showcase the incredible creativity within Edo State. Designed as a platform for young and emerging talents across music, dance, comedy, spoken word, and other performing arts, the show aims to provide visibility, growth opportunities, and a pathway to stardom for participants.</p>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="sec-img">
+            <img src="assets/img/project/star-prize.png" alt="">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="auditions pad-x">
+      <div class="bkg-img" style="background-image: url('assets/img/project/talent-bkg.png');"></div>
+      <div class="audition-info">
+        <div class="card-hld">
+          <div class="details">
+            <div class="sec-hdr xs bkg-full">Audition Dates</div>
+            <div class="info-text">December 1 - 6, 2025</div>
+          </div>
+          <img src="assets/img/project/date.png" alt="">
+        </div>
+        <div class="card-hld">
+          <div class="details">
+            <div class="sec-hdr xs bkg-full">Audition Location</div>
+            <div class="info-text">No 3 Imuetinyan Street, <br/> Off Ihama, Opp. Ebenezer Junction, <br/> GRA, Benin City</div>
+          </div>
+          <img src="assets/img/project/venue.jpg" alt="">
+        </div>
+      </div>
+    </section>
+
+    <section class="talents pad-x">
+      <div class="talent-info">
+        <div class="card-hld" style="background-image: url('assets/img/project/other.jpg');">
+          <div class="overlay"></div>
+          <div class="hdr">
+            <div class="title">Singing</div>
+            <div class="sec-hdr xs bkg-mild">1st December, 2025</div>
+          </div>
+        </div>
+
+        <div class="card-hld" style="background-image: url('assets/img/project/comedy.jpg');">
+          <div class="overlay"></div>
+          <div class="hdr">
+            <div class="title">Comedy</div>
+            <div class="sec-hdr xs bkg-mild">2nd December, 2025</div>
+          </div>
+        </div>  
+        <div class="card-hld" style="background-image: url('assets/img/project/dancing.jpg');">
+          <div class="overlay"></div>
+          <div class="hdr">
+            <div class="title">Dancing</div>
+            <div class="sec-hdr xs bkg-mild">4th December, 2025</div>
+          </div>
+        </div>
+        <div class="card-hld" style="background-image: url('assets/img/project/dancing2.jpg');">
+          <div class="overlay"></div>
+          <div class="hdr">
+            <div class="title">Other Talents</div>
+            <div class="sec-hdr xs bkg-mild">5th - 6th December, 2025</div>
+          </div>
+          <img src="" alt="">
+        </div>
+      </div>
+    </section>
+
+    <section class="diy-section pad-x">
+      <div class="video-wrap">
+        <video src="assets/img/project/reg-video.mp4" autoplay loop></video>
+      </div>
+      <div class="video-steps">
+        <div class="sec-hdr md mb-4">How to Register</div>
+        <ul>
+          <li>
+            <span>1</span> <span>Select your registration type</span>
+          </li>
+          <li>
+            <span>2</span> <span>Fill in your personal details</span>
+          </li>
+          <li>
+            <span>3</span> <span>Provide information about your talent</span>
+          </li>
+          <li>
+            <span>4</span> <span>Upload your passport photo</span>
+          </li>
+          <li>
+            <span>5</span> <span>Fill in your audition preferences</span>
+          </li>
+          <li>
+            <span>6</span> <span>Review your terms and conditions</span>
+          </li>
+          <li>
+            <span>7</span> <span>Proceed to make payment</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="strip-section pad-x">
+      <div class="image" style="background-image: url('assets/img/project/music.jpg');"></div>
+      <div class="info">
+        <div class="sec-hdr lg text-white"><span style="color: var(--primary);">✨</span>Let your light shine <span style="color: var(--primary);">✨</span></div>
+        <button class="cta cta-primary mt-5" routerLink="/login">Register Now</button>
+      </div>
+    </section>
+
+    <section class="footer-logo">
+      <div class="logo">
+        <img routerLink="/" src="assets/img/project/eth-logo-wht.png" alt="">
+      </div>
+    </section>
+
+  </main>
+  <app-footer></app-footer>
+</div>

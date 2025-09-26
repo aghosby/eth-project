@@ -5,6 +5,8 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { FormFields } from '@shared/models/form-fields';
 import { Validators } from '@angular/forms';
+import { ContactFormComponent } from '@shared/components/blocks/contact-form/contact-form.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface StepForm {
   valid: boolean;
@@ -577,7 +579,8 @@ export class UtilityService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    public dialog: MatDialog,
   ) { }
 
   get userCurrentStep() {
@@ -751,5 +754,13 @@ export class UtilityService {
     const steps = this.getFormStepsForUser(registrationType, dob, this.formSteps);
     const step = steps.find(s => s.id === stepIndex);
     return step ? step.stepName : '-';
+  }
+
+  contactForm() {
+    const screenSize = this.getScreenWidth();
+    let dialogRef = this.dialog.open(ContactFormComponent, {
+      width: screenSize > 768 ? '45%' : '95%',
+      height: 'auto',
+    });
   }
 }

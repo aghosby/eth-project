@@ -1,6 +1,7 @@
 // Angular modules
+import { CommonModule } from '@angular/common';
 import { Component, OnInit }    from '@angular/core';
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn }    from '@angular/forms';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn }    from '@angular/forms';
 import { FormControl }  from '@angular/forms';
 import { Validators }   from '@angular/forms';
 import { ActivatedRoute, Router }       from '@angular/router';
@@ -15,11 +16,23 @@ import { AuthService } from '@services/auth.service';
 import { NotificationService } from '@services/notification.service';
 import { StoreService } from '@services/store.service';
 import { take, timer } from 'rxjs';
+import { AuthRoutingModule } from '../auth-routing.module';
+import { SharedModule } from '@shared/shared.module';
+import { NgOtpInputModule } from 'ng-otp-input';
 
 @Component({
   selector    : 'app-login',
   templateUrl : './login.component.html',
-  styleUrls   : ['./login.component.scss']
+  styleUrls   : ['./login.component.scss'],
+  imports: [
+    CommonModule,
+    AuthRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgOtpInputModule,
+    SharedModule   // 👈 add this
+  ],
+  standalone: true
 })
 export class LoginComponent implements OnInit {
 

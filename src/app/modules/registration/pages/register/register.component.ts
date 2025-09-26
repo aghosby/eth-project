@@ -204,8 +204,9 @@ export class RegisterComponent implements OnInit {
     this.sharedService.getUserRegistration().subscribe({
       next: res => {
         if(res.success) {
-          this.savedRegData = res.data
-          sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
+          this.savedRegData = res.data[0];
+          console.log('Saved', this.savedRegData)
+          sessionStorage.setItem('savedRegData', JSON.stringify(this.savedRegData));
           this.getCurrentStep();
         }
       },
@@ -228,7 +229,8 @@ export class RegisterComponent implements OnInit {
       //console.log('else')
     }    
     // fallback to session storage only
-    const savedStep = this.loggedInUser.registrationInfo.completedSteps[0] ? this.loggedInUser.registrationInfo.completedSteps[0] : Number(sessionStorage.getItem('currentStep')) || 0;
+    const savedStep = this.loggedInUser.registrationInfo.currentStep ? this.loggedInUser.registrationInfo.currentStep : Number(sessionStorage.getItem('currentStep')) || 0;
+    console.log('Saved Step', savedStep)
     if(this.savedRegData && this.savedRegData.personalInfo) {
       const savedAge = this.savedRegData.personalInfo.dateOfBirth
       this.getUserAge(new Date(savedAge))

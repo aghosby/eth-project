@@ -93,7 +93,7 @@ export class SharedService {
   }
 
   public sendMessage(payload:any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/complaints`, this.requestOptions);
+    return this.http.post<any>(`${this.baseUrl}/complaints`, payload, this.requestOptions);
   }
 
 
@@ -115,6 +115,11 @@ export class SharedService {
 
   public getTransactions(paging: Paging = { page: 1, limit: 10 }) {
     const url = `${this.baseUrl}/admin/transactions`;
+    return this.paging$(url, paging, this.requestOptions);
+  }
+
+  public getMessages(paging: Paging = { page: 1, limit: 10 }) {
+    const url = `${this.baseUrl}/complaints/admin/all`;
     return this.paging$(url, paging, this.requestOptions);
   }
 

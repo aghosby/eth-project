@@ -33,14 +33,15 @@ header {
     }
 
     nav {
-        margin-left: 1rem;
+        margin-left: auto;
 
-        @include screen-media-min(md) {
-            margin-left: 7rem;
-        }
+        // @include screen-media-min(md) {
+        //     margin-left: 7rem;
+        // }
 
         ul {
             display: flex;
+            justify-content: flex-end;
             margin: 0;
             gap: 1.7rem;
 
@@ -49,14 +50,15 @@ header {
 
                 a {
                     font-size: 0.85rem;
-                    font-weight: 400;
+                    font-weight: 500;
+                    border-radius: 2rem;
                     letter-spacing: 0.06rem;
-                    font-family: 'Gilroy-medium';
-                    padding: 0.6rem 1rem;
-                    border-radius: 0.3rem;
+                    padding: 0.5rem 1rem;
+                    background: var(--primary);
                     transition: all 0.4s ease;
-                    color: black;
+                    color: white;
                     text-decoration: none;
+                    cursor: pointer;
 
                     &.active {
                         background: var(--primary);
@@ -69,7 +71,7 @@ header {
 
     .info {
         display: flex;
-        margin-left: auto;
+        margin-left: 2rem;
         align-items: center;
         gap: 2rem;
 

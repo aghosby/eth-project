@@ -1,19 +1,15 @@
 <header>
     <div class="logo">
-        <img [routerLink]="'/app'" class="logo" src="assets/img/project/eth-logo-wht.png" alt="">
+        <img [routerLink]="'/'" class="logo" src="assets/img/project/eth-logo-wht.png" alt="">
     </div>
 
-    <!-- <nav>
+    <nav>
         <ul>
             <li>
-            </li>
-            <li>
-                <a [routerLink]="['events']" [routerLinkActive]="'active'">All Events</a>
-            </li>
-            <li>
+                <a (click)="contactForm()">Send Message</a>
             </li>
         </ul>
-    </nav> -->
+    </nav>
 
     <div class="info">
         <div (click)="logOutConfirm = !logOutConfirm" [class.active]="userInitials" class="det user">

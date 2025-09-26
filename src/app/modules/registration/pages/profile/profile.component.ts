@@ -54,11 +54,11 @@ export class ProfileComponent implements OnInit {
     this.sharedService.getUserRegistration().subscribe({
       next: res => {
         if(res.success) {
-          this.savedRegData = res.data
+          this.savedRegData = res.data[0]
           console.log(this.savedRegData)
           console.log('loggedIn', this.loggedInUser)
           console.log('Registration Type', this.regType)
-          sessionStorage.setItem('savedRegData', JSON.stringify(res.data));
+          sessionStorage.setItem('savedRegData', JSON.stringify(res.data[0]));
           this.regType = this.savedRegData.registrationType === 'bulk' ? 3 : this.loggedInUser.registrationInfo.registrationType === 'individual' ? 1 : 2 
           if(this.regType !== 3) {
             this.applicantAge = this.getUserAge(this.savedRegData.personalInfo.dateOfBirth)

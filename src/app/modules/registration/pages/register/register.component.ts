@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Location, PlatformLocation } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '@shared/services/auth.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
 import { BehaviorSubject } from 'rxjs';
-import { log } from 'util';
 
 @Component({
   selector: 'app-register',
@@ -33,6 +33,8 @@ export class RegisterComponent implements OnInit {
   }
 
   constructor(
+    private location: Location,
+    private platformLocation: PlatformLocation,
     private authService: AuthService,
     private sharedService: SharedService,
     private utilityService: UtilityService,
@@ -43,6 +45,15 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUser = this.authService.loggedInUser;
     this.allFormSteps = this.utilityService.formSteps;
+    this.platformLocation.onPopState(() => {
+      if (this.stepInView?.stepName === 'Review & Payment') {
+        history.pushState(null, '', window.location.href);
+      }
+      else if(this.stepInView?.stepName === 'Success' ) {
+        this.authService.logOut(); 
+      }
+    });
+
     if(this.loggedInUser.registrationInfo.currentStep == 0) {
       this.savedRegData = {};
       this.getCurrentStep()

@@ -9,17 +9,29 @@
         letter-spacing: 0.05rem;
 
         &.lg {
-            font-size: 2.7rem;
+            font-size: 1.7rem;
             font-weight: 700;
             line-height: 1;
             color: var(--primary);
+            text-align: center;
+
+            @include screen-media-min(md) {
+                font-size: 2.7rem;
+                text-align: left;
+            }
         }
 
         &.md {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
             line-height: 1;
             color: rgba(0, 0, 0, 0.9);
+            text-align: center;
+
+            @include screen-media-min(md) {
+                font-size: 2rem;
+                text-align: left;
+            }
         }
 
         &.xs {
@@ -53,12 +65,17 @@
         line-height: 1.6;
         letter-spacing: 0.03rem;
         color: rgba(0, 0, 0, 0.8);
+        text-align: center;
+
+        @include screen-media-min(md) {
+            text-align: left;
+        }
     }
 }
 
 header {
     width: 100%;
-    padding: 1.5rem 10%;
+    padding: 1.5rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -67,9 +84,17 @@ header {
     top: 0;
     z-index: 3;
 
+    @include screen-media-min(md) {
+        padding: 1.5rem 10%;
+    }
+
     .logo {
         width: auto;
-        height: 5rem;
+        height: 4rem;
+
+        @include screen-media-min(md) {
+            height: 5rem;
+        }
 
         img {
             width: 100%;
@@ -78,6 +103,11 @@ header {
     }
 
     nav {
+        display: none;
+
+        @include screen-media-min(md) {
+            display: block;
+        }
 
         ul {
             margin: 0;
@@ -125,7 +155,11 @@ header {
     .header-ctas {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 0.5rem;
+
+        @include screen-media-min(md) {
+            gap: 1rem;
+        }
 
         button {
             font-size: 1rem;
@@ -141,10 +175,14 @@ header {
             display: flex;
             align-items: center;
             border-radius: 2rem;
-            padding: 0.1rem 1rem 0.1rem 0.3rem;
+            padding: 0.1rem;
             background-color: white;
             cursor: pointer;
             gap: 0.4rem;
+
+            @include screen-media-min(md) {
+                padding: 0.1rem 1rem 0.1rem 0.3rem;
+            }
 
             .image {
                 width: 2rem;
@@ -161,10 +199,15 @@ header {
                 color: var(--primary);
             }
             span {
+                display: none;
                 font-size: 1rem;
                 font-weight: 400;
                 color: var(--primary);
                 letter-spacing: 0.05rem;
+
+                @include screen-media-min(md) {
+                    display: block;
+                }
             }
             .arrow {
                 font-size: 0.7rem;
@@ -177,19 +220,28 @@ header {
 main {
 
     .pad-x {
-        padding-left: 10%;
-        padding-right: 10%;
+        padding-left: 5%;
+        padding-right: 5%;
+
+        @include screen-media-min(md) {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
     }
 
     section {
 
         &.hero {
             width: 100%;
-            height: 90vh;
+            height: 35rem;
             background-size: cover;
             background-position: top center;
             background-repeat: no-repeat;
             position: relative;
+
+            @include screen-media-min(md) {
+                height: 90vh;
+            }
 
             .overlay {
                 width: 100%;
@@ -201,26 +253,48 @@ main {
             }
 
             .caption-wrap {
-                width: 45%;
+                width: 90%;
                 position: absolute;
                 transform: translate(-50%, -50%);
                 text-align: center;
                 top: 50%;
                 left: 50%;
 
+                @include screen-media-min(md) {
+                    width: 45%;
+                }
+
                 h1 {
-                    font-size: 2.8rem;
+                    font-size: 1.7rem;
                     font-weight: 600;
                     letter-spacing: 0.05rem;
+                    white-space: nowrap;
                     color: white;
+
+                    @include screen-media-min(md) {
+                        font-size: 2.8rem;
+                    }
                 }
 
                 .sec-text {
-                    font-size: 1.1rem;
+                    font-size: 0.85rem;
                     font-weight: 300;
                     line-height: 1.5;
                     letter-spacing: 0.05rem;
                     color: rgba(#fff, 0.9);
+                    text-align: center;
+
+                    @include screen-media-min(md) {
+                        font-size: 1.1rem;
+                    }
+                }
+
+                button {
+                    width: 100%;
+
+                    @include screen-media-min(md) {
+                        width: fit-content;
+                    }
                 }
             }
         }
@@ -246,13 +320,18 @@ main {
             &:before {
                 content: '';
                 width: 100%;
-                height: 8rem;
+                height: 5rem;
                 background-color: var(--bkg-1);
-                border-radius: 5rem 5rem 0 0;
+                border-radius: 3rem 3rem 0 0;
                 position: absolute;
                 left: 0;
                 top: -5rem;
                 z-index: 3;
+
+                @include screen-media-min(md) {
+                    height: 8rem;
+                    border-radius: 5rem 5rem 0 0;
+                }
             }
 
             .partner-container {
@@ -275,7 +354,7 @@ main {
                     }
 
                     .partner-hld {
-                        width: 30vw;
+                        width: 35vw;
                         display: inline-flex;
                         justify-content: center;
 
@@ -299,8 +378,16 @@ main {
                                 height: 4rem;
                                 //filter: grayscale(1);
 
-                                @include screen-media-min(xxxl) {
+                                @include screen-media-min(md) {
+                                    height: 5.5rem;
+                                }
+
+                                &.sm {
                                     height: 1.5rem;
+
+                                    @include screen-media-min(md) {
+                                        height: 2.5rem;
+                                    }
                                 }
                             }
                         }
@@ -310,12 +397,17 @@ main {
         }
 
         &.auditions {
-            margin: 6rem 0 2rem;
+            margin: 4rem 0 2rem;
             position: relative;
+
+            @include screen-media-min(md) {
+                margin: 6rem 0 2rem;
+            }
 
             .bkg-img {
                 width: 50%;
                 height: 40rem;
+                display: none;
                 background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -328,25 +420,40 @@ main {
 
             .audition-info {
                 display: flex;
-                justify-content: flex-end;
+                flex-direction: column;
+                justify-content: center;
                 align-items: center;
                 gap: 1.5rem;
 
+                @include screen-media-min(md) {
+                    flex-direction: row;
+                }
+
                 .card-hld {
-                    width: 40%;
-                    height: 36rem;
+                    width: 100%;
+                    height: 30rem;
                     overflow: hidden;
                     position: relative;
                     border-radius: 0.5rem;
                     //border: 1px solid rgba(#000, 0.07);
                     box-shadow: 0 16px 43px rgba(0,0,0,.06);
 
+                    @include screen-media-min(md) {
+                        width: 40%;
+                        height: 36rem;
+                    }
+
                     &:first-child {
                         background: #dcdcdc;
 
                         img { 
+                            width: 20rem;
                             bottom: 0;
                             left: 0;
+
+                            @include screen-media-min(md) {
+                                width: unset;
+                            }
                         }
                     }
 
@@ -373,12 +480,16 @@ main {
                         z-index: 2;
 
                         .info-text {
-                            font-size: 1.5rem;
+                            font-size: 1.2rem;
                             font-weight: 600;
                             line-height: 1.4;
                             padding-left: 0.3rem;
                             letter-spacing: 0.05rem;
                             margin-top: 1rem;
+
+                            @include screen-media-min(md) {
+                                font-size: 1.5rem;
+                            }
                         }
                     }
                 }
@@ -389,17 +500,28 @@ main {
 
             .talent-info {
                 display: flex;
+                flex-wrap: wrap;
                 justify-content: space-between;
+                gap: 1rem 0;
+
+                @include screen-media-min(md) {
+                    gap: unset;
+                }
 
                 .card-hld {
-                    width: 24%;
-                    height: 23rem;
+                    width: 48%;
+                    height: 15rem;
                     background-size: cover;
                     background-position: center;
                     background-repeat: no-repeat;
                     border-radius: 0.5rem;
                     position: relative;
                     overflow: hidden;
+
+                    @include screen-media-min(md) {
+                        width: 24%;
+                        height: 23rem;
+                    }
 
                     .overlay {
                         width: 100%;
@@ -414,8 +536,13 @@ main {
                     .hdr {
                         position: absolute;
                         z-index: 3;
-                        top: 1rem;
-                        left: 1rem;
+                        top: 0.5rem;
+                        left: 0.4rem;
+
+                        @include screen-media-min(md) {
+                            left: 1rem;
+                            top: 1rem;
+                        }
 
                         .title {
                             font-size: 1rem;
@@ -425,6 +552,13 @@ main {
                             letter-spacing: 0.05rem;
                             padding-left: 0.3rem;
                         }
+
+                        .sec-hdr {
+                            @include screen-media-max(md) {
+                                font-size: 0.65rem;
+                                //padding: 0.2rem 0.2rem;
+                            }
+                        }
                     }
                 }
             }
@@ -432,15 +566,27 @@ main {
 
         &.diy-section {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             background: rgba(#d09823, 0.3);
-            padding: 5rem 0;
-            margin: 5rem 0;
+            padding: 3rem 0;
+            margin: 3rem 0;
+
+            @include screen-media-min(md) {
+                padding: 5rem 0;
+                margin: 5rem 0;
+                flex-direction: row;
+            }
 
             .video-wrap {
-                width: 40%;
-                height: 35rem;
+                width: 70%;
+                height: 30rem;
+
+                @include screen-media-min(md) {
+                    width: 40%;
+                    height: 35rem;
+                }
 
                 video {
                     width: 100%;
@@ -451,6 +597,11 @@ main {
             }
 
             .video-steps {
+                margin-top: 3rem;
+
+                @include screen-media-min(md) {
+                    margin-top: 0;
+                }
 
                 ul {
                     display: flex;
@@ -482,10 +633,14 @@ main {
                             }
 
                             &:last-child {
-                                font-size: 1.1rem;
+                                font-size: 0.85rem;
                                 font-weight: 500;
                                 letter-spacing: 0.05rem;
                                 line-height: 1;
+
+                                @include screen-media-min(md) {
+                                    font-size: 1.1rem;
+                                }
                             }
                         }
                     }
@@ -494,12 +649,18 @@ main {
         }
 
         &.strip-section {
-            width: 80%;
-            height: 25rem;
-            margin: 5rem auto;
+            width: 90%;
+            height: 15rem;
+            margin: 3rem auto;
             position: relative;
             border-radius: 1rem;
             overflow: hidden;
+
+            @include screen-media-min(md) {
+                width: 80%;
+                height: 25rem;
+                margin: 5rem auto;
+            }
 
             .image {
                 width: 100%;
@@ -516,7 +677,20 @@ main {
                 position: absolute;
                 transform: translateY(-50%);
                 right: 5%;
-                top: 50%;
+                top: 70%;
+
+                @include screen-media-min(md) {
+                    width: fit-content;
+                    top: 50%;
+                }
+
+                button {
+                    width: 100%;
+
+                    @include screen-media-min(md) {
+                        width: fit-content;
+                    }
+                }
             }
         }
 

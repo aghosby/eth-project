@@ -33,4 +33,8 @@ export class HeaderComponent implements OnInit {
     const step = Number(sessionStorage.getItem('currentStep'))
     return step
   }
+
+  contactForm() {
+    this.utilityService.contactForm()
+  }
 }

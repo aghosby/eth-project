@@ -91,6 +91,10 @@ export class LoginComponent implements OnInit {
           break;
       }
     }); 
+
+    this.route.queryParams.subscribe(params => {
+      this.userAction = params['action'] || 'login';
+    });
   }
 
   getEmailQuery(): void {

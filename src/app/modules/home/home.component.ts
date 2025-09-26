@@ -1,6 +1,7 @@
 // Angular modules
 import { Component } from '@angular/core';
 import { OnInit }    from '@angular/core';
+import { Router } from '@angular/router';
 import { UtilityService } from '@shared/services/utility.service';
 
 @Component({
@@ -41,30 +42,32 @@ export class HomeComponent implements OnInit {
       image: 'assets/img/project/partners/logo-6.png',
       websiteUrl: '',
     },
-    // {
-    //   name: '',
-    //   image: 'assets/img/project/partners/logo-7.png',
-    //   websiteUrl: '',
-    // },{
-    //   name: '',
-    //   image: 'assets/img/project/partners/logo-8.png',
-    //   websiteUrl: '',
-    // },
-    // {
-    //   name: '',
-    //   image: 'assets/img/project/partners/logo-9.png',
-    //   websiteUrl: '',
-    // },
-    // {
-    //   name: '',
-    //   image: 'assets/img/project/partners/logo-10.jpg',
-    //   websiteUrl: '',
-    // },
-    // {
-    //   name: '',
-    //   image: 'assets/img/project/partners/logo-11.jpg',
-    //   websiteUrl: '',
-    // },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-7.png',
+      websiteUrl: '',
+      size: 'sm'
+    },{
+      name: '',
+      image: 'assets/img/project/partners/logo-8.png',
+      websiteUrl: '',
+      size: 'sm'
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-9.png',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-10.jpg',
+      websiteUrl: '',
+    },
+    {
+      name: '',
+      image: 'assets/img/project/partners/logo-11.jpg',
+      websiteUrl: '',
+    },
     {
       name: '',
       image: 'assets/img/project/partners/logo-12.png',
@@ -92,7 +95,8 @@ export class HomeComponent implements OnInit {
   ]
 
   constructor(
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private router: Router
   ) { }
 
   ngOnInit() : void {
@@ -104,6 +108,14 @@ export class HomeComponent implements OnInit {
 
   contactForm() {
     this.utilityService.contactForm();
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login'], { queryParams: { action: 'login' } });
+  }
+
+  goToRegister() {
+    this.router.navigate(['/login'], { queryParams: { action: 'create' } });
   }
 
   // -------------------------------------------------------------------------------

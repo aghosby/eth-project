@@ -89,7 +89,7 @@ export class ContactFormComponent  implements OnInit {
         next: res => {
           if(res.success) {
             this.isLoading = false
-            this.notifyService.showSuccess(res.message);
+            this.notifyService.showSuccess('Your message has been sent successfully');
             this.closeDialog();
           }
         },

@@ -65,7 +65,7 @@ export class UtilityService {
           controlType: 'text',
           controlLabel: 'First Name',
           controlWidth: '48%',
-          initialValue: this.authService.loggedInUser.firstName ?? null,
+          initialValue: this.authService.loggedInUser?.firstName ?? null,
           validators: [Validators.required],
           order: 1
         },
@@ -74,7 +74,7 @@ export class UtilityService {
           controlType: 'text',
           controlLabel: 'Last Name',
           controlWidth: '48%',
-          initialValue: this.authService.loggedInUser.lastName ?? null,
+          initialValue: this.authService.loggedInUser?.lastName ?? null,
           validators: [Validators.required],
           order: 2
         },
@@ -83,7 +83,7 @@ export class UtilityService {
           controlType: 'text',
           controlLabel: 'Email Address',
           controlWidth: '48%',
-          initialValue: this.authService.loggedInUser.email ?? null,
+          initialValue: this.authService.loggedInUser?.email ?? null,
           validators: [Validators.required, Validators.email],
           order: 3
         },

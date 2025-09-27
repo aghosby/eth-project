@@ -26,9 +26,9 @@
 
     <div class="header-ctas">
       
-      <div class="user">
+      <div (click)="goToLogin()" class="user">
         <div class="image"><i class="bi bi-person-circle"></i></div>
-        <span (click)="goToLogin()">Login</span>
+        <span>Login</span>
         <!-- <div class="name">Admin {{loggedInUser.lastName}}</div> -->
       </div>
       <button (click)="goToRegister()">Register</button>

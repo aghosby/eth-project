@@ -88,12 +88,12 @@ header {
         padding: 1.5rem 10%;
     }
 
-    .logo {
+    .logo-cont {
         width: auto;
         height: auto;
 
         img {
-            width: 100%;
+            width: auto;
             height: 4rem;
 
             @include screen-media-min(md) {
@@ -582,6 +582,8 @@ main {
             .video-wrap {
                 width: 70%;
                 height: 30rem;
+                overflow: hidden;
+                background: transparent;
 
                 @include screen-media-min(md) {
                     width: 40%;
@@ -593,6 +595,7 @@ main {
                     height: 100%;
                     object-fit: contain;
                     object-position: center;
+                    background: transparent;
                 }
             }
 

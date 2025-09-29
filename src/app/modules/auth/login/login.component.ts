@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
 
     this.route.url.subscribe(urlSegments => {
       const path = urlSegments[0]?.path;
-
+  
       switch (path) {
         case 'login':
           this.userAction = 'login';
@@ -90,10 +90,13 @@ export class LoginComponent implements OnInit {
           this.userAction = 'login';
           break;
       }
-    }); 
-
+    });
+  
+    // Only override if query param explicitly provided
     this.route.queryParams.subscribe(params => {
-      this.userAction = params['action'] || 'login';
+      if (params['action']) {
+        this.userAction = params['action'];
+      }
     });
   }
 

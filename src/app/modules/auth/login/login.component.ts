@@ -93,11 +93,14 @@ export class LoginComponent implements OnInit {
     });
   
     // Only override if query param explicitly provided
-    this.route.queryParams.subscribe(params => {
-      if (params['action']) {
-        this.userAction = params['action'];
-      }
-    });
+    // this.route.queryParams.subscribe(params => {
+    //   if (params['action']) {
+    //     this.userAction = params['action'];
+    //   }
+    //   else {
+    //      this.userAction = this.userAction;
+    //   }
+    // });
   }
 
   getEmailQuery(): void {

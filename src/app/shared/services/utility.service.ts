@@ -756,11 +756,12 @@ export class UtilityService {
     return step ? step.stepName : '-';
   }
 
-  contactForm() {
+  contactForm(email?:string) {
     const screenSize = this.getScreenWidth();
     let dialogRef = this.dialog.open(ContactFormComponent, {
       width: screenSize > 768 ? '45%' : '95%',
       height: 'auto',
+      data: email
     });
   }
 }

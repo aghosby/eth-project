@@ -11,7 +11,7 @@ import { Paging } from '@shared/models/paging';
 export class SharedService {
 
   private baseUrl = `${environment.apiBaseUrl}`;
-  private userId = this.authService.loggedInUser.id ?? '';
+  private userId = this.authService.loggedInUser?.id ?? '';
 
   requestOptions:any = {
     headers: new HttpHeaders({

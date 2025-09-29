@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormFields } from '@shared/models/form-fields';
@@ -23,6 +23,7 @@ export class ContactFormComponent  implements OnInit {
   keepOrder = () => 0;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public dialogRef: MatDialogRef<ContactFormComponent>,
     private authService: AuthService,
     private utilityService: UtilityService,
@@ -34,7 +35,7 @@ export class ContactFormComponent  implements OnInit {
     this.screenSize = this.utilityService.getScreenWidth();
     this.useFormWidth = this.screenSize > 768;
     this.setUpForm();
-    this.loggedInUser = this.authService.loggedInUser;
+    //this.loggedInUser = this.authService.loggedInUser;
   }
 
   closeDialog() {
@@ -44,10 +45,19 @@ export class ContactFormComponent  implements OnInit {
   setUpForm = async () => {
     this.formInfoFields = [
       {
+        controlName: 'email',
+        controlType: 'text',
+        controlLabel: 'Email Address',
+        controlWidth: '48%',
+        initialValue: this.dialogData ?? null,
+        validators: [Validators.required, Validators.email],
+        order: 1
+      },
+      {
         controlName: 'complaintType',
         controlType: 'select',
         controlLabel: 'Category',
-        controlWidth: '100%',
+        controlWidth: '48%',
         initialValue: null,
         selectOptions: {
           Registration: 'Registration',
@@ -59,7 +69,7 @@ export class ContactFormComponent  implements OnInit {
           Other: 'Other'
         },
         validators: [Validators.required],
-        order: 1
+        order: 2
       },
       {
         controlName: 'description',
@@ -68,7 +78,7 @@ export class ContactFormComponent  implements OnInit {
         controlWidth: '100%',
         initialValue: null,
         validators: [Validators.required],
-        order: 2
+        order: 3
       }
     ]
 

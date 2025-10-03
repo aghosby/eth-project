@@ -178,4 +178,8 @@ export class RegistrationListComponent implements OnInit {
     }
     return age;
   }
+
+  verifyPayment(registrationId:string) {
+    this.utilityService.verifyFailedTransaction(registrationId);
+  }
 }

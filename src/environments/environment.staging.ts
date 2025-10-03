@@ -23,7 +23,9 @@ export const environment = {
   envName         : EnvName.LOCAL,
   defaultLanguage : 'en',
   apiBaseUrl      : baseUrl,
-  credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH'
+  credoBaseUrl: 'https://api.credocentral.com',
+  credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH',
+  credoSecretKey: '1PRI7593uzp9r20eb4C2g4WhnUz1o5mkHHa1hE'
 };
 
 /*

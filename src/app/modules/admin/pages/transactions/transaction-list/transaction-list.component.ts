@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
 import { map, Observable, tap } from 'rxjs';
 
@@ -54,10 +55,15 @@ export class TransactionListComponent implements OnInit {
       label: 'Payment Status',
       colWidth: '15%'
     },
+    {
+      label: 'Actions',
+      colWidth: '10%'
+    }
   ]
 
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private notifyService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -110,6 +116,30 @@ export class TransactionListComponent implements OnInit {
     else {
       if(value != undefined) this.filterEndDate = value;
     }
+  }
+
+  verifyPayment(trxRef:string, internalRef:string) {
+    this.sharedService.verifyCredoPayment(trxRef).subscribe({
+      next: res => {
+        console.log('Payment Res', res)
+        this.transactionUpdate(internalRef, res.data)
+      },
+      error: err => {
+        this.notifyService.showError('Payment verification failed')
+      }
+    })
+  }
+
+  transactionUpdate(internalRef:string, payload:any) {
+    this.sharedService.verifyPaymentRef(internalRef, payload).subscribe({
+      next: res => {
+        //console.log('Payment Res', res)
+        this.notifyService.showSuccess('Verification was successful')
+      },
+      error: err => {
+        this.notifyService.showError('Payment verification failed. Try again later')
+      }
+    })
   }
 
 }

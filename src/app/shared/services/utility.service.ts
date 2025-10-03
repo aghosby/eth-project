@@ -7,6 +7,7 @@ import { FormFields } from '@shared/models/form-fields';
 import { Validators } from '@angular/forms';
 import { ContactFormComponent } from '@shared/components/blocks/contact-form/contact-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PaymentVerificationComponent } from 'src/app/modules/admin/components/payment-verification/payment-verification.component';
 
 interface StepForm {
   valid: boolean;
@@ -762,6 +763,15 @@ export class UtilityService {
       width: screenSize > 768 ? '45%' : '95%',
       height: 'auto',
       data: email
+    });
+  }
+
+  verifyFailedTransaction(registrationId?:string) {
+    const screenSize = this.getScreenWidth();
+    let dialogRef = this.dialog.open(PaymentVerificationComponent, {
+      width: screenSize > 768 ? '45%' : '95%',
+      height: 'auto',
+      data: registrationId
     });
   }
 }

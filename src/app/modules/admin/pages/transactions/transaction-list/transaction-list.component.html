@@ -83,7 +83,7 @@
                                 <span >{{item?.reference}}</span>
                             </td>
                             <td>
-                                <span >₦{{item?.gatewayResponse?.frontendData.transAmount.toLocaleString()}}</span>
+                                <span >₦{{item?.amount.toLocaleString()}}</span>
                             </td>
                             
                             <td>
@@ -98,7 +98,14 @@
                             <td>
                                 <span *ngIf="item?.status !== 'successful'" class="declined">Failed</span>
                                 <span *ngIf="item?.status === 'successful'" class="approved">Successful</span>
-                            </td>  
+                            </td> 
+                            <td>
+                                <span>
+                                    <button (click)="verifyPayment(item?.gatewayResponse?.frontendData.transRef, item?.reference)" class="cta cta-trans sm-bd">
+                                        Verify
+                                    </button>
+                                </span>
+                            </td> 
                         </tr>
                     </ng-container>
                 </tbody>

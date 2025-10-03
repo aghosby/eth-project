@@ -29,31 +29,31 @@ export class TransactionListComponent implements OnInit {
   tableColumns = [
     {
       label: 'Name',
-      colWidth: '15%'
+      colWidth: '10%'
     },
     {
-      label: 'Reference No',
-      colWidth: '15%'
+      label: 'Email',
+      colWidth: '10%'
     },
+    // {
+    //   label: 'Reference No',
+    //   colWidth: '10%'
+    // },
     {
       label: 'Amount',
       colWidth: '10%'
     },
     {
       label: 'Date',
-      colWidth: '10%'
-    },
-    {
-      label: 'Time',
-      colWidth: '10%'
+      colWidth: '15%'
     },
     {
       label: 'Trans Reference',
-      colWidth: '15%'
+      colWidth: '10%'
     },
     {
       label: 'Payment Status',
-      colWidth: '15%'
+      colWidth: '10%'
     },
     {
       label: 'Actions',

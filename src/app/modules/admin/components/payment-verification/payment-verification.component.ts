@@ -47,7 +47,7 @@ export class PaymentVerificationComponent implements OnInit {
         controlName: 'reference',
         controlType: 'text',
         controlLabel: 'Transaction Reference',
-        controlWidth: '48%',
+        controlWidth: '100%',
         initialValue: null,
         validators: [Validators.required],
         order: 1

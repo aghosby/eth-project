@@ -14,6 +14,7 @@ import { TransactionListComponent } from './pages/transactions/transaction-list/
 import { TransactionDetailsComponent } from './pages/transactions/transaction-details/transaction-details.component';
 import { SupportListComponent } from './pages/support/support-list/support-list.component';
 import { SupportDetailsComponent } from './pages/support/support-details/support-details.component';
+import { PaymentVerificationComponent } from './components/payment-verification/payment-verification.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { SupportDetailsComponent } from './pages/support/support-details/support
     TransactionListComponent,
     TransactionDetailsComponent,
     SupportListComponent,
-    SupportDetailsComponent
+    SupportDetailsComponent,
+    PaymentVerificationComponent
   ],
   imports: [
     CommonModule,

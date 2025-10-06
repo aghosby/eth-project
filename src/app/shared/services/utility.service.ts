@@ -7,6 +7,7 @@ import { FormFields } from '@shared/models/form-fields';
 import { Validators } from '@angular/forms';
 import { ContactFormComponent } from '@shared/components/blocks/contact-form/contact-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PaymentVerificationComponent } from 'src/app/modules/admin/components/payment-verification/payment-verification.component';
 
 interface StepForm {
   valid: boolean;
@@ -65,7 +66,7 @@ export class UtilityService {
           controlType: 'text',
           controlLabel: 'First Name',
           controlWidth: '48%',
-          initialValue: this.authService.loggedInUser.firstName ?? null,
+          initialValue: this.authService.loggedInUser?.firstName ?? null,
           validators: [Validators.required],
           order: 1
         },
@@ -74,7 +75,7 @@ export class UtilityService {
           controlType: 'text',
           controlLabel: 'Last Name',
           controlWidth: '48%',
-          initialValue: this.authService.loggedInUser.lastName ?? null,
+          initialValue: this.authService.loggedInUser?.lastName ?? null,
           validators: [Validators.required],
           order: 2
         },
@@ -83,7 +84,7 @@ export class UtilityService {
           controlType: 'text',
           controlLabel: 'Email Address',
           controlWidth: '48%',
-          initialValue: this.authService.loggedInUser.email ?? null,
+          initialValue: this.authService.loggedInUser?.email ?? null,
           validators: [Validators.required, Validators.email],
           order: 3
         },
@@ -607,22 +608,22 @@ export class UtilityService {
 
     if (width < 576) {
       return 'xs'; // < 576 → extra small
-    } 
+    }
     else if (width < 768) {
       return 'sm';
-    } 
+    }
     else if (width < 992) {
       return 'md';
-    } 
+    }
     else if (width < 1200) {
       return 'lg';
-    } 
+    }
     else if (width < 1400) {
       return 'xl';
-    } 
+    }
     else if (width < 1600) {
       return 'xxl';
-    } 
+    }
     else {
       return 'xxxl';
     }
@@ -658,11 +659,11 @@ export class UtilityService {
 
     // fallback: check sessionStorage
     const savedData =
-      (sessionStorage.getItem('savedRegData') 
+      (sessionStorage.getItem('savedRegData')
         ? JSON.parse(sessionStorage.getItem('savedRegData') as string)
-        : null) 
-      ?? 
-      (sessionStorage.getItem('registrationData') 
+        : null)
+      ??
+      (sessionStorage.getItem('registrationData')
       ? JSON.parse(sessionStorage.getItem('registrationData') as string)
       : null);
 
@@ -756,11 +757,21 @@ export class UtilityService {
     return step ? step.stepName : '-';
   }
 
-  contactForm() {
+  contactForm(email?:string) {
     const screenSize = this.getScreenWidth();
     let dialogRef = this.dialog.open(ContactFormComponent, {
       width: screenSize > 768 ? '45%' : '95%',
       height: 'auto',
+      data: email
+    });
+  }
+
+  verifyFailedTransaction(registrationId?:string) {
+    const screenSize = this.getScreenWidth();
+    let dialogRef = this.dialog.open(PaymentVerificationComponent, {
+      width: screenSize > 768 ? '45%' : '95%',
+      height: 'auto',
+      data: registrationId
     });
   }
 }

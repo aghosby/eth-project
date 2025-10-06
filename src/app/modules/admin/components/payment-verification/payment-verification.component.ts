@@ -9,22 +9,21 @@ import { UtilityService } from '@shared/services/utility.service';
 import { environment } from '@env/environment';
 
 @Component({
-  selector: 'app-contact-form',
-  templateUrl: './contact-form.component.html',
-  styleUrls: ['./contact-form.component.scss']
+  selector: 'app-payment-verification',
+  templateUrl: './payment-verification.component.html',
+  styleUrls: ['./payment-verification.component.scss']
 })
-export class ContactFormComponent implements OnInit {
+export class PaymentVerificationComponent implements OnInit {
   loggedInUser: any;
   isLoading: boolean = false;
   formInfoFields!: FormFields[];
   grpInfoForm:FormGroup = new FormGroup({});
   useFormWidth:boolean = true;
   screenSize!:number;
-  keepOrder = () => 0;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
-    public dialogRef: MatDialogRef<ContactFormComponent>,
+    public dialogRef: MatDialogRef<PaymentVerificationComponent>,
     private authService: AuthService,
     private utilityService: UtilityService,
     private sharedService: SharedService,
@@ -45,40 +44,13 @@ export class ContactFormComponent implements OnInit {
   setUpForm = async () => {
     this.formInfoFields = [
       {
-        controlName: 'email',
+        controlName: 'reference',
         controlType: 'text',
-        controlLabel: 'Email Address',
-        controlWidth: '48%',
-        initialValue: this.dialogData ?? null,
-        validators: [Validators.required, Validators.email],
-        order: 1
-      },
-      {
-        controlName: 'complaintType',
-        controlType: 'select',
-        controlLabel: 'Category',
-        controlWidth: '48%',
-        initialValue: null,
-        selectOptions: {
-          Registration: 'Registration',
-          Payment: 'Payment',
-          Technical: 'Technical Issue',
-          Access: 'Portal Access',
-          Observation: 'Observation',
-          Enquiry: 'Enquiry',
-          Other: 'Other'
-        },
-        validators: [Validators.required],
-        order: 2
-      },
-      {
-        controlName: 'description',
-        controlType: 'textarea',
-        controlLabel: 'Message',
+        controlLabel: 'Transaction Reference',
         controlWidth: '100%',
         initialValue: null,
         validators: [Validators.required],
-        order: 3
+        order: 1
       }
     ]
 
@@ -91,28 +63,37 @@ export class ContactFormComponent implements OnInit {
 
   }
 
-  sendMessage() {
+  verifyPayment() {
     if(this.grpInfoForm.valid) {
       this.isLoading = true;
-      let payload = this.grpInfoForm.value
-      this.sharedService.sendMessage(payload).subscribe({
+      const trxRef = this.grpInfoForm.value.reference;
+      this.sharedService.verifyCredoPayment(trxRef).subscribe({
         next: res => {
-          if(res.success) {
-            this.isLoading = false
-            this.notifyService.showSuccess('Your message has been sent successfully');
-            this.closeDialog();
-          }
+          if(res) this.verifyFailedTransaction(this.dialogData, res.data);
         },
         error: err => {
-          this.notifyService.showError(err.error.message)
+          this.notifyService.showError('This payment could not be verified')
           this.isLoading = false
         }
       }) 
     }
     else {
       this.grpInfoForm.markAllAsTouched()
-    }
-     
+    }  
+  }
+
+  verifyFailedTransaction(registrationId:string, payload:any) {
+    this.sharedService.verifyFailedTransaction(registrationId, payload).subscribe({
+      next: res => {
+        this.isLoading = false;
+        this.notifyService.showSuccess('Verification was successful');
+        this.closeDialog();
+      },
+      error: err => {
+        this.isLoading = false;
+        this.notifyService.showError('Payment verification failed. Try again later')
+      }
+    })
   }
 
 }

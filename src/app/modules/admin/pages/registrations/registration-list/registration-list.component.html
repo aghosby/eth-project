@@ -129,7 +129,7 @@
                                     <span>{{item?.bulkRegistration.usedSlots}} {{item?.bulkRegistration.usedSlots > 1 ? 'slots' : 'slot'}} Used</span>
                                 </ng-container>
                             </td>
-                            <td>
+                            <td (click)="verifyPayment(item?._id)">
                                 <span *ngIf="item?.paymentInfo.paymentStatus !== 'pending'" class="approved">Paid</span>
                                 <span *ngIf="item?.paymentInfo.paymentStatus === 'pending'" class="pending">Pending</span>
                             </td>                            

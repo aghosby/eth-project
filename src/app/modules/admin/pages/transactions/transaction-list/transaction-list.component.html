@@ -80,17 +80,17 @@
                                 <span >{{item?.userId.firstName}} {{item?.userId.lastName}}</span>
                             </td> 
                             <td>
+                                <span >{{item?.userId.email}}</span>
+                            </td> 
+                            <!-- <td>
                                 <span >{{item?.reference}}</span>
-                            </td>
+                            </td> -->
                             <td>
-                                <span >₦{{item?.gatewayResponse?.frontendData.transAmount.toLocaleString()}}</span>
+                                <span >₦{{item?.amount.toLocaleString()}}</span>
                             </td>
                             
                             <td>
-                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'dd-MM-YYYY'}}</span>
-                            </td>
-                            <td>
-                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'h:mm a'}}</span>
+                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'dd-MM-YYYY'}} {{item.createdAt | date : 'h:mm a'}}</span>
                             </td>
                             <td>
                                 <span >{{item?.gatewayResponse?.frontendData.transRef}}</span>
@@ -98,7 +98,14 @@
                             <td>
                                 <span *ngIf="item?.status !== 'successful'" class="declined">Failed</span>
                                 <span *ngIf="item?.status === 'successful'" class="approved">Successful</span>
-                            </td>  
+                            </td> 
+                            <td>
+                                <span>
+                                    <button (click)="verifyPayment(item?.gatewayResponse?.frontendData.transRef, item?.reference)" class="cta cta-trans sm-bd">
+                                        Verify
+                                    </button>
+                                </span>
+                            </td> 
                         </tr>
                     </ng-container>
                 </tbody>

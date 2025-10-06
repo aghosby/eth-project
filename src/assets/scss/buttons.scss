@@ -41,6 +41,23 @@
         }
     }
 
+    &.sm-bd {
+        font-size: 0.785rem;
+        font-weight: 400;
+        border: none;
+        border-radius: 1rem;
+        letter-spacing: 0.05rem;
+        background: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        text-decoration: none;
+
+        @include screen-media-min(md) {
+            font-size: 0.8rem;
+            padding: 0.3rem 1rem;
+        }
+    }
+
     &.sm {
         font-size: 0.785rem;
         font-weight: 500;

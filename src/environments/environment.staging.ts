@@ -14,7 +14,7 @@ const port   = ':5000';
 const path   = '/api';
 
 // const baseUrl = scheme + host + port + path;
-const baseUrl = 'https://eth-project-backend-1086159474664.europe-west1.run.app/api/v1';
+const baseUrl = 'https://eth-project-backend-staging-1086159474664.europe-west1.run.app'
 
 export const environment = {
   production      : false,
@@ -24,8 +24,7 @@ export const environment = {
   defaultLanguage : 'en',
   apiBaseUrl      : baseUrl,
   credoBaseUrl: 'https://api.credocentral.com',
-  // credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH'
-  credoApiKey: '1PUB7593p0OB2Gy7ZHc6rmCtEf8M903b4A1HeE',
+  credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH',
   credoSecretKey: '1PRI7593uzp9r20eb4C2g4WhnUz1o5mkHHa1hE'
 };
 

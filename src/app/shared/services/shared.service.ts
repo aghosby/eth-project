@@ -11,11 +11,19 @@ import { Paging } from '@shared/models/paging';
 export class SharedService {
 
   private baseUrl = `${environment.apiBaseUrl}`;
-  private userId = this.authService.loggedInUser.id ?? '';
+  private credoUrl = `${environment.credoBaseUrl}`;
+  private userId = this.authService.loggedInUser?.id ?? '';
 
   requestOptions:any = {
     headers: new HttpHeaders({
       Authorization: `Bearer ${this.authService.token}`
+    })
+  };
+
+  credoRequestOptions:any = {
+    headers: new HttpHeaders({
+      'Authorization': `${environment.credoSecretKey}`,
+      'Content-Type': 'application/json'
     })
   };
   
@@ -78,6 +86,18 @@ export class SharedService {
 
   public getPaymentDetails(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/payments`, this.requestOptions);
+  }
+
+  public verifyCredoPayment(trxRef:string): Observable<any> {
+    return this.http.get<any>(`${this.credoUrl}/transaction/${trxRef}/verify`, this.credoRequestOptions);
+  }
+
+  public verifyPaymentRef(trxRef:string, payload:string): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/payments/update/${trxRef}`, payload, this.requestOptions);
+  }
+
+  public verifyFailedTransaction(registrationId:string, payload:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/payments/create/${registrationId}`, payload, this.requestOptions);
   }
 
   public getBulkRegistrations(): Observable<any> {

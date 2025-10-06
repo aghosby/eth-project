@@ -132,23 +132,7 @@ export class RegistrationPaymentComponent implements OnInit {
       },
       callBack: (response: any) => {
         const paymentResult = this.parsePaymentResult(response.callbackUrl);
-        this.sharedService.confirmPayment(paymentResult, this.authService.loggedInUser.id).subscribe({
-          next: res => {
-            this.notifyService.showSuccess(res.message);
-          },
-          error: err => {
-            this.notifyService.showInfo('Your payment was successful and payment status will be updated soon')
-          }
-        })
-
-        this.utilityService.updateStep('payment', {
-          valid: true,
-          value: paymentResult,
-        });
-
-        const currentStep = Number(sessionStorage.getItem('currentStep'));
-        this.goToStep(currentStep)
-        
+        this.verifyPayment(transRef)        
       },
     });
   }
@@ -173,6 +157,37 @@ export class RegistrationPaymentComponent implements OnInit {
     if (this.handler) {
       this.handler.openIframe();
     }
+  }
+
+  verifyPayment(trxRef:string) {
+    this.sharedService.verifyCredoPayment(trxRef).subscribe({
+      next: res => {
+        console.log('Payment Res', res)
+        this.confirmPaymentInternally(res.data);
+      },
+      error: err => {
+        this.notifyService.showError('Payment verification failed')
+      }
+    })
+  }
+
+  confirmPaymentInternally(paymentResult:any) {
+    this.sharedService.confirmPayment(paymentResult, this.authService.loggedInUser.id).subscribe({
+      next: res => {
+        this.notifyService.showSuccess(res.message);
+      },
+      error: err => {
+        this.notifyService.showInfo('Your payment was successful and payment status will be updated soon')
+      }
+    })
+
+    this.utilityService.updateStep('payment', {
+      valid: true,
+      value: paymentResult,
+    });
+
+    const currentStep = Number(sessionStorage.getItem('currentStep'));
+    this.goToStep(currentStep)
   }
 
   // Retrieve labels for a step

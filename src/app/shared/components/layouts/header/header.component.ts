@@ -35,6 +35,6 @@ export class HeaderComponent implements OnInit {
   }
 
   contactForm() {
-    this.utilityService.contactForm()
+    this.utilityService.contactForm(this.loggedInUser.email)
   }
 }

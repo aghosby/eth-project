@@ -16,7 +16,8 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Build the Angular app
-RUN ng build --configuration production
+ARG BUILD_CONFIGURATION=production
+RUN ng build --configuration ${BUILD_CONFIGURATION}
 
 # Production stage
 FROM nginx:1.23.0-alpine

@@ -85,6 +85,8 @@
         <button *ngIf="userAction == 'change'" (click)="setPassword()" type="submit" class="w-100 cta cta-primary my-3 px-5" role="button">
           <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Set Password
         </button>
+
+        <div *ngIf="userAction == 'verify'" class="notice mt-2 w-100">⚠️ Note: Please note that your OTP might be in your spam folder.</div>
       </div>
 
       <div class="auth-actions text-center">

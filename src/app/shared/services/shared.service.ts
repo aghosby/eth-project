@@ -143,6 +143,10 @@ export class SharedService {
     return this.paging$(url, paging, this.requestOptions);
   }
 
+  public changeComplaintStatus(id:string, payload:any): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}/complaints/admin/${id}/status`, payload, this.requestOptions);
+  }
+
   paging$(
     url: string,
     initialPaging: Paging = { page: 1, limit: 10 },

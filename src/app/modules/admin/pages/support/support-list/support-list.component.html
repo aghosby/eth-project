@@ -94,8 +94,8 @@
                                 <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'h:mm a'}}</span>
                             </td>
                             <td>
-                                <span *ngIf="item?.status !== 'resolved'" class="pending">Pending</span>
-                                <span *ngIf="item?.status === 'resolved'" class="approved">Resolved</span>
+                                <span (click)="changeStatus('Resolved', item._id)" *ngIf="item?.status !== 'Resolved'" class="pending">Pending</span>
+                                <span (click)="changeStatus('Pending', item._id)" *ngIf="item?.status === 'Resolved'" class="approved">Resolved</span>
                             </td> 
                         </tr>
                     </ng-container>

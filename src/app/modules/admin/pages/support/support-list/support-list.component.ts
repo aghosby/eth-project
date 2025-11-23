@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
 import { debounceTime, distinctUntilChanged, map, merge, Observable, Subject, tap } from 'rxjs';
@@ -61,7 +62,8 @@ export class SupportListComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    public utilityService: UtilityService
+    public utilityService: UtilityService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -118,6 +120,23 @@ export class SupportListComponent implements OnInit {
     //   },
     //   error: err => {}
     // })
+  }
+
+  changeStatus(status:string, complaintId:string) {
+    const payload = {
+      status: status
+    }
+    this.sharedService.changeComplaintStatus(complaintId, payload).subscribe({
+      next: res => {
+        if(res) {
+          this.searchEvent$.next('');
+          this.notificationService.showSuccess('The status was changed successfully')
+        }
+      },
+      error: err => {
+        this.notificationService.showError('The status was changed failed. Please try again.')
+      }
+    })
   }
 
   onPageChange(newPage: number) {

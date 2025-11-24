@@ -349,6 +349,10 @@ main {
                     animation: scrollAnimation 40s infinite linear;
                     white-space: nowrap;
 
+                    ::-webkit-scrollbar {
+                        display: none;
+                    }
+
                     &:hover {
                         animation-play-state: paused;
                     }
@@ -509,7 +513,7 @@ main {
                 }
 
                 .card-hld {
-                    width: 48%;
+                    width: 100%;
                     height: 15rem;
                     background-size: cover;
                     background-position: center;
@@ -534,19 +538,21 @@ main {
                     }
 
                     .hdr {
+                        width: 100%;
+                        height: 100%;
+                        padding: 1rem;
                         position: absolute;
-                        z-index: 3;
-                        top: 0.5rem;
-                        left: 0.4rem;
-
-                        @include screen-media-min(md) {
-                            left: 1rem;
-                            top: 1rem;
-                        }
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end;
+                        z-index: 2;
+                        top: 0;
+                        left: 0;
+                        gap: 0.7rem;
 
                         .title {
                             font-size: 1rem;
-                            font-weight: 300;
+                            font-weight: 500;
                             margin-bottom: 0.6rem;
                             color: rgba(#fff, 0.8);
                             letter-spacing: 0.05rem;
@@ -653,7 +659,7 @@ main {
 
         &.strip-section {
             width: 90%;
-            height: 15rem;
+            height: 20rem;
             margin: 3rem auto;
             position: relative;
             border-radius: 1rem;
@@ -680,7 +686,7 @@ main {
                 position: absolute;
                 transform: translateY(-50%);
                 right: 5%;
-                top: 70%;
+                top: 50%;
 
                 @include screen-media-min(md) {
                     width: fit-content;

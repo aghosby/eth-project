@@ -116,6 +116,18 @@ export class SharedService {
     return this.http.post<any>(`${this.baseUrl}/complaints`, payload, this.requestOptions);
   }
 
+  public getAllTicketTypes(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/tickets`);
+  }
+
+  public purchaseTicket(payload:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/tickets/purchase`, payload);
+  }
+
+  public verifyTicketPurchase(payload:any, paymentRef:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/tickets/verify-payment/${paymentRef}`, payload);
+  }
+
 
   /*****************************ADMIN ENDPOINTS*******************************************************************************************/
 

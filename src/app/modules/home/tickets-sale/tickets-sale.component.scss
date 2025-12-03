@@ -1,0 +1,293 @@
+@import '../../../../assets/scss/mixins.scss';
+
+main {
+
+    .pad-x {
+        padding-left: 5%;
+        padding-right: 5%;
+
+        @include screen-media-min(md) {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+    }
+
+    section {
+
+        &.hero {
+            width: 100%;
+            height: 20rem;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            position: relative;
+
+            @include screen-media-min(md) {
+                height: 50vh;
+            }
+
+            .overlay {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                background: rgba(0, 0, 0, 0.5);
+                left: 0;
+                top: 0;
+            }
+
+            .caption-wrap {
+                width: 90%;
+                position: absolute;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                top: 70%;
+                left: 50%;
+
+                @include screen-media-min(md) {
+                    width: 45%;
+                }
+
+                h1 {
+                    font-size: 1.7rem;
+                    font-weight: 600;
+                    letter-spacing: 0.05rem;
+                    white-space: nowrap;
+                    color: white;
+
+                    @include screen-media-min(md) {
+                        font-size: 2.8rem;
+                    }
+                }
+
+                .sec-text {
+                    font-size: 0.85rem;
+                    font-weight: 300;
+                    line-height: 1.5;
+                    letter-spacing: 0.05rem;
+                    color: rgba(#fff, 0.9);
+                    text-align: center;
+
+                    @include screen-media-min(md) {
+                        font-size: 1.1rem;
+                    }
+                }
+
+                button {
+                    width: 100%;
+
+                    @include screen-media-min(md) {
+                        width: fit-content;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+/* Colors mapped to tier names */
+$platinum: #E5E4E2; // subtle cool
+$gold: #FFD700;     // warm goldy
+$silver: #eef1f5;   // light grey-blue
+$bronze: #CD7F32;   // warm bronze-ish
+
+.ticket-sale {
+    h3 {
+        font-size: 1.7rem;
+        font-weight: 600;
+        letter-spacing: 0.04rem;
+        margin-bottom: 1.2rem;
+        color: black;
+    }
+
+    .ticket-types {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .ticket-hld {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border-radius: 10px;
+            //border: 2px solid transparent;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            }
+
+            .ticket-desc {
+                display: flex;
+                align-items: center;
+                gap: 0.9rem;
+                flex: 1;
+
+                .icon {
+                    display: grid;
+                    place-items: center;
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 10px;
+                    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.02);
+                    font-size: 1.25rem;
+                }
+
+                .info {
+                    .name {
+                        font-weight: 600;
+                        font-size: 1rem;
+                    }
+                    .sub {
+                        font-size: 0.82rem;
+                        color: #6b7280;
+                    }
+                }
+
+                .amount {
+                    margin-left: auto;
+
+                    .price {
+                        font-weight: 700;
+                        font-size: 1.05rem;
+                    }
+                }
+            }
+
+            .ticket-count {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-left: 1rem;
+
+                .btn {
+                    min-width: 36px;
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 8px;
+                    font-weight: 700;
+                    border: none;
+                    box-shadow: none;
+                }
+
+                .btn-decr {
+                    background: rgba(0,0,0,0.05);
+                }
+                .btn-incr {
+                    background: rgba(0,0,0,0.08);
+                }
+
+                .count {
+                min-width: 28px;
+                text-align: center;
+                font-weight: 600;
+                font-size: 0.98rem;
+                }
+            }
+        }
+    }
+
+    /* Type theme classes - a mild background on icon and border */
+    .platinum {
+        border: 2px solid rgba($platinum, 1);
+        .icon {
+            background: linear-gradient(180deg, rgba(255,255,255,0.6), $platinum);
+            color: #222;
+        }
+    }
+
+    .gold {
+        border: 2px solid rgba($gold, 1);
+        .icon {
+            background: linear-gradient(180deg, #fff7e0, $gold);
+            color: #7a5400;
+        }
+    }
+
+    .silver {
+        border: 2px solid rgba($silver, 1);
+        .icon {
+            background: linear-gradient(180deg, #ffffff, $silver);
+            color: #2f3a45;
+        }
+    }
+
+    .bronze {
+        border: 2px solid rgba($bronze, 0.6);
+        .icon {
+            background: linear-gradient(180deg, #fff7f0, $bronze);
+            color: #6b3f1e;
+        }
+    }
+
+    /* Purchase summary and buyer info styling */
+    .hdr h3 {
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+
+    .ticket-summary,
+        .ticket-info {
+            .section-title {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.95rem;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .summary-list,
+        .buyer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+
+            .summary-item,
+            .buyer-item {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                gap: 0.5rem;
+                align-items: center;
+
+                .label {
+                    color: #4b5563;
+                }
+                .value {
+                    font-weight: 700;
+                    text-align: right;
+                }
+            }
+
+            .total {
+                border-top: 1px dashed rgba(0,0,0,0.06);
+                padding-top: 0.6rem;
+            }
+        }
+
+        .empty {
+            color: #6b7280;
+            font-style: italic;
+        }
+    }
+
+    /* small screens */
+    @media (max-width: 991px) {
+        .ticket-types .ticket-hld {
+            flex-direction: column;
+            align-items: stretch;
+
+            .ticket-desc {
+                width: 100%;
+            }
+
+            .ticket-count {
+                justify-content: flex-end;
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}

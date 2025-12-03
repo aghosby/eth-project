@@ -19,7 +19,7 @@
           <a href="#register">How to Participate</a>
         </li>
         <li>
-          <a (click)="contactForm()" role="button">Contact Us</a>
+          <a class="text-white" (click)="contactForm()" role="button">Contact Us</a>
         </li>
       </ul>
     </nav>
@@ -31,7 +31,7 @@
         <span>Login</span>
         <!-- <div class="name">Admin {{loggedInUser.lastName}}</div> -->
       </div>
-      <button>Buy Tickets</button>
+      <button [routerLink]="'/tickets'">Buy Tickets</button>
     </div>
   </header>
 
@@ -134,7 +134,7 @@
         <div class="card-hld" style="background-image: url('assets/img/project/dancing2.jpg');">
           <div class="overlay"></div>
           <div class="hdr">
-            <div class="sec-hdr xs bkg-mild">14th Jan, 2025</div>
+            <div class="sec-hdr xs bkg-mild">14th Jan, 2026</div>
             <div class="title">Grand Finale - Victor Uwaifo Creative hub</div>
           </div>
           <img src="" alt="">

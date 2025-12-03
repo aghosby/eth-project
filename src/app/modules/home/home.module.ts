@@ -8,6 +8,8 @@ import { HomeRoutingModule } from './home-routing.module';
 
 // Components
 import { HomeComponent }     from './home.component';
+import { TicketsSaleComponent } from './tickets-sale/tickets-sale.component';
+import { VotingComponent } from './voting/voting.component';
 
 @NgModule({
   imports :
@@ -19,6 +21,8 @@ import { HomeComponent }     from './home.component';
   declarations :
   [
     HomeComponent,
+    TicketsSaleComponent,
+    VotingComponent,
   ],
 })
 export class HomeModule { }

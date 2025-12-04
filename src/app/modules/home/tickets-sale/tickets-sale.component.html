@@ -214,7 +214,7 @@
                     <div class="action mt-3">
                         <!-- Payment button intentionally left out per requirements -->
                         <button class="cta cta-primary w-100" (click)="makePayment()">
-                            Make Payment
+                            <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Make Payment
                         </button>
                     </div>
                 </div>

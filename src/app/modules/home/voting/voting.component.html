@@ -44,8 +44,14 @@
 
         <section class="vote-wrap pad-x my-lg-5 my-4">
 
-            <div class="contestants-wrap">
-                <div *ngFor="let c of contestants" class="contestant-hld">
+            <div class="search-wrap mt-lg-4 mt-3">
+                <span class="icon"><i class="bi bi-search"></i></span>
+                <input class="form-control form-control-lg" type="text" (input)="onSearchChange($event)" [value]="searchTerm" placeholder="Search by contestant name or code">
+                <span *ngIf="searchTerm" (click)="clearSearch()" class="clear">&times;</span>
+            </div>
+
+            <div class="contestants-wrap mt-lg-5 mt-4">
+                <div *ngFor="let c of (filteredContestants$ | async)" class="contestant-hld">
 
                     <!-- Image Card -->
                     <div class="img-card" [ngStyle]="{'background-image': getBackgroundImage(c)}">
@@ -64,7 +70,7 @@
                     <!-- Details -->
                     <div class="details">
                         <div class="detail-row">
-                            <span class="label">Talent:</span>
+                            <span class="label">Talent Category:</span>
                             <span class="value">{{ c.talentCategory }}</span>
                         </div>
 
@@ -110,8 +116,9 @@
 
                                 <button 
                                     class="pay-btn cta cta-primary"
-                                    (click)="makeVotePayment(c)">
-                                    Make Payment
+                                    (click)="makeVotePayment(c)"
+                                >
+                                    <span *ngIf="isLoading" class="loader spinner-border text-white"></span> Make Payment
                                 </button>
 
                                 <button 

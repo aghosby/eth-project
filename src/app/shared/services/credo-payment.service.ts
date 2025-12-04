@@ -19,6 +19,10 @@ export class CredoPaymentService {
   private votePaymentSubject = new Subject<any>();
   votePayment$ = this.votePaymentSubject.asObservable();
 
+  /** Emits results back to ticket-sale.component */
+  private ticketPaymentSubject = new Subject<any>();
+  ticketPayment$ = this.ticketPaymentSubject.asObservable();
+
   constructor(
     private sharedService: SharedService,
     private notifyService: NotificationService,
@@ -132,41 +136,75 @@ export class CredoPaymentService {
 
   /** Ticket Purchase confirmation */
   private confirmTicketPayment(paymentResult: any, metadata: any) {
-    console.log('Details', paymentResult, metadata)
 
-    this.sharedService.verifyTicketPurchase(paymentResult, paymentResult.transRef)
-      .subscribe({
-        next: verifyRes => {
-          console.log('Verify Details', verifyRes)
+    this.sharedService.verifyTicketPurchase(paymentResult, paymentResult.transRef).subscribe({
 
-          if (verifyRes?.data?.status === 'success' || verifyRes?.status === true) {
+      next: verifyRes => {
 
-            this.sharedService.purchaseTicket(metadata).subscribe({
-              next: purchaseRes => {
-                this.notifyService.showSuccess(
-                  purchaseRes.message || 'Ticket purchase successful.'
-                );
-              },
-              error: () => {
-                this.notifyService.showInfo(
-                  'Payment verified but ticket registration failed. Support will resolve this shortly.'
-                );
-              }
-            });
+        const isSuccess = verifyRes?.success;
 
-          } else {
-            this.notifyService.showInfo(
-              'Payment verification failed. If you were debited, please contact support.'
-            );
-          }
-        },
+        if (isSuccess) {
 
-        error: () => {
-          this.notifyService.showInfo(
-            'Payment verification could not be completed. If you were debited, your ticket will be confirmed shortly.'
-          );
+          this.sharedService.purchaseTicket(metadata.purchasePayload).subscribe({
+
+            next: purchaseRes => {
+              this.notifyService.showSuccess(
+                purchaseRes.message || 'Ticket purchase successful.'
+              );
+
+              /** Emit success for UI */
+              this.ticketPaymentSubject.next({
+                status: 'success',
+                ticketType: metadata.ticketType,
+                quantity: metadata.quantity,
+                amountPaid: metadata.amountPaid,
+                ticketData: purchaseRes.data
+              });
+            },
+
+            error: () => {
+              this.notifyService.showInfo(
+                'Payment verified but ticket registration failed. Support will resolve this shortly.'
+              );
+
+              /** Emit failure to UI */
+              this.ticketPaymentSubject.next({
+                status: 'failed',
+                reason: 'ticket_registration_failed'
+              });
+            }
+
+          });
+
         }
-      });
+
+        else {
+          this.notifyService.showInfo(
+            'Payment verification failed. If you were debited, please contact support.'
+          );
+
+          /** Emit verification failure */
+          this.ticketPaymentSubject.next({
+            status: 'failed',
+            reason: 'verification_failed'
+          });
+        }
+
+      },
+
+      error: () => {
+        this.notifyService.showInfo(
+          'Payment verification could not be completed. If you were debited, your ticket will be confirmed shortly.'
+        );
+
+        /** Emit network failure */
+        this.ticketPaymentSubject.next({
+          status: 'failed',
+          reason: 'verification_error'
+        });
+      }
+
+    });
   }
 
   /** VOTE PAYMENT CONFIRMATION */

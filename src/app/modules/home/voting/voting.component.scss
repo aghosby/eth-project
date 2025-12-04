@@ -89,6 +89,53 @@ main {
 .vote-wrap {
     width: 100%;
 
+    .search-wrap {
+        position: relative;
+
+        input {
+            font-size: 16px;
+            height: 3.4rem;
+            letter-spacing: 0.05rem;
+            font-family: var(--font-medium);
+            padding-left: 2.5rem;
+
+            @include screen-media-min(xl) {
+                font-size: 1rem;
+            }
+
+            @include screen-media-min(xl) {
+                font-size: 1.2rem;
+                padding-left: 3.5rem;
+            }
+        }
+
+        .icon {
+            font-size: 0.9rem;
+            position: absolute;
+            transform: translateY(-50%);
+            left: 1rem;
+            top: 50%;
+
+            @include screen-media-min(md) {
+                font-size: 1rem;
+            }
+            @include screen-media-min(xl) {
+                font-size: 1.2rem;
+                left: 1.3rem;
+            }
+        }
+
+
+        .clear {
+            font-size: 1.4rem;
+            position: absolute;
+            cursor: pointer;
+            transform: translateY(-50%);
+            right: 1rem;
+            top: 50%;
+        }
+    }
+
     .contestants-wrap {
         display: grid;
         align-items: flex-start;
@@ -126,7 +173,7 @@ main {
         .gradient-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.1));
+            background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.1));
         }
 
         .contestant-name {
@@ -138,26 +185,34 @@ main {
         }
 
         .vote-count {
+            width: 3.5rem;
+            height: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: absolute;
             top: 12px;
             right: 12px;
-            background: rgba(255,255,255,0.9);
+            background: var(--primary);
             padding: 6px 12px;
-            border-radius: 30px;
+            border-radius: 50%;
             text-align: center;
             z-index: 3;
             box-shadow: 0 0 12px rgba(0,0,0,0.2);
 
             .count {
-                font-size: 1.2rem;
+                font-size: 1rem;
                 font-weight: 700;
-                color: #222;
+                line-height: 1.5;
+                color: white;
             }
             .label {
-                font-size: 0.75rem;
+                font-size: 0.65rem;
+                line-height: 1;
                 text-transform: uppercase;
                 display: block;
-                color: #444;
+                color: white;
             }
         }
     }

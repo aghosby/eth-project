@@ -13,6 +13,8 @@ import { SharedService } from '@shared/services/shared.service';
 })
 export class TicketsSaleComponent implements OnInit {
 
+  isLoading: boolean = false;
+
   ticketTypes: any[] = [
     {
       id: 1,
@@ -65,6 +67,24 @@ export class TicketsSaleComponent implements OnInit {
   ngOnInit(): void {
     //this.getTicketTypes()
     // could initialize values or subscribe to changes if needed
+
+    this.paymentService.ticketPayment$.subscribe(res => {
+      this.isLoading = false; // ⛔ stop loading when payment finishes
+
+      if (res.status === 'success') {
+        this.notifyService.showSuccess('Ticket purchase successful!');
+        console.log('Ticket Metadata:', res);
+
+        // Reset form and quantities
+        this.buyerForm.reset();
+        this.ticketTypes.forEach(t => (t.quantity = 0));
+      }
+
+      else {
+        this.notifyService.showError('Ticket purchase failed. Please try again.');
+        console.log('Ticket Payment Error:', res);
+      }
+    });
   }
 
   contactForm() {
@@ -145,9 +165,11 @@ export class TicketsSaleComponent implements OnInit {
   makePayment() {
     if (this.buyerForm.invalid || !this.selectedTickets.length) {
       this.buyerForm.markAllAsTouched();
-      this.notifyService.showError('Please fill in all necessary details')
+      this.notifyService.showError('Please fill in all necessary details');
       return;
     }
+
+    this.isLoading = true; // ⏳ Start loading immediately on click
 
     const customer = {
       firstName: this.buyerForm.value.firstName,

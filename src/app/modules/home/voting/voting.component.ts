@@ -4,6 +4,7 @@ import { CredoPaymentService } from '@shared/services/credo-payment.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
 import { UtilityService } from '@shared/services/utility.service';
+import { BehaviorSubject, catchError, debounceTime, distinctUntilChanged, map, merge, Observable, of, Subject, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-voting',
@@ -13,6 +14,13 @@ import { UtilityService } from '@shared/services/utility.service';
 export class VotingComponent implements OnInit {
 
   contestants: any[] = [];
+  searchTerm = '';
+  private searchTerm$ = new BehaviorSubject<string>('');
+  private refresh$ = new Subject<void>();
+  searchLoading = false;
+
+  // the filtered list driven by backend
+  filteredContestants$: Observable<any[]> = of([]);
 
   /** The contestant currently being voted for */
   activeVote: number | null = null;
@@ -36,6 +44,33 @@ export class VotingComponent implements OnInit {
   ngOnInit(): void {
     this.loadContestants();
     this.listenForVoteCompletion();
+
+    // wire up search -> backend stream
+    this.filteredContestants$ = merge(
+      this.searchTerm$,
+      this.refresh$.pipe(map(() => this.searchTerm)) // use current search value
+    ).pipe(
+      debounceTime(300),
+      tap(() => this.searchLoading = true),
+      switchMap(search =>
+        this.sharedService.getAllContestants(search).pipe(
+          map(res => {
+            // adapt to your backend shape (res.data or res.data.contestants)
+            // prefer res.data.contestants if available, fall back to res.data
+            const data = res?.data?.contestants ?? res?.data ?? [];
+            return data;
+          }),
+          catchError(err => {
+            this.notifyService.showError('Could not load contestants. Please try again.');
+            return of([]);
+          })
+        )
+      ),
+      tap(() => this.searchLoading = false)
+    );
+
+    // trigger initial load (empty search)
+    this.searchTerm$.next('');
   }
 
   /** Listen for updates from the payment service */
@@ -44,11 +79,13 @@ export class VotingComponent implements OnInit {
       if (res.status === 'success') {
         this.notifyService.showSuccess('Vote successful!');
         this.cancelVoting();
-        this.loadContestants();
+        this.refresh$.next();
+        this.isLoading = false;
       }
       else if (res.status === 'failed') {
         this.notifyService.showError('Vote payment failed. Please try again.');
         this.cancelVoting();
+        this.isLoading = false;
       }
     });
   }
@@ -59,6 +96,17 @@ export class VotingComponent implements OnInit {
       next: res => this.contestants = res.data.contestants,
       error: () => this.notifyService.showError('Could not load contestants.')
     });
+  }
+
+  onSearchChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value ?? '';
+    this.searchTerm = value;
+    this.searchTerm$.next(value.trim());
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.searchTerm$.next('');
   }
 
   /** Fallback background for missing images */
@@ -109,6 +157,7 @@ export class VotingComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     const metadata = this.buildMetadata(contestant);
 
     const customer = {

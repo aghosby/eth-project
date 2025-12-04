@@ -86,7 +86,8 @@ export class CredoPaymentService {
 
       callBack: (response: any) => {
         const result = this.parsePaymentResult(response.callbackUrl);
-        this.verifyPayment(transRef, metadata);
+        console.log('Result', result)
+        this.verifyPayment(result.transRef, metadata);
       }
     });
 
@@ -131,10 +132,12 @@ export class CredoPaymentService {
 
   /** Ticket Purchase confirmation */
   private confirmTicketPayment(paymentResult: any, metadata: any) {
+    console.log('Details', paymentResult, metadata)
 
     this.sharedService.verifyTicketPurchase(paymentResult, paymentResult.transRef)
       .subscribe({
         next: verifyRes => {
+          console.log('Verify Details', verifyRes)
 
           if (verifyRes?.data?.status === 'success' || verifyRes?.status === true) {
 
@@ -168,9 +171,11 @@ export class CredoPaymentService {
 
   /** VOTE PAYMENT CONFIRMATION */
   private confirmVotePayment(paymentResult: any, metadata: any) {
+    console.log('Details', paymentResult, metadata)
 
     this.sharedService.verifyVotePayment(paymentResult, metadata).subscribe({
       next: res => {
+        console.log('Verify Details', res)
 
         // Notify UI
         this.notifyService.showSuccess(res.message || 'Vote purchase successful.');

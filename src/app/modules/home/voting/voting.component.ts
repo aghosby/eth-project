@@ -93,8 +93,8 @@ export class VotingComponent implements OnInit {
   private buildMetadata(contestant: any) {
     return {
       type: 'vote_payment',
-      contestantId: contestant.id,
-      contestantVoteCode: contestant.contestantVoteCode,
+      contestantId: contestant._id,
+      contestantVoteCode: contestant.contestantNumber,
       contestantName: `${contestant.firstName} ${contestant.lastName}`,
       talent: contestant.talentCategory,
       votesPurchased: this.voteCount,

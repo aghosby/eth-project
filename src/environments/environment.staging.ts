@@ -24,8 +24,10 @@ export const environment = {
   defaultLanguage: 'en',
   apiBaseUrl: baseUrl,
   credoBaseUrl: 'https://api.credodemo.com',
-  credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH',
-  credoSecretKey: '0PUB0629zabkUVDb5rpdM1nGo43F7yOy'
+  //credoApiKey: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH',
+  credoApiKey: '0PUB0123v80AzP7kLEP2EQUGjG82Fz17',
+  //credoSecretKey: '0PUB0629zabkUVDb5rpdM1nGo43F7yOy'
+  credoSecretKey: '0PRI0123cXR2oDAoFaZyDU32oP9KSy57'
 };
 
 /*

@@ -171,9 +171,9 @@ export class CredoPaymentService {
 
   /** VOTE PAYMENT CONFIRMATION */
   private confirmVotePayment(paymentResult: any, metadata: any) {
-    console.log('Details', paymentResult, metadata)
+    console.log('Vote Details', paymentResult, metadata)
 
-    this.sharedService.verifyVotePayment(paymentResult, metadata).subscribe({
+    this.sharedService.verifyVotePayment(paymentResult, paymentResult.transRef).subscribe({
       next: res => {
         console.log('Verify Details', res)
 

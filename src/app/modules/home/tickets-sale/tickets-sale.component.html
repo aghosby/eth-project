@@ -1,5 +1,5 @@
 <div class="page-wrap">
-    <header>
+    <header class="main">
         <div class="logo-cont">
             <img routerLink="/" src="assets/img/project/eth-logo-wht.png" alt="">
         </div>
@@ -31,7 +31,6 @@
             <button [routerLink]="'/tickets'">Buy Tickets</button>
         </div>
     </header>
-
 
     <main>
         <section class="hero" style="background-image: url('assets/img/project/hero-bkg.jpg');">
@@ -173,7 +172,7 @@
 
                             <div class="summary-item total">
                                 <div class="left"><strong>Grand total</strong></div>
-                                <div class="right"><strong>₦ {{ grandTotal | number:'1.0-0' }}</strong></div>
+                                <div class="right lg"><strong>₦ {{ grandTotal | number:'1.0-0' }}</strong></div>
                             </div>
                             </div>
                         </ng-container>

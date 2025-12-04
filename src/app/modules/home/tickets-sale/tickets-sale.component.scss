@@ -265,6 +265,11 @@ $bronze: #CD7F32;   // warm bronze-ish
             .total {
                 border-top: 1px dashed rgba(0,0,0,0.06);
                 padding-top: 0.6rem;
+
+                .right.lg {
+                    font-size: 1.2rem;
+                    color: var(--primary);
+                }
             }
         }
 

@@ -128,6 +128,19 @@ export class SharedService {
     return this.http.post<any>(`${this.baseUrl}/tickets/verify-payment/${paymentRef}`, payload);
   }
 
+  public getAllContestants(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/contestants`);
+  }
+
+  public voteContestant(payload:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/contestants/vote`, payload);
+  }
+
+  public verifyVotePayment(payload:any, paymentRef:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/contestants/verify-payment/${paymentRef}`, payload);
+  }
+
+
 
   /*****************************ADMIN ENDPOINTS*******************************************************************************************/
 

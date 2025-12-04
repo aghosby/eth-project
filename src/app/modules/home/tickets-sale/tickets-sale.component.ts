@@ -4,6 +4,7 @@ import { UtilityService } from '@shared/services/utility.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CredoPaymentService } from '@shared/services/credo-payment.service';
 import { NotificationService } from '@shared/services/notification.service';
+import { SharedService } from '@shared/services/shared.service';
 
 @Component({
   selector: 'app-tickets-sale',
@@ -37,7 +38,7 @@ export class TicketsSaleComponent implements OnInit {
     {
       id: 4,
       name: 'Table of 10',
-      price: 15000000,
+      price: 1500000,
       tier: 'platinum',
       quantity: 0
     }
@@ -47,6 +48,7 @@ export class TicketsSaleComponent implements OnInit {
 
   constructor(
     private utilityService: UtilityService,
+    private sharedService: SharedService,
     private paymentService: CredoPaymentService,
     private notifyService: NotificationService,
     private router: Router,
@@ -61,6 +63,7 @@ export class TicketsSaleComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //this.getTicketTypes()
     // could initialize values or subscribe to changes if needed
   }
 
@@ -74,6 +77,17 @@ export class TicketsSaleComponent implements OnInit {
 
   goToRegister() {
     this.router.navigate(['/login'], { queryParams: { action: 'create' } });
+  }
+
+  getTicketTypes() {
+    this.sharedService.getAllTicketTypes().subscribe({
+      next: res => {
+        this.ticketTypes = res.data
+      },
+      error: err => {
+        this.notifyService.showError('Could not retrieve ticket types. Please try again')
+      }
+    })
   }
 
   // increment/decrement

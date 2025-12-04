@@ -4,6 +4,7 @@ import { SharedService } from './shared.service';
 import { AuthService } from './auth.service';
 import { UtilityService } from './utility.service';
 import { NotificationService } from './notification.service';
+import { Subject } from 'rxjs';
 
 declare var CredoWidget: any;
 
@@ -13,6 +14,10 @@ declare var CredoWidget: any;
 export class CredoPaymentService {
 
   private handler: any;
+
+  /** Emits results back to voting.component */
+  private votePaymentSubject = new Subject<any>();
+  votePayment$ = this.votePaymentSubject.asObservable();
 
   constructor(
     private sharedService: SharedService,
@@ -54,7 +59,7 @@ export class CredoPaymentService {
     };
   }
 
-  /** Start a payment (tickets, votes, etc.) */
+  /** Start payment (tickets, votes, etc.) */
   startPayment(
     customer: { firstName: string; lastName: string; email: string; phone?: string },
     amount: number,
@@ -69,13 +74,14 @@ export class CredoPaymentService {
       customerLastName: customer.lastName,
       email: customer.email,
       customerPhoneNumber: customer.phone || '',
-      amount: amount * 100, // convert to kobo
+      amount: amount * 100,
       currency: 'NGN',
       renderSize: 0,
       channels: ['card', 'bank'],
       reference: transRef,
-      metadata: metadata || {},
+      metadata,
       callbackUrl,
+
       onClose: () => {},
 
       callBack: (response: any) => {
@@ -88,12 +94,21 @@ export class CredoPaymentService {
   }
 
   /** Verify payment with backend */
-  private verifyPayment(ref: string, metadata?:any) {
+  private verifyPayment(ref: string, metadata?: any) {
     this.sharedService.verifyCredoPayment(ref).subscribe({
       next: res => {
-        if(metadata?.type === 'ticket_purchase') {
-          this.confirmTicketPayment(res.data, metadata)
+
+        /** Ticket purchase */
+        if (metadata?.type === 'ticket_purchase') {
+          this.confirmTicketPayment(res.data, metadata);
         }
+
+        /** Vote purchase */
+        else if (metadata?.type === 'vote_payment') {
+          this.confirmVotePayment(res.data, metadata);
+        }
+
+        /** Standard registration purchase */
         else {
           this.confirmPayment(res.data);
         }
@@ -107,48 +122,40 @@ export class CredoPaymentService {
   /** Registration Purchase confirmation */
   private confirmPayment(paymentResult: any) {
     const userId = this.authService.loggedInUser?.id;
+
     this.sharedService.confirmPayment(paymentResult, userId).subscribe({
-      next: res => {
-        this.notifyService.showSuccess(res.message);
-      },
-      error: () => {
-        this.notifyService.showInfo('Payment was successful. Status will be updated soon.');
-      }
+      next: res => this.notifyService.showSuccess(res.message),
+      error: () => this.notifyService.showInfo('Payment was successful. Status will be updated soon.')
     });
   }
 
   /** Ticket Purchase confirmation */
   private confirmTicketPayment(paymentResult: any, metadata: any) {
 
-    // 1️⃣ Verify the payment first
     this.sharedService.verifyTicketPurchase(paymentResult, paymentResult.transRef)
       .subscribe({
         next: verifyRes => {
 
-          // 2️⃣ If the transaction is verified → create the ticket
           if (verifyRes?.data?.status === 'success' || verifyRes?.status === true) {
 
-            this.sharedService.purchaseTicket(metadata)
-              .subscribe({
-                next: purchaseRes => {
-                  this.notifyService.showSuccess(
-                    purchaseRes.message || 'Ticket purchase successful.'
-                  );
-                },
-                error: () => {
-                  this.notifyService.showInfo(
-                    'Payment verified but ticket registration failed. Support will resolve this shortly.'
-                  );
-                }
-              });
+            this.sharedService.purchaseTicket(metadata).subscribe({
+              next: purchaseRes => {
+                this.notifyService.showSuccess(
+                  purchaseRes.message || 'Ticket purchase successful.'
+                );
+              },
+              error: () => {
+                this.notifyService.showInfo(
+                  'Payment verified but ticket registration failed. Support will resolve this shortly.'
+                );
+              }
+            });
 
           } else {
-            // Payment NOT verified
             this.notifyService.showInfo(
               'Payment verification failed. If you were debited, please contact support.'
             );
           }
-
         },
 
         error: () => {
@@ -159,5 +166,34 @@ export class CredoPaymentService {
       });
   }
 
+  /** VOTE PAYMENT CONFIRMATION */
+  private confirmVotePayment(paymentResult: any, metadata: any) {
 
+    this.sharedService.verifyVotePayment(paymentResult, metadata).subscribe({
+      next: res => {
+
+        // Notify UI
+        this.notifyService.showSuccess(res.message || 'Vote purchase successful.');
+
+        // Send response back to voting component
+        this.votePaymentSubject.next({
+          status: 'success',
+          contestantId: metadata.contestantId,
+          newVoteCount: res.data?.updatedVotes
+        });
+      },
+      error: () => {
+
+        this.notifyService.showInfo(
+          'Payment verified but vote allocation failed. Support will resolve this shortly.'
+        );
+
+        this.votePaymentSubject.next({
+          status: 'failed',
+          contestantId: metadata.contestantId
+        });
+
+      }
+    });
+  }
 }

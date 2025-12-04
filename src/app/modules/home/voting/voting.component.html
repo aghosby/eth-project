@@ -1,1 +1,139 @@
-<p>voting works!</p>
+<div class="page-wrap">
+    <header class="main">
+        <div class="logo-cont">
+            <img routerLink="/" src="assets/img/project/eth-logo-wht.png" alt="">
+        </div>
+
+        <nav>
+            <ul>
+                <li>
+                <a href="#about">About</a>
+                </li>
+                <li>
+                <a href="#auditions">Auditions</a>
+                </li>
+                <li>
+                <a href="#register">How to Participate</a>
+                </li>
+                <li>
+                <a class="text-white" (click)="contactForm()" role="button">Contact Us</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="header-ctas">
+        
+            <div (click)="goToLogin()" class="user">
+                <div class="image"><i class="bi bi-person-circle"></i></div>
+                <span>Login</span>
+                <!-- <div class="name">Admin {{loggedInUser.lastName}}</div> -->
+            </div>
+            <button [routerLink]="'/tickets'">Buy Tickets</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" style="background-image: url('assets/img/project/hero-bkg.jpg');">
+            <div class="overlay"></div>
+
+            <div class="caption-wrap">
+                <h1>✨ Vote Your Favourite Contestant ✨</h1>
+                <div class="sec-text">Every vote brings your star closer to victory! Support your favourite contestant and help them shine on the grand stage.</div>
+            </div>
+        </section>
+
+        <section class="vote-wrap pad-x my-lg-5 my-4">
+
+            <div class="contestants-wrap">
+                <div *ngFor="let c of contestants" class="contestant-hld">
+
+                    <!-- Image Card -->
+                    <div class="img-card" [ngStyle]="{'background-image': getBackgroundImage(c)}">
+                        <div class="gradient-overlay"></div>
+
+                        <div class="contestant-name">
+                            {{ c.firstName }} {{ c.lastName }}
+                        </div>
+
+                        <div class="vote-count">
+                            <span class="count">{{ c.totalVotes }}</span>
+                            <span class="label">Votes</span>
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="details">
+                        <div class="detail-row">
+                            <span class="label">Talent:</span>
+                            <span class="value">{{ c.talentCategory }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="label">Code:</span>
+                            <span class="value code">{{ c.contestantNumber }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="label">Total Votes:</span>
+                            <span class="value">{{ c.totalVotes }}</span>
+                        </div>
+
+                        <!-- Vote Button / Vote Input -->
+                        <div class="vote-action">
+
+                            <!-- Normal Vote Button -->
+                            <button 
+                                *ngIf="activeVote !== c._id"
+                                class="vote-btn cta cta-primary"
+                                (click)="startVoting(c)">
+                                Vote
+                            </button>
+
+                            <!-- Voting Input & Pay -->
+                            <div *ngIf="activeVote === c._id" class="vote-input-wrapper">
+
+                                <mat-form-field appearance="outline" class="vote-input">
+                                    <mat-label>Amount (₦)</mat-label>
+                                    <input 
+                                        matInput 
+                                        type="number" 
+                                        min="100"
+                                        step="100"
+                                        [(ngModel)]="totalAmount"
+                                        (input)="updateVotesFromAmount()">
+                                    <mat-hint>Each vote is ₦100</mat-hint>
+                                </mat-form-field>
+
+                                <div class="amount-display" *ngIf="totalAmount > 0">
+                                    Votes: <strong>{{ voteCount }}</strong>
+                                </div>
+
+                                <button 
+                                    class="pay-btn cta cta-primary"
+                                    (click)="makeVotePayment(c)">
+                                    Make Payment
+                                </button>
+
+                                <button 
+                                    class="cancel-btn cta cta-trans"
+                                    (click)="cancelVoting()">
+                                    Cancel
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <div class="mt-5">
+        <app-footer></app-footer>
+    </div>
+</div>

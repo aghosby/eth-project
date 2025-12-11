@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
 import { CredoPaymentService } from '@shared/services/credo-payment.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { SharedService } from '@shared/services/shared.service';
@@ -32,6 +33,9 @@ export class VotingComponent implements OnInit {
   totalAmount: number = 0;
 
   isLoading: boolean = false;
+  today = new Date();
+  cutoffDate = new Date('2025-12-13T00:00:00');
+  envProd:boolean = environment.production;
 
   constructor(
     private utilityService: UtilityService,
@@ -164,7 +168,7 @@ export class VotingComponent implements OnInit {
       firstName: contestant.firstName,
       lastName: contestant.lastName,
       email: contestant.email,
-      phone: contestant.phone
+      phone: contestant.phone || ''
     };
 
     this.paymentService.startPayment(

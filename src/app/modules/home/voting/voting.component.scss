@@ -172,9 +172,9 @@ main {
     /* IMAGE CARD */
     .img-card {
         position: relative;
-        height: 300px;
+        height: 24rem;
         background-size: cover;
-        background-position: center;
+        background-position: top center;
         display: flex;
         align-items: flex-end;
         padding: 16px;
@@ -205,8 +205,8 @@ main {
             align-items: center;
             position: absolute;
             top: 12px;
-            right: 12px;
-            background: var(--primary);
+            left: 12px;
+            background: white;
             padding: 6px 12px;
             border-radius: 50%;
             text-align: center;
@@ -217,14 +217,14 @@ main {
                 font-size: 1rem;
                 font-weight: 700;
                 line-height: 1.5;
-                color: white;
+                color: var(--primary);
             }
             .label {
                 font-size: 0.65rem;
                 line-height: 1;
                 text-transform: uppercase;
                 display: block;
-                color: white;
+                color: black;
             }
         }
     }

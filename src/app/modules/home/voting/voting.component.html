@@ -46,7 +46,7 @@
             <h1 class="main-notice">Online Voting starts 13 December, 2025 at 12:00AM</h1>
         </section>
 
-        <section class="vote-wrap pad-x my-lg-5 my-4">
+        <section *ngIf="envProd && (today > cutoffDate) || !envProd" class="vote-wrap pad-x my-lg-5 my-4">
 
             <div class="search-wrap mt-lg-4 mt-3">
                 <span class="icon"><i class="bi bi-search"></i></span>

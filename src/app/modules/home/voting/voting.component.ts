@@ -34,7 +34,7 @@ export class VotingComponent implements OnInit {
 
   isLoading: boolean = false;
   today = new Date();
-  cutoffDate = new Date('2025-12-13T12:00:00');
+  cutoffDate = new Date('2025-12-13T11:00:00');
   envProd:boolean = environment.production;
 
   constructor(

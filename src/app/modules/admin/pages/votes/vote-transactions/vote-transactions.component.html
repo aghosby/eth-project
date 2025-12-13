@@ -1,0 +1,80 @@
+<div class="page-wrap">
+
+    <div class="admin-heading d-flex justify-content-between align-items-center">
+        <h1 class="title xl">Vote Transactions</h1>
+    </div>
+
+    <div class="section eth-table">
+        <div class="table-container mt-lg-4">
+            <div class="table-hdr">
+                <div class="title">Vote Transactions <span *ngIf="totalItems > 0" class="count">{{totalItems}}</span></div>
+                <div class="input-wrap table-search">
+                    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch($event)" class="form-control form-control-md" placeholder="Search by name, or code">
+                    <div *ngIf="searchTerm" class="icon" (click)="clearSearch()">&times;</div>
+                </div>
+            </div>
+
+            <table class="table align-middle mb-0 bg-white">
+                <thead class="bg-light">
+                    <tr>
+                        <ng-container *ngFor = 'let col of tableColumns'>
+                            <th [style.width]="col.colWidth">{{col.label}}</th>
+                        </ng-container>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let item of tableData; let i = index">
+                        <tr>
+                            <td>
+                                <span class="text-capitalize">{{item?.contestantId?.firstName | lowercase}} {{item?.contestantId?.lastName | lowercase}}</span>
+                            </td> 
+                            <td>
+                                <span >{{item?.contestantId?.contestantNumber}}</span>
+                            </td> 
+                            <td>
+                                <span >{{item?.contestantId?.email}}</span>
+                            </td> 
+                            <td>
+                                <span >{{item?.numberOfVotes}}</span>
+                            </td> 
+                            <td>
+                                <span >₦{{item?.amountPaid.toLocaleString()}}</span>
+                            </td>
+                            
+                            <td>
+                                <span class="d-inline-flex gap-4 justify-content-between">{{item.createdAt | date : 'dd-MM-YYYY'}} {{item.createdAt | date : 'h:mm a'}}</span>
+                            </td>
+                            <td>
+                                <span >{{item?.paymentReference}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item?.paymentStatus !== 'completed'" class="declined">Failed</span>
+                                <span *ngIf="item?.paymentStatus === 'completed'" class="approved">Successful</span>
+                            </td> 
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <!-- use the custom pagination component -->
+            <app-pagination
+                *ngIf="totalItems > pageSize"
+                [currentPage]="currentPage"
+                [pageSize]="pageSize"
+                [totalItems]="totalItems"
+                (pageChange)="onPageChange($event)"
+                (pageSizeChange)="onPageSizeChange($event)"
+            >
+            </app-pagination>
+
+            <div class="d-flex justify-content-center align-items-center py-4" *ngIf="isLoading && tableData.length < 1">
+                <span class="loader spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status"></span>
+            </div>
+            <div *ngIf="!isLoading && tableData.length == 0" class="empty-state">
+                <span><i class="bi bi-folder2-open"></i></span>
+                No records were found
+            </div>
+        </div>
+    </div>
+</div>

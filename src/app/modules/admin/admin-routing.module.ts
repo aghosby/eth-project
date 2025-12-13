@@ -6,6 +6,8 @@ import { RegistrationListComponent } from './pages/registrations/registration-li
 import { UserListComponent } from './pages/users/user-list/user-list.component';
 import { TransactionListComponent } from './pages/transactions/transaction-list/transaction-list.component';
 import { SupportListComponent } from './pages/support/support-list/support-list.component';
+import { VoteTransactionsComponent } from './pages/votes/vote-transactions/vote-transactions.component';
+import { ContestantListComponent } from './pages/contestants/contestant-list/contestant-list.component';
 
 const routes: Routes = [
   {
@@ -18,6 +20,8 @@ const routes: Routes = [
       { path: 'users', component: UserListComponent },
       { path: 'transactions', component: TransactionListComponent },
       { path: 'support', component: SupportListComponent },
+      { path: 'votes', component: VoteTransactionsComponent },
+      { path: 'contestants', component: ContestantListComponent },
       // { 
       //   path: 'registrations', 
       //   children: [

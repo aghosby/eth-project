@@ -9,9 +9,17 @@
                 <i class="bi bi-ui-checks"></i>
                 <span>Registrations</span>
             </li>
+            <li class="nav-item" [class.active]="activeMenu=='contestants'" (click)="activeMenu = 'contestants'" [routerLink]="'/admin/contestants'">
+                <i class="bi bi-people-fill"></i>
+                <span>Contestants</span>
+            </li>
+            <li class="nav-item" [class.active]="activeMenu=='votes'" (click)="activeMenu = 'votes'" [routerLink]="'/admin/votes'">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>Vote Transactions</span>
+            </li>
             <li class="nav-item" [class.active]="activeMenu=='transactions'" (click)="activeMenu = 'transactions'" [routerLink]="'/admin/transactions'">
                 <i class="bi bi-wallet-fill"></i>
-                <span>Transactions</span>
+                <span>Reg Transactions</span>
             </li>
             <li class="nav-item" [class.active]="activeMenu=='users'" (click)="activeMenu = 'users'" [routerLink]="'/admin/users'">
                 <i class="bi bi-people-fill"></i>

@@ -141,7 +141,6 @@ export class SharedService {
   }
 
 
-
   /*****************************ADMIN ENDPOINTS*******************************************************************************************/
 
   public getDashboardDetails(): Observable<any> {
@@ -162,6 +161,20 @@ export class SharedService {
     const url = `${this.baseUrl}/admin/transactions`;
     return this.paging$(url, paging, this.requestOptions);
   }
+
+  public getVoteTransactions(paging: Paging = { page: 1, limit: 10 }) {
+    const url = `${this.baseUrl}/contestants/votes`;
+    return this.paging$(url, paging, this.requestOptions);
+  }
+
+  public getContestants(paging: Paging = { page: 1, limit: 10 }) {
+    const url = `${this.baseUrl}/contestants`;
+    return this.paging$(url, paging, this.requestOptions);
+  }
+
+  // public getContestants(search:string = ''): Observable<any> {
+  //   return this.http.get<any>(`${this.baseUrl}/contestants?searchQuery=${search}`);
+  // }
 
   public getMessages(paging: Paging = { page: 1, limit: 10 }) {
     const url = `${this.baseUrl}/complaints/admin/all`;

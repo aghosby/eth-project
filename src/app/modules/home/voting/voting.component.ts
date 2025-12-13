@@ -87,8 +87,9 @@ export class VotingComponent implements OnInit {
         this.isLoading = false;
       }
       else if (res.status === 'failed') {
-        this.notifyService.showError('Vote payment failed. Please try again.');
+        //this.notifyService.showError('Vote payment failed. Please try again.');
         this.cancelVoting();
+        this.refresh$.next();
         this.isLoading = false;
       }
     });

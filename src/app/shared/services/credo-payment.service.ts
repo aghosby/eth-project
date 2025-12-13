@@ -227,9 +227,9 @@ export class CredoPaymentService {
       },
       error: () => {
 
-        this.notifyService.showInfo(
-          'Payment verified but vote allocation failed. Support will resolve this shortly.'
-        );
+        // this.notifyService.showInfo(
+        //   'Payment verified but vote allocation failed. Support will resolve this shortly.'
+        // );
 
         this.votePaymentSubject.next({
           status: 'failed',

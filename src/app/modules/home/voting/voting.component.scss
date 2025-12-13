@@ -172,13 +172,17 @@ main {
     /* IMAGE CARD */
     .img-card {
         position: relative;
-        height: 24rem;
+        height: 27rem;
         background-size: cover;
         background-position: top center;
         display: flex;
         align-items: flex-end;
         padding: 16px;
         border-bottom: 1px solid #eee;
+
+        @include screen-media-min(md) {
+            height: 24rem;
+        }
 
         .gradient-overlay {
             position: absolute;

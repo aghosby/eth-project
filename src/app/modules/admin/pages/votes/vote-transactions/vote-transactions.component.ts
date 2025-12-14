@@ -19,6 +19,7 @@ export class VoteTransactionsComponent implements OnInit  {
   filterEndDate: any = null;
   tableData:any = [];
   isLoading: boolean = false;
+  dashboardData:any;
 
   tableData$!: Observable<any>;
   searchTerm = '';
@@ -70,6 +71,7 @@ export class VoteTransactionsComponent implements OnInit  {
   ) {}
 
   ngOnInit(): void {
+    this.getStatusData();
     this.pagingController = this.sharedService.getVoteTransactions({ page: this.currentPage, limit: this.pageSize });
     this.tableData$ = this.pagingController.data$;
   
@@ -105,6 +107,18 @@ export class VoteTransactionsComponent implements OnInit  {
     this.tableData$.subscribe(res => {
       this.tableData = res
       //console.log('Registrations', res)
+    })
+  }
+
+  getStatusData() {
+    this.sharedService.getVotesSummary().subscribe({
+      next: res => {
+        this.dashboardData = res.data
+        console.log(this.dashboardData)
+        // this.paymentStats = this.dashboardDetails.payments.byStatus.find((x: any) => x._id == 'successful')
+        // this.registrationDetails = this.dashboardDetails.payments.byStatus.find((x: any) => x._id == 'successful')
+      },
+      error: err => {}
     })
   }
 

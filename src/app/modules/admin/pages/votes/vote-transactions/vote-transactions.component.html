@@ -4,6 +4,42 @@
         <h1 class="title xl">Vote Transactions</h1>
     </div>
 
+     <div class="section dashboard-stats mt-lg-3 mt-1">
+        <div class="stats-wrap">
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-people-fill"></i></div>
+                <div class="info">
+                    <div class="card-hld">{{dashboardData ? dashboardData?.contestants.total : 0}}</div>
+                    <div class="card-hld">No of Contestants</div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-ui-checks"></i></div>
+                <div class="info">
+                    <div class="card-hld">{{dashboardData?.votesByStatus.completed.count }}</div>
+                    <div class="card-hld">No of Transactions</div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="icon"> <i class="bi bi-wallet-fill"></i></div>
+                <div class="info">
+                    <div class="card-hld">{{dashboardData ? dashboardData?.votesByStatus?.completed.totalVotes : 0}}</div>
+                    <div class="card-hld">Total No of Votes</div>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-cash-stack"></i></div>
+                <div class="info">
+                    <div style="white-space: nowrap;"  class="card-hld">₦{{ dashboardData ? dashboardData?.votesByStatus?.completed.totalAmount.toLocaleString() : 0}}</div>
+                    <div class="card-hld">Total Amount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="section eth-table">
         <div class="table-container mt-lg-4">
             <div class="table-hdr">

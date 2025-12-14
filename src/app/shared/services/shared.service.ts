@@ -136,6 +136,10 @@ export class SharedService {
     return this.http.post<any>(`${this.baseUrl}/contestants/vote`, payload);
   }
 
+  public getVotesSummary(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/contestants/votes/summary`);
+  }
+
   public verifyVotePayment(payload:any, paymentRef:string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/contestants/verify-payment/${paymentRef}`, payload);
   }
